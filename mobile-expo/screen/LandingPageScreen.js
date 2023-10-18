@@ -183,7 +183,6 @@ const styles = StyleSheet.create({
   verticalCardImage: {
     height: 150,
     resizeMode: "cover",
-    // borderRadius: 8,
   },
   verticalCardText: {
     color: "#0e365c",
