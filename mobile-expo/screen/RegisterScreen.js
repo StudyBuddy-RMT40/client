@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Logo from "../assets/StudyBuddy.png"
+import Button from "../components/Button";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -16,15 +18,13 @@ export default function RegisterScreen() {
   };
 
   const handleLogin = () => {
-    navigation.push("Login");
+    navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
        <Image
-        source={{
-          uri: "https://i.pinimg.com/originals/e9/e2/78/e9e2787d0cb55d570fe1c76843506759.jpg",
-        }}
+        source={Logo}
         style={styles.logo}
       />
       <Text style={styles.title}>Register</Text>
@@ -61,8 +61,8 @@ export default function RegisterScreen() {
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Register</Text>
+      <TouchableOpacity onPress={handleRegister}>
+        <Button text="Register" />
       </TouchableOpacity>
       <View style={styles.loginContainer}>
         <Text style={styles.loginText}>Already have an account?</Text>
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 16,
+    color: "#396987"
   },
   input: {
     width: "100%",
@@ -101,18 +102,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
   },
-  button: {
-    backgroundColor: "#00008b",
-    padding: 10,
-    borderRadius: 8,
-    width: "30%",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-  },
   loginContainer: {
     marginTop: 10,
     flexDirection: "row",
@@ -122,6 +111,6 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   loginButton: {
-    color: "blue",
+    color: "#396987",
   },
 });
