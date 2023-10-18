@@ -58,7 +58,6 @@ export default function LandingPageScreen() {
             <TouchableOpacity>
               <Image
                 style={{
-                  ...styles.buttonIcon,
                   width: item.size,
                   height: item.size,
                 }}
@@ -70,7 +69,7 @@ export default function LandingPageScreen() {
         ))}
       </View>
 
-      {/* Card Carousel */}
+      {/* Horizontal Card Carousel */}
       <View style={styles.horizontalCardContainer}>
         <Text style={styles.horizontalCardTitle}>Ini Ceritanya Title</Text>
         <ScrollView
@@ -80,26 +79,26 @@ export default function LandingPageScreen() {
         >
           {carouselItems.map((item, idx) => (
             <View key={idx} style={styles.horizontalCard}>
-              <Image style={styles.horizontalCardImage} source={item.image} />
-              <Text style={styles.horizontalCardText}>{item.text}</Text>
+              <TouchableOpacity>
+                <Image style={styles.horizontalCardImage} source={item.image} />
+                <Text style={styles.horizontalCardText}>{item.text}</Text>
+              </TouchableOpacity>
             </View>
           ))}
         </ScrollView>
       </View>
 
-      {/* Card Vertical */}
-      <View style={styles.horizontalCardContainer}>
-        <Text style={styles.horizontalCardTitle}>Ini Juga Title</Text>
-        <ScrollView
-          style={styles.cardCarousel}
-          vertical
-          showsVerticalScrollIndicator={false}
-        >
+      {/* Vertical Card Carousel */}
+      <View style={styles.verticalCardContainer}>
+        <Text style={styles.verticalCardTitle}>Ini Juga Title</Text>
+        <ScrollView vertical showsVerticalScrollIndicator={false}>
           {carouselItems.map((item, idx) => (
-            <View key={idx} style={styles.card}>
-              <Image style={styles.cardImage} source={{ uri: item.image }} />
-              <Text style={styles.cardText}>{item.text}</Text>
-            </View>
+            <TouchableOpacity key={idx}>
+              <View style={styles.verticalCard}>
+                <Image style={styles.verticalCardImage} source={heroDummy} />
+                <Text style={styles.verticalCardText}>{item.text}</Text>
+              </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
@@ -133,43 +132,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
   },
-  buttonContainer: {
-    width: "30%",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-
   buttonLabel: {
     fontSize: 12,
     color: "#0e365c",
     marginTop: 5,
     textAlign: "center",
   },
-  cardCarousel: {
-    marginVertical: 20,
-  },
-  card: {
-    backgroundColor: "#6b9ebf",
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-    alignItems: "center",
-  },
-  cardImage: {
-    width: screenWidth * 0.9,
-    height: 150,
-    resizeMode: "cover",
-    borderRadius: 8,
-  },
-  cardText: {
-    color: "#0e365c",
-    fontSize: 16,
-    marginTop: 10,
-    textAlign: "center",
-  },
   horizontalCardContainer: {
     padding: 10,
-    marginBottom: 20,
   },
   horizontalCardTitle: {
     fontSize: 18,
@@ -187,7 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   horizontalCardImage: {
-    width: screenWidth * 0.58,
+    width: screenWidth * 0.6,
     height: 100,
     resizeMode: "cover",
     borderRadius: 8,
@@ -195,6 +165,30 @@ const styles = StyleSheet.create({
   horizontalCardText: {
     marginTop: 5,
     color: "#0e365c",
+    textAlign: "center",
+  },
+  verticalCardContainer: {
+    padding: 10,
+  },
+  verticalCardTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#0e365c",
+  },
+  verticalCard: {
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  verticalCardImage: {
+    height: 150,
+    resizeMode: "cover",
+    // borderRadius: 8,
+  },
+  verticalCardText: {
+    color: "#0e365c",
+    fontSize: 16,
+    marginTop: 5,
     textAlign: "center",
   },
 });
