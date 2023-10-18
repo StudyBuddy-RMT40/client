@@ -8,6 +8,8 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Logo from "../assets/StudyBuddy.png"
+import Button from "../components/Button";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -24,15 +26,13 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <Image
-        source={{
-          uri: "https://i.pinimg.com/originals/e9/e2/78/e9e2787d0cb55d570fe1c76843506759.jpg",
-        }}
+        source={Logo}
         style={styles.logo}
       />
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder="Email"
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
@@ -43,8 +43,8 @@ export default function LoginScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity onPress={handleLogin}>
+        <Button text="Login"/>
       </TouchableOpacity>
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Don't have an account yet?</Text>
@@ -72,6 +72,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 16,
+    color: "#396987",
+    fontFamily: "Quicksand-Regular"
   },
   input: {
     width: "100%",
@@ -83,18 +85,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
   },
-  button: {
-    backgroundColor: "#00008b",
-    padding: 10,
-    borderRadius: 8,
-    width: "30%",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-  },
   registerContainer: {
     marginTop: 10,
     flexDirection: "row",
@@ -102,8 +92,9 @@ const styles = StyleSheet.create({
   },
   registerText: {
     marginRight: 5,
+    fontFamily: "Quicksand-Regular"
   },
   registerButton: {
-    color: "blue",
+    color: "#396987",
   },
 });
