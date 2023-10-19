@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,27 +8,34 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Logo from "../assets/StudyBuddy.png"
+import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
+import { useAuth } from "../navigators/Authcontext";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { login, accessToken } = useAuth();
 
   const navigation = useNavigation();
 
-  const handleLogin = () => {};
-  
+  const handleLogin = () => {
+    console.log(">> klik login button <<");
+    login();
+    navigation.navigate("Profile");
+  };
+
+  useEffect(() => {
+    console.log("Current access token:", accessToken);
+  }, [accessToken]);
+
   const handleRegister = () => {
     navigation.push("Register");
   };
 
   return (
     <View style={styles.container}>
-      <Image
-        source={Logo}
-        style={styles.logo}
-      />
+      <Image source={Logo} style={styles.logo} />
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
@@ -43,11 +50,10 @@ export default function LoginScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-      <View style={{width: "100%"}}>
-      <TouchableOpacity onPress={handleLogin}>
-        <Button text="Login"/>
+
+      <TouchableOpacity>
+        <Button onPress={handleLogin} text="Login" />
       </TouchableOpacity>
-      </View>
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Don't have an account yet?</Text>
         <TouchableOpacity onPress={handleRegister}>
@@ -64,7 +70,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "white"
   },
   logo: {
     width: 100,
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     color: "#396987",
-    // fontFamily: "Quicksand-Regular"
+    // fontFamily: "Quicksand-Regular",
   },
   input: {
     width: "100%",
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     marginRight: 5,
-    // fontFamily: "Quicksand-Regular"
+    // fontFamily: "Quicksand-Regular",
   },
   registerButton: {
     color: "#396987",
