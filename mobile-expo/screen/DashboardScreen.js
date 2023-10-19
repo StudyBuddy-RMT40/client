@@ -15,6 +15,7 @@ import Svg, { Path } from "react-native-svg";
 import allProject from "../assets/public.png";
 import highschool from "../assets/highschool.png";
 import university from "../assets/university.png";
+import { useNavigation } from "@react-navigation/native";
 
 const SearchBar = () => {
   return (
@@ -50,7 +51,8 @@ const Card = ({ data, isLike, isReview }) => {
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 24 24'
               strokeWidth={1.5}
-              stroke='currentColor'>
+              stroke='red'
+              fill='red'>
               <Path
                 strokeLinecap='round'
                 strokeLinejoin='round'
@@ -68,7 +70,8 @@ const Card = ({ data, isLike, isReview }) => {
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 24 24'
               strokeWidth={1.5}
-              stroke='currentColor'>
+              stroke='gold'
+              fill='gold'>
               <Path
                 strokeLinecap='round'
                 strokeLinejoin='round'
@@ -85,18 +88,43 @@ const Card = ({ data, isLike, isReview }) => {
 };
 
 const ProjectCard = ({ title, progress }) => {
+  const navigation = useNavigation();
+
+  const handleDetail = () => {
+    navigation.push("Detail");
+  };
+
+  let progressBarColor;
+  if (progress <= 25) {
+    progressBarColor = "red";
+  } else if (progress <= 50) {
+    progressBarColor = "orange";
+  } else if (progress <= 75) {
+    progressBarColor = "yellow";
+  } else {
+    progressBarColor = "green";
+  }
+
   return (
-    <View style={styles.projectCard}>
-      <View style={styles.cardHeader}>
-        <Text style={styles.cardTitle}>{title}</Text>
+    <TouchableOpacity onPress={handleDetail}>
+      <View style={styles.projectCard}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>{title}</Text>
+        </View>
+        <View style={styles.progressBarContainer}>
+          <View
+            style={{
+              ...styles.progressBarFill,
+              width: `${progress}%`,
+              backgroundColor: progressBarColor,
+            }}
+          ></View>
+        </View>
       </View>
-      <View style={styles.progressBarContainer}>
-        <Text
-          style={{ ...styles.progressBarFill, width: `${progress}%` }}></Text>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
+
 
 export default function DashboardScreen() {
   const { isLoggedIn } = useAuth();
@@ -168,6 +196,7 @@ export default function DashboardScreen() {
           />
         ))}
       </View>
+      <View style={{marginBottom: 30}}></View>
     </ScrollView>
   );
 }
@@ -183,6 +212,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#f0f0f0",
     borderRadius: 20,
+    
   },
   input: {
     borderColor: "#ccc",
@@ -207,6 +237,14 @@ const styles = StyleSheet.create({
     height: 100,
     width: "48%",
     borderWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   cardHeader: {
     flexDirection: "row",
@@ -227,6 +265,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 8,
   },
+  
   cardContent: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -248,21 +287,39 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   projectCard: {
-    borderRadius: 10,
+    borderRadius: 20,
     padding: 16,
     marginTop: 10,
     borderWidth: 1,
     borderColor: "#ccc",
+    backgroundColor: "white",
+    shadowColor: "#000", 
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   progressBarContainer: {
     height: 10,
     backgroundColor: "white",
-    borderRadius: 5,
+    borderRadius: 10, 
     marginTop: 5,
   },
   progressBarFill: {
     height: 10,
-    backgroundColor: "black",
-    borderRadius: 5,
+    borderRadius: 10,
+    backgroundColor: "white",
+    shadowColor: "#000", 
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, 
   },
+  
 });

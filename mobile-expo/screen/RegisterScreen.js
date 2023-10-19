@@ -14,7 +14,6 @@ export default function RegisterScreen() {
   const navigation = useNavigation();
 
   const handleRegister = () => {
-    // Add registration logic here
   };
 
   const handleLogin = () => {
@@ -61,9 +60,11 @@ export default function RegisterScreen() {
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
+      <View style={{width: "100%"}}>
       <TouchableOpacity onPress={handleRegister}>
         <Button text="Register" />
       </TouchableOpacity>
+      </View>
       <View style={styles.loginContainer}>
         <Text style={styles.loginText}>Already have an account?</Text>
         <TouchableOpacity onPress={handleLogin}>
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
+    backgroundColor: "white"
   },
   logo: {
     width: 100,
