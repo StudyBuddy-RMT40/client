@@ -11,7 +11,7 @@ export default Button = ({ text, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: 360,
+    width: "100%",
     backgroundColor: '#0e365c',
     padding: 10,
     borderRadius: 8,

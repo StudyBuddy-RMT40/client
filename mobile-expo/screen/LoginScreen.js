@@ -43,9 +43,11 @@ export default function LoginScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
+      <View style={{width: "100%"}}>
       <TouchableOpacity onPress={handleLogin}>
         <Button text="Login"/>
       </TouchableOpacity>
+      </View>
       <View style={styles.registerContainer}>
         <Text style={styles.registerText}>Don't have an account yet?</Text>
         <TouchableOpacity onPress={handleRegister}>
@@ -62,6 +64,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
+    backgroundColor: "white"
   },
   logo: {
     width: 100,
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     color: "#396987",
-    fontFamily: "Quicksand-Regular"
+    // fontFamily: "Quicksand-Regular"
   },
   input: {
     width: "100%",
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     marginRight: 5,
-    fontFamily: "Quicksand-Regular"
+    // fontFamily: "Quicksand-Regular"
   },
   registerButton: {
     color: "#396987",
