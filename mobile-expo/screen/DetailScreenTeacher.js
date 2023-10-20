@@ -3,6 +3,7 @@ import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import Button from "../components/Button";
 import * as Font from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function DetailScreenTeacher() {
   const navigation = useNavigation();
@@ -79,7 +80,7 @@ Font.loadAsync({
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
-    padding: 23,
+    padding: 30,
     backgroundColor: "white",
   },
   title: {
@@ -97,6 +98,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   durationContainer: {
     flexDirection: "row",
@@ -121,6 +124,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   containerBig: {
     width: "100%",
@@ -131,6 +136,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
     
   },
   containerButton: {

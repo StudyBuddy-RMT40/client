@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  TouchableHighlight
+  TouchableHighlight,
 } from "react-native";
 import { useAuth } from "../navigators/Authcontext";
 import Svg, { Path } from "react-native-svg";
@@ -19,8 +19,11 @@ import highschool from "../assets/highschool.png";
 import university from "../assets/university.png";
 import { useNavigation } from "@react-navigation/native";
 
-
 const Card = ({ data, isLike, isReview }) => {
+  const formatNumber = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardHeader}>
@@ -65,7 +68,9 @@ const Card = ({ data, isLike, isReview }) => {
           </View>
         )}
       </View>
-      <Text style={styles.cardTitle}>{data}</Text>
+      <Text style={styles.cardTitle}>
+        {isLike ? `${formatNumber(data)} Likes` : `${formatNumber(data)} Rating`}
+      </Text>
     </View>
   );
 };
@@ -90,26 +95,26 @@ const ProjectCard = ({ title, progress }) => {
 
   return (
     <TouchableHighlight
-    onPress={handleDetail}
-    underlayColor="#f0f0f0" 
-    style={{ borderRadius: 20, overflow: "hidden" }} 
-  >
-    <View style={styles.projectCard}>
-      <View style={styles.cardHeader}>
-        <Text style={styles.cardTitle}>{title}</Text>
+      onPress={handleDetail}
+      underlayColor="#f0f0f0"
+      style={{ borderRadius: 20, overflow: "hidden" }}
+    >
+      <View style={styles.projectCard}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>{title}</Text>
+        </View>
+        <View style={styles.progressBarContainer}>
+          <View
+            style={{
+              ...styles.progressBarFill,
+              width: `${progress}%`,
+              backgroundColor: progressBarColor,
+            }}
+          ></View>
+        </View>
+        <Text style={styles.progressLabel}>{`${progress}% Complete`}</Text>
       </View>
-      <View style={styles.progressBarContainer}>
-        <View
-          style={{
-            ...styles.progressBarFill,
-            width: `${progress}%`,
-            backgroundColor: progressBarColor,
-          }}
-        ></View>
-      </View>
-      <Text style={styles.progressLabel}>{`${progress}% Complete`}</Text>
-    </View>
-  </TouchableHighlight>
+    </TouchableHighlight>
   );
 };
 
@@ -134,6 +139,11 @@ export default function DashboardScreen() {
   ];
 
   return (
+    <View>
+    <View style={styles.header}>
+    <Text style={styles.headerText}>The Project</Text>
+    <Text style={styles.headerSubText}>Let's check your progress...</Text>
+  </View>
     <ScrollView style={styles.container}>
       <Text
         style={{
@@ -142,7 +152,6 @@ export default function DashboardScreen() {
           fontWeight: "bold",
           marginLeft: 4,
           fontFamily: "CustomFont",
-          
         }}
       >
         Overview
@@ -194,8 +203,9 @@ export default function DashboardScreen() {
           />
         ))}
       </View>
-      <View style={{ marginBottom: 30 }}></View>
+      <View style={{ marginBottom: 150 }}></View>
     </ScrollView>
+    </View>
   );
 }
 Font.loadAsync({
@@ -206,7 +216,32 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: "#F7F7F7"
+    backgroundColor: "#F7F7F7",
+  },
+  header: {
+    backgroundColor: "#bddded",
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000,
+    height: 120,  
+    width: "100%",  
+  },
+  headerText: {
+    fontSize: 24,
+    color: "#0e365c",
+    fontWeight: "bold",
+    fontFamily: "CustomFont",
+    marginTop: 30, 
+  },
+  headerSubText: {
+    fontSize: 17,
+    color: "#4781a5",
+    fontFamily: "CustomFont",
+    marginTop: 5,
   },
   input: {
     flex: 1,
@@ -217,7 +252,6 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   cardContainer: {
-    marginTop: 20,
     borderRadius: 20,
     borderColor: "#ccc",
     padding: 16,
@@ -252,12 +286,11 @@ const styles = StyleSheet.create({
     fontFamily: "CustomFont",
   },
   cardTitle: {
-    fontSize: 24,
-    fontFamily: "CustomFont", 
+    fontSize: 20,
+    fontFamily: "CustomFont",
     fontWeight: "bold",
     marginTop: 8,
   },
-
   cardContent: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -279,7 +312,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "CustomFont",
     fontWeight: "bold",
-    color: "#0e365c"
+    color: "#0e365c",
   },
   projectCard: {
     borderRadius: 20,
@@ -293,7 +326,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.50,
+    shadowOpacity: 0.5,
     shadowRadius: 3.84,
     elevation: 5,
   },

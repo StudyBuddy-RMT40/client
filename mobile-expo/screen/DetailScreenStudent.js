@@ -90,6 +90,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   durationContainer: {
     flexDirection: "row",
@@ -114,6 +116,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   containerBig: {
     width: "100%",
@@ -124,6 +128,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   containerButton: {
     marginBottom: 30,
