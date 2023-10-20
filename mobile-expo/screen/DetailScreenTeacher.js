@@ -10,10 +10,6 @@ export default function DetailScreenTeacher() {
     navigation.push("Meeting");
   };
 
-  const handlePayment = () => {
-    navigation.push("Payment");
-  };
-
   const handleChat = () => {
     navigation.push("Chat");
   };
@@ -59,12 +55,6 @@ export default function DetailScreenTeacher() {
       <Text style={styles.title}>Learning Materials</Text>
       <View style={styles.containerBig}>
         <Text>Learning Materials...</Text>
-      </View>
-
-      <View style={styles.containerButton}>
-        <TouchableOpacity>
-          <Button onPress={handlePayment} text="PAYMENT(BETA)" />
-        </TouchableOpacity>
       </View>
 
       <View style={styles.containerButton}>
