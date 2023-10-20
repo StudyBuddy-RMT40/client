@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   TextInput,
@@ -96,12 +96,24 @@ const ProjectCard = ({ title, progress }) => {
     navigation.push("Detail");
   };
 
+  // useEffect(() => {
+  //   console.log(`Progress: ${progress}`);
+  //   if (progress === 100) {
+  //     console.log("Navigating to Review");
+  //     navigation.push("Review");
+  //   } else if (progress < 100) {
+  //     console.log("Navigating to Detail");
+  //     // Jika progress < 100, navigasi ke Detail
+  //     navigation.push("Detail");
+  //   }
+  // }, [progress, navigation]);
+
   let progressBarColor;
   if (progress <= 25) {
     progressBarColor = "red";
   } else if (progress <= 50) {
     progressBarColor = "orange";
-  } else if (progress <= 75) {
+  } else if (progress <= 99) {
     progressBarColor = "yellow";
   } else {
     progressBarColor = "green";
@@ -144,7 +156,7 @@ export default function DashboardScreen() {
   const projectData = [
     { title: "Project A", progress: 75 },
     { title: "Project B", progress: 45 },
-    { title: "Project C", progress: 90 },
+    { title: "Project C", progress: 100 },
   ];
 
   return (
