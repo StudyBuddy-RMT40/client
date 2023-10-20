@@ -13,6 +13,7 @@ import {
 import { useAuth } from "../navigators/Authcontext";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
+import * as Font from "expo-font";
 
 import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
@@ -179,6 +180,9 @@ export default function AccountScreen() {
     </SafeAreaView>
   );
 }
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
@@ -191,10 +195,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 10,
     textAlign: "center",
+    fontFamily: "CustomFont"
   },
   fieldTitle: {
-    fontWeight: "600",
+    fontWeight: "bold",
     marginTop: 15,
+    fontFamily: "CustomFont"
   },
   input: {
     height: 40,
@@ -244,6 +250,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     borderRadius: 15,
+    fontFamily: "CustomFont"
   },
   editButton: {
     backgroundColor: "#B0B0B0",
@@ -258,5 +265,6 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 12,
     textAlign: "center",
+    fontFamily: "CustomFont"
   },
 });

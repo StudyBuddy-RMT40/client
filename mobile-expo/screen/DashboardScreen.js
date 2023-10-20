@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   View,
   TextInput,
@@ -7,9 +7,11 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  TouchableHighlight
 } from "react-native";
 import { useAuth } from "../navigators/Authcontext";
 import Svg, { Path } from "react-native-svg";
+import * as Font from "expo-font";
 
 // import image
 import allProject from "../assets/public.png";
@@ -22,8 +24,8 @@ const SearchBar = () => {
     <View style={styles.searchBarContainer}>
       <TextInput
         style={styles.input}
-        placeholder="Find Something"
-        placeholderTextColor="#666"
+        placeholder="Find Something..."
+        placeholderTextColor="#999"
       />
       <Svg width={24} height={24} viewBox="0 0 24 24" style={styles.searchIcon}>
         <Path
@@ -96,46 +98,39 @@ const ProjectCard = ({ title, progress }) => {
     navigation.push("Detail");
   };
 
-  // useEffect(() => {
-  //   console.log(`Progress: ${progress}`);
-  //   if (progress === 100) {
-  //     console.log("Navigating to Review");
-  //     navigation.push("Review");
-  //   } else if (progress < 100) {
-  //     console.log("Navigating to Detail");
-  //     // Jika progress < 100, navigasi ke Detail
-  //     navigation.push("Detail");
-  //   }
-  // }, [progress, navigation]);
-
   let progressBarColor;
   if (progress <= 25) {
     progressBarColor = "red";
   } else if (progress <= 50) {
     progressBarColor = "orange";
-  } else if (progress <= 99) {
+  } else if (progress <= 75) {
     progressBarColor = "yellow";
   } else {
     progressBarColor = "green";
   }
 
   return (
-    <TouchableOpacity onPress={handleDetail}>
-      <View style={styles.projectCard}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle}>{title}</Text>
-        </View>
-        <View style={styles.progressBarContainer}>
-          <View
-            style={{
-              ...styles.progressBarFill,
-              width: `${progress}%`,
-              backgroundColor: progressBarColor,
-            }}
-          ></View>
-        </View>
+    <TouchableHighlight
+    onPress={handleDetail}
+    underlayColor="#f0f0f0" 
+    style={{ borderRadius: 20, overflow: "hidden" }} 
+  >
+    <View style={styles.projectCard}>
+      <View style={styles.cardHeader}>
+        <Text style={styles.cardTitle}>{title}</Text>
       </View>
-    </TouchableOpacity>
+      <View style={styles.progressBarContainer}>
+        <View
+          style={{
+            ...styles.progressBarFill,
+            width: `${progress}%`,
+            backgroundColor: progressBarColor,
+          }}
+        ></View>
+      </View>
+      <Text style={styles.progressLabel}>{`${progress}% Complete`}</Text>
+    </View>
+  </TouchableHighlight>
   );
 };
 
@@ -156,7 +151,7 @@ export default function DashboardScreen() {
   const projectData = [
     { title: "Project A", progress: 75 },
     { title: "Project B", progress: 45 },
-    { title: "Project C", progress: 100 },
+    { title: "Project C", progress: 90 },
   ];
 
   return (
@@ -168,6 +163,8 @@ export default function DashboardScreen() {
           fontSize: 20,
           fontWeight: "bold",
           marginLeft: 4,
+          fontFamily: "CustomFont",
+          
         }}
       >
         Overview
@@ -223,6 +220,9 @@ export default function DashboardScreen() {
     </ScrollView>
   );
 }
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -233,20 +233,29 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
-    borderRadius: 20,
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    paddingHorizontal: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 3,
+    marginVertical: 10,
   },
   input: {
-    borderColor: "#ccc",
     flex: 1,
     height: 40,
     padding: 10,
-    borderRadius: 20,
-    marginLeft: 10,
+    fontSize: 16,
+    fontFamily: "CustomFont",
+    color: "#333",
   },
   searchIcon: {
-    position: "absolute",
-    right: 20,
+    marginLeft: 10,
   },
   cardContainer: {
     marginTop: 20,
@@ -281,9 +290,11 @@ const styles = StyleSheet.create({
   cardAction: {
     fontSize: 14,
     marginLeft: 10,
+    fontFamily: "CustomFont",
   },
   cardTitle: {
     fontSize: 24,
+    fontFamily: "CustomFont", 
     fontWeight: "bold",
     marginTop: 8,
   },
@@ -307,6 +318,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
     textAlign: "center",
+    fontFamily: "CustomFont",
+    fontWeight: "bold",
+    color: "#0e365c"
   },
   projectCard: {
     borderRadius: 20,
@@ -314,21 +328,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderWidth: 1,
     borderColor: "#ccc",
-    backgroundColor: "white",
+    backgroundColor: "#bddded",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.50,
     shadowRadius: 3.84,
     elevation: 5,
   },
   progressBarContainer: {
     height: 10,
-    backgroundColor: "white",
+    backgroundColor: "#f0f0f0",
     borderRadius: 10,
-    marginTop: 5,
+    marginTop: 10,
   },
   progressBarFill: {
     height: 10,
@@ -342,5 +356,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  progressLabel: {
+    marginTop: 5,
+    fontSize: 12,
+    textAlign: "center",
+    color: "#666",
   },
 });

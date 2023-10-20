@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "reac
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png"
 import Button from "../components/Button";
+import * as Font from "expo-font";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -74,6 +75,9 @@ export default function RegisterScreen() {
     </View>
   );
 }
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -92,7 +96,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 16,
-    color: "#396987"
+    color: "#396987",
+    fontFamily: "CustomFont",
   },
   input: {
     width: "100%",
@@ -103,6 +108,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    fontFamily: "CustomFont",
   },
   loginContainer: {
     marginTop: 10,
@@ -111,6 +117,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     marginRight: 5,
+    fontFamily: "CustomFont",
   },
   loginButton: {
     color: "#396987",
