@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import Button from "../components/Button";
+import * as Font from "expo-font";
 
 export default function DetailScreenTeacher() {
   const navigation = useNavigation();
@@ -72,6 +73,9 @@ export default function DetailScreenTeacher() {
     </ScrollView>
   );
 }
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
@@ -82,6 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 10,
+    fontFamily: "CustomFont",
   },
   container: {
     width: "100%",
@@ -108,6 +113,7 @@ const styles = StyleSheet.create({
   durationText: {
     fontWeight: "bold",
     marginRight: 5,
+    fontFamily: "CustomFont",
   },
   durationContent: {
     flex: 1,
@@ -125,8 +131,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    
   },
   containerButton: {
-    marginTop: 5, 
+    marginTop: 5,
   }
 });

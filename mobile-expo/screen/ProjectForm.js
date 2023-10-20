@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import teacherdummy1 from "../assets/images/image1.jpg";
 import teacherdummy2 from "../assets/images/image2.jpg";
 import teacherdummy3 from "../assets/images/image3.jpg";
+import * as Font from "expo-font";
 
 export default function ProjectForm() {
   const [projectName, setProjectName] = useState("");
@@ -126,6 +127,10 @@ export default function ProjectForm() {
     </ScrollView>
   );
 }
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
+
 const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   contentContainerStyle: {
@@ -138,10 +143,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
     textAlign: "left",
+    fontFamily: "CustomFont",
   },
   label: {
     fontSize: 18,
     marginVertical: 10,
+    fontFamily: "CustomFont",
+    fontWeight: "bold",
   },
   container: {
     width: "100%",
@@ -227,5 +235,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "#0e365c",
     textAlign: "center",
+    fontFamily: "CustomFont",
   },
 });

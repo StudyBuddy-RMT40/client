@@ -7,6 +7,7 @@ import {
   Linking,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import * as Font from "expo-font";
 
 export default function PaymentScreen() {
   const navigation = useNavigation();
@@ -70,6 +71,10 @@ export default function PaymentScreen() {
   );
 }
 
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -80,6 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    fontFamily: "CustomFont",
   },
   cardDetails: {
     marginBottom: 20,
@@ -111,6 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
+    fontFamily: "CustomFont",
   },
   summaryContainer: {
     borderWidth: 2,
@@ -152,10 +159,12 @@ const styles = StyleSheet.create({
   totalText: {
     fontWeight: "bold",
     fontSize: 20,
+    fontFamily: "CustomFont",
   },
   totalAmount: {
     fontWeight: "bold",
     fontSize: 18,
+    fontFamily: "CustomFont",
   },
 });
 
