@@ -19,27 +19,6 @@ import highschool from "../assets/highschool.png";
 import university from "../assets/university.png";
 import { useNavigation } from "@react-navigation/native";
 
-const SearchBar = () => {
-  return (
-    <View style={styles.searchBarContainer}>
-      <TextInput
-        style={styles.input}
-        placeholder="Find Something..."
-        placeholderTextColor="#999"
-      />
-      <Svg width={24} height={24} viewBox="0 0 24 24" style={styles.searchIcon}>
-        <Path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-          stroke="black"
-          strokeWidth={1.5}
-          fill="none"
-        />
-      </Svg>
-    </View>
-  );
-};
 
 const Card = ({ data, isLike, isReview }) => {
   return (
@@ -156,7 +135,6 @@ export default function DashboardScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <SearchBar />
       <Text
         style={{
           marginTop: 15,
@@ -228,23 +206,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: "white",
-  },
-  searchBarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    borderRadius: 30,
-    paddingHorizontal: 16,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 3,
-    marginVertical: 10,
+    backgroundColor: "#F7F7F7"
   },
   input: {
     flex: 1,
@@ -253,9 +215,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "CustomFont",
     color: "#333",
-  },
-  searchIcon: {
-    marginLeft: 10,
   },
   cardContainer: {
     marginTop: 20,

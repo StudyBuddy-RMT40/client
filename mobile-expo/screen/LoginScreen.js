@@ -12,6 +12,7 @@ import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
 import * as Font from "expo-font";
+// import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -34,6 +35,15 @@ export default function LoginScreen() {
     navigation.push("Register");
   };
 
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo = await GoogleSignin.signIn();
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   return (
     <View style={styles.container}>
       <Image source={Logo} style={styles.logo} />
@@ -51,16 +61,22 @@ export default function LoginScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-      <View style={{width: "100%"}}>
-      <TouchableOpacity>
-        <Button onPress={handleLogin} text="Login" />
-      </TouchableOpacity>
-      <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Don't have an account yet?</Text>
-        <TouchableOpacity onPress={handleRegister}>
-          <Text style={styles.registerButton}>Register here</Text>
+      <View style={{ width: "100%" }}>
+        <TouchableOpacity>
+          <Button onPress={handleLogin} text="Login" />
         </TouchableOpacity>
-      </View>
+        <View style={styles.registerContainer}>
+          <Text style={styles.registerText}>Don't have an account yet?</Text>
+          <TouchableOpacity onPress={handleRegister}>
+            <Text style={styles.registerButton}>Register here</Text>
+          </TouchableOpacity>
+        </View>
+        {/* <GoogleSigninButton
+          style={{ width: 192, height: 48 }}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Light}
+          onPress={handleGoogleSignIn}
+        /> */}
       </View>
     </View>
   );
@@ -76,6 +92,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
+    backgroundColor: "#F7F7F7"
   },
   logo: {
     width: 100,
@@ -104,7 +121,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   registerText: {
     marginRight: 5,
@@ -112,6 +129,5 @@ const styles = StyleSheet.create({
   },
   registerButton: {
     color: "#396987",
-    
   },
 });
