@@ -47,10 +47,6 @@ export default function AccountScreen() {
     navigation.navigate("Login");
   };
 
-  const handleEditSaveProfile = () => {
-    setIsEditing(!isEditing);
-  };
-
   const handleChange = (field, value) => {
     setUserProfile({
       ...userProfile,
@@ -69,6 +65,41 @@ export default function AccountScreen() {
       return imageIcon;
     }
     return null;
+  };
+
+  const [documentCount, setDocumentCount] = useState(
+    userProfile.documents.length
+  );
+
+  const addNewDocument = () => {
+    setUserProfile((prevState) => ({
+      ...prevState,
+      documents: [...prevState.documents, { title: "", file_url: "" }],
+    }));
+  };
+
+  const removeDocument = (indexToRemove) => {
+    setUserProfile((prevState) => ({
+      ...prevState,
+      documents: prevState.documents.filter(
+        (_, index) => index !== indexToRemove
+      ),
+    }));
+  };
+
+  const handleEditSaveProfile = () => {
+    const areDocumentsValid = userProfile.documents.every(
+      (doc) => doc.title && doc.file_url
+    );
+
+    if (!areDocumentsValid) {
+      alert(
+        "Please fill out all document fields or remove empty ones before saving."
+      );
+      return;
+    }
+
+    setIsEditing(!isEditing);
   };
 
   return (
@@ -135,34 +166,62 @@ export default function AccountScreen() {
         )}
 
         <Text style={styles.fieldTitle}>Documents:</Text>
-        {isEditing
-          ? userProfile.documents.map((doc, index) => (
-              <View key={index} style={styles.documentInputContainer}>
-                <TextInput
-                  placeholder="Document Title"
-                  value={doc.title}
-                  style={styles.input}
-                />
-                <TextInput
-                  placeholder="Document URL"
-                  value={doc.file_url}
-                  style={styles.input}
-                />
+        {isEditing ? (
+          <>
+            {userProfile.documents.map((doc, index) => (
+              <View key={index} style={styles.documentInputGroup}>
+                <View style={styles.documentInputContainer}>
+                  <TextInput
+                    placeholder="Document Title"
+                    value={doc.title}
+                    style={[styles.input, styles.documentInput]}
+                    onChangeText={(text) => {
+                      const newDocs = [...userProfile.documents];
+                      newDocs[index].title = text;
+                      setUserProfile({ ...userProfile, documents: newDocs });
+                    }}
+                  />
+                  <TextInput
+                    placeholder="Document URL"
+                    value={doc.file_url}
+                    style={[styles.input, styles.documentInput]}
+                    onChangeText={(text) => {
+                      const newDocs = [...userProfile.documents];
+                      newDocs[index].file_url = text;
+                      setUserProfile({ ...userProfile, documents: newDocs });
+                    }}
+                  />
+                </View>
+                <TouchableOpacity
+                  onPress={() => removeDocument(index)}
+                  style={styles.roundRemoveButton}
+                >
+                  <Text style={styles.removeButtonText}>X</Text>
+                  {/* Kalau sempet ganti Icon */}
+                </TouchableOpacity>
               </View>
-            ))
-          : userProfile.documents.map((doc, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.documentContainer}
-                onPress={() => Linking.openURL(doc.file_url)}
-              >
-                <Image
-                  source={renderDocumentIcon(doc.file_url)}
-                  style={styles.documentIcon}
-                />
-                <Text>{doc.title}</Text>
-              </TouchableOpacity>
             ))}
+            <Button
+              text="Add More Documents"
+              onPress={addNewDocument}
+              style={styles.addButton}
+            />
+          </>
+        ) : (
+          userProfile.documents.map((doc, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.documentContainer}
+              onPress={() => Linking.openURL(doc.file_url)}
+            >
+              <Image
+                source={renderDocumentIcon(doc.file_url)}
+                style={styles.documentIcon}
+              />
+              <Text>{doc.title}</Text>
+            </TouchableOpacity>
+          ))
+        )}
 
         <Button
           text={isEditing ? "Save" : "Edit Profile"}
@@ -195,26 +254,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 10,
     textAlign: "center",
-    fontFamily: "CustomFont"
+    fontFamily: "CustomFont",
+    color: "#333",
   },
   fieldTitle: {
     fontWeight: "bold",
     marginTop: 15,
-    fontFamily: "CustomFont"
+    fontFamily: "CustomFont",
+    color: "#6b9ebf",
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#D8D8D8",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 5,
     padding: 8,
+    backgroundColor: "#F5F5F5",
   },
   container: {
     width: "100%",
     height: 40,
-    borderColor: "E0E0E0",
+    borderColor: "#E0E0E0",
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 5,
@@ -222,13 +284,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: "#E0E0E0",
   },
-  documentInputContainer: {
+  documentInputGroup: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 15,
+  },
+  documentInputContainer: {
+    flex: 1,
+  },
+  documentInput: {
+    marginVertical: 5,
   },
   documentContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
+    borderColor: "#E0E0E0",
+    borderWidth: 1,
+    borderRadius: 8,
+    marginTop: 5,
   },
   documentIcon: {
     width: 24,
@@ -240,31 +314,57 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileImage: {
-    width: 150,
-    height: 150,
+    width: 140,
+    height: 140,
     resizeMode: "cover",
-    borderRadius: 75,
-    marginBottom: 10,
-  },
-  editTextContainer: {
-    marginTop: 10,
-    padding: 10,
-    borderRadius: 15,
-    fontFamily: "CustomFont"
+    borderRadius: 70,
   },
   editButton: {
-    backgroundColor: "#B0B0B0",
+    backgroundColor: "#6b9ebf",
+    marginTop: 20,
+    borderRadius: 8,
+    padding: 10,
   },
+  documentInputRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  documentInput: {
+    flex: 1,
+    marginEnd: 5,
+    marginStart: 5,
+  },
+  roundRemoveButton: {
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#D3D3D3",
+    borderRadius: 15,
+    marginLeft: 10,
+  },
+  removeButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  addButton: {
+    backgroundColor: "#0e365c",
+    marginTop: 10,
+    borderRadius: 8,
+    padding: 10,
+  },
+
   saveButton: {
-    backgroundColor: "#32CD32",
+    backgroundColor: "#6b9ebf",
+    marginTop: 20,
+    borderRadius: 8,
+    padding: 10,
   },
   logoutButton: {
     backgroundColor: "#8B0000",
-  },
-  editText: {
-    color: "#FFF",
-    fontSize: 12,
-    textAlign: "center",
-    fontFamily: "CustomFont"
+    marginTop: 20,
+    borderRadius: 8,
+    padding: 10,
   },
 });
