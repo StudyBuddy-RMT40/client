@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
+import * as Font from "expo-font";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -65,6 +66,10 @@ export default function LoginScreen() {
   );
 }
 
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -82,7 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     color: "#396987",
-    // fontFamily: "Quicksand-Regular",
+    fontFamily: "CustomFont",
   },
   input: {
     width: "100%",
@@ -93,6 +98,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    fontFamily: "CustomFont",
   },
   registerContainer: {
     marginTop: 10,
@@ -102,7 +108,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     marginRight: 5,
-    // fontFamily: "Quicksand-Regular",
+    fontFamily: "CustomFont",
   },
   registerButton: {
     color: "#396987",

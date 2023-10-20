@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions, Image } from "react-native";
-import Button from "../components/Button";
+import * as Font from "expo-font";
 
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
 import dummy1 from "../assets/dummy/dummy1.png";
@@ -87,7 +87,9 @@ export default function ReviewScreen() {
     </ScrollView>
   );
 }
-
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
 const screenWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
@@ -99,6 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 10,
+    fontFamily: "CustomFont",
   },
   container: {
     width: "100%",
@@ -125,6 +128,7 @@ const styles = StyleSheet.create({
   durationText: {
     fontWeight: "bold",
     marginRight: 5,
+    fontFamily: "CustomFont",
   },
   durationContent: {
     flex: 1,
@@ -168,5 +172,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: "#0e365c",
     textAlign: "center",
+    fontFamily: "CustomFont",
   },
 });

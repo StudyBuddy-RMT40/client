@@ -6,7 +6,7 @@ import {
   TextInput,
   SafeAreaView,
 } from "react-native";
-
+import * as Font from "expo-font";
 import HeroCarousel from "../components/HeroCarousel";
 import ButtonGrid from "../components/ButtonGrid";
 import HorizontalSlider from "../components/HorizontalSlider";
@@ -34,9 +34,14 @@ export default function LandingPageScreen() {
         <HorizontalSlider />
         {/* <VerticalSlider /> */}
       </ScrollView>
+      
     </SafeAreaView>
   );
 }
+
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -44,6 +49,7 @@ const styles = StyleSheet.create({
   },
   carouselContainer: {
     marginTop: 10,
+    
   },
   header: {
     position: "absolute",
@@ -63,10 +69,12 @@ const styles = StyleSheet.create({
     color: "#0e365c",
     fontWeight: "bold",
     marginTop: 50,
+    fontFamily: "CustomFont",
   },
   headerSubText: {
     fontSize: 17,
     color: "#4781a5",
+    fontFamily: "CustomFont",
   },
   searchBar: {
     marginTop: 20,

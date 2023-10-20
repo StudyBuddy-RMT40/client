@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
-
+import * as Font from "expo-font";
 const screenWidth = Dimensions.get("window").width;
 
 export default function VerticalSlider() {
@@ -36,6 +36,10 @@ export default function VerticalSlider() {
     </View>
   );
 }
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
+
 
 const styles = StyleSheet.create({
   verticalCardContainer: {
@@ -45,6 +49,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#0e365c",
+    fontFamily: "CustomFont",
   },
   verticalCard: {
     padding: 15,
@@ -60,5 +65,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
     textAlign: "center",
+    fontFamily: "CustomFont",
   },
 });
