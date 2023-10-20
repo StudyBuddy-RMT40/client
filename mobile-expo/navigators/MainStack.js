@@ -6,7 +6,11 @@ const Stack = createNativeStackNavigator();
 export default function LandingPageStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Landing Page' component={LandingPageScreen} />
+      <Stack.Screen
+        name="LandingPage"
+        component={LandingPageScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }

@@ -1,193 +1,83 @@
-import React from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
-  Image,
   ScrollView,
-  Dimensions,
+  TextInput,
+  SafeAreaView,
 } from "react-native";
 
-import heroDummy from "../assets/dummy/hero-dummy.jpg";
-import dummy1 from "../assets/dummy/dummy1.png";
-import dummy2 from "../assets/dummy/dummy2.png";
-import dummy3 from "../assets/dummy/dummy3.png";
-import allProject from "../assets/public.png";
-import highschool from "../assets/highschool.png";
-import university from "../assets/university.png";
-import browseLocation from "../assets/location.png";
-import topProject from "../assets/top-projects.png";
-import topBuddy from "../assets/top-teacher.png";
+import HeroCarousel from "../components/HeroCarousel";
+import ButtonGrid from "../components/ButtonGrid";
+import HorizontalSlider from "../components/HorizontalSlider";
+// import VerticalSlider from "../components/VerticalSlider";
 
 export default function LandingPageScreen() {
-  const carouselItems = [
-    { text: "Dummy 1", image: heroDummy },
-    { text: "Dummy 2", image: dummy1 },
-    { text: "Dummy 3", image: dummy2 },
-    { text: "Dummy 4", image: dummy3 },
-  ];
-
-  const buttonItems = [
-    { icon: allProject, label: "All Projects", size: 60 },
-    { icon: highschool, label: "School Projects", size: 60 },
-    { icon: university, label: "University Projects", size: 60 },
-    { icon: browseLocation, label: "Projects Near Me", size: 60 },
-    { icon: topProject, label: "Top Projects", size: 60 },
-    { icon: topBuddy, label: "Top Buddy", size: 60 },
-  ];
-
   return (
-    <ScrollView style={styles.container}>
-      {/* Hero Banner Carousel */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.heroBanner}
-        pagingEnabled
-      >
-        {carouselItems.map((item, idx) => (
-          <Image key={idx} style={styles.bannerImage} source={item.image} />
-        ))}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Hi, Riska 👋</Text>
+        <Text style={styles.headerSubText}>Welcome to StudyBuddy!</Text>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Looking for your next project?"
+        />
+      </View>
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.carouselContainer}>
+          <HeroCarousel />
+        </View>
+        <ButtonGrid />
+        <HorizontalSlider />
+        <HorizontalSlider />
+        <HorizontalSlider />
+        <HorizontalSlider />
+        {/* <VerticalSlider /> */}
       </ScrollView>
-
-      {/* Buttons */}
-      <View style={styles.buttonGrid}>
-        {buttonItems.map((item, idx) => (
-          <View style={styles.buttonContainer} key={idx}>
-            <TouchableOpacity>
-              <Image
-                style={{
-                  width: item.size,
-                  height: item.size,
-                }}
-                source={item.icon}
-              />
-            </TouchableOpacity>
-            <Text style={styles.buttonLabel}>{item.label}</Text>
-          </View>
-        ))}
-      </View>
-
-      {/* Horizontal Card Carousel */}
-      <View style={styles.horizontalCardContainer}>
-        <Text style={styles.horizontalCardTitle}>Ini Ceritanya Title</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.horizontalCardCarousel}
-        >
-          {carouselItems.map((item, idx) => (
-            <View key={idx} style={styles.horizontalCard}>
-              <TouchableOpacity>
-                <Image style={styles.horizontalCardImage} source={item.image} />
-                <Text style={styles.horizontalCardText}>{item.text}</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Vertical Card Carousel */}
-      <View style={styles.verticalCardContainer}>
-        <Text style={styles.verticalCardTitle}>Ini Juga Title</Text>
-        <ScrollView vertical showsVerticalScrollIndicator={false}>
-          {carouselItems.map((item, idx) => (
-            <TouchableOpacity key={idx}>
-              <View style={styles.verticalCard}>
-                <Image style={styles.verticalCardImage} source={heroDummy} />
-                <Text style={styles.verticalCardText}>{item.text}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const screenWidth = Dimensions.get("window").width;
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: "#F7F7F7",
+  },
+  carouselContainer: {
+    marginTop: 10,
+  },
+  header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 200,
+    backgroundColor: "#bddded",
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    justifyContent: "center",
+    paddingHorizontal: 30,
+    zIndex: 1000,
+  },
+  headerText: {
+    fontSize: 24,
+    color: "#0e365c",
+    fontWeight: "bold",
+    marginTop: 50,
+  },
+  headerSubText: {
+    fontSize: 17,
+    color: "#4781a5",
+  },
+  searchBar: {
+    marginTop: 20,
     backgroundColor: "#FFFFFF",
-  },
-  heroBanner: {
-    height: 200,
-  },
-  bannerImage: {
-    width: screenWidth,
-    height: 200,
-    resizeMode: "cover",
-  },
-  buttonGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    padding: 10,
-  },
-  buttonContainer: {
-    width: "30%",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  buttonLabel: {
-    fontSize: 12,
-    color: "#0e365c",
-    marginTop: 5,
-    textAlign: "center",
-  },
-  horizontalCardContainer: {
-    padding: 10,
-  },
-  horizontalCardTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#0e365c",
-  },
-  horizontalCardCarousel: {
-    flexDirection: "row",
-  },
-  horizontalCard: {
-    width: screenWidth * 0.6,
-    marginRight: 10,
-    padding: 10,
     borderRadius: 10,
+    paddingHorizontal: 20,
+    height: 40,
   },
-  horizontalCardImage: {
-    width: screenWidth * 0.6,
-    height: 100,
-    resizeMode: "cover",
-    borderRadius: 8,
-  },
-  horizontalCardText: {
-    marginTop: 5,
-    color: "#0e365c",
-    textAlign: "center",
-  },
-  verticalCardContainer: {
-    padding: 10,
-  },
-  verticalCardTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#0e365c",
-  },
-  verticalCard: {
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  verticalCardImage: {
-    height: 150,
-    resizeMode: "cover",
-  },
-  verticalCardText: {
-    color: "#0e365c",
-    fontSize: 16,
-    marginTop: 5,
-    textAlign: "center",
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: "#F7F7F7",
+    paddingTop: 150,
   },
 });
