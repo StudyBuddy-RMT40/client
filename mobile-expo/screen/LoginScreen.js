@@ -12,7 +12,7 @@ import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
 import * as Font from "expo-font";
-// import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -35,64 +35,63 @@ export default function LoginScreen() {
     navigation.push("Register");
   };
 
-  // const handleGoogleSignIn = async () => {
-  //   try {
-  //     await GoogleSignin.hasPlayServices();
-  //     const userInfo = await GoogleSignin.signIn();
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
 
   return (
-    <View style={styles.container}>
-      <Image source={Logo} style={styles.logo} />
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-      />
-      <View style={{ width: "100%" }}>
-        <TouchableOpacity>
-          <Button onPress={handleLogin} text="Login" />
-        </TouchableOpacity>
-        <View style={styles.registerContainer}>
-          <Text style={styles.registerText}>Don't have an account yet?</Text>
-          <TouchableOpacity onPress={handleRegister}>
-            <Text style={styles.registerButton}>Register here</Text>
+    <LinearGradient
+      colors={['#bddded', '#D8D8D8']} 
+      style={styles.container}
+    >
+      <View style={styles.containerContent}>
+        <Image source={Logo} style={styles.logo} />
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={username}
+          onChangeText={(text) => setUsername(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
+        <View style={{ width: "100%" }}>
+          <TouchableOpacity>
+            <Button onPress={handleLogin} text="Login" />
           </TouchableOpacity>
+          <View style={styles.registerContainer}>
+            <Text style={styles.registerText}>Don't have an account yet?</Text>
+            <TouchableOpacity onPress={handleRegister}>
+              <Text style={styles.registerButton}>Register here</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        {/* <GoogleSigninButton
-          style={{ width: 192, height: 48 }}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Light}
-          onPress={handleGoogleSignIn}
-        /> */}
       </View>
-    </View>
+    </LinearGradient>
   );
 }
-
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  containerContent: {
+    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 16,
-    backgroundColor: "#F7F7F7"
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 16,
+    height: 650,
+    width: 350
+
   },
   logo: {
     width: 100,
@@ -116,6 +115,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
     fontFamily: "CustomFont",
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   registerContainer: {
     marginTop: 10,

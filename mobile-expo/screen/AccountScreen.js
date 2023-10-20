@@ -245,7 +245,7 @@ Font.loadAsync({
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
-    padding: 20,
+    padding: 30,
     backgroundColor: "white",
     paddingBottom: 100,
   },
@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 140,
     height: 140,
+    marginTop: 30,
     resizeMode: "cover",
     borderRadius: 70,
   },

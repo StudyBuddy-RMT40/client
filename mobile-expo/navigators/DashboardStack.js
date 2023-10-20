@@ -13,13 +13,13 @@ const Stack = createNativeStackNavigator();
 export default function DashboardStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Welcome" component={DashboardScreen} />
-      <Stack.Screen name="AddProject" component={ProjectForm} />
-      <Stack.Screen name="Detail" component={DetailScreenTeacher} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
-      <Stack.Screen name="Meeting" component={MeetingScreen} />
-      <Stack.Screen name="Payment" component={PaymentScreen} />
-      <Stack.Screen name="Review" component={ReviewScreen} />
+      <Stack.Screen name="Welcome" component={DashboardScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="AddProject" component={ProjectForm}  options={{ headerShown: false }}/>
+      <Stack.Screen name="Detail" component={DetailScreenTeacher} options={{ headerShown: false }} />
+      <Stack.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="Meeting" component={MeetingScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="Payment" component={PaymentScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="Review" component={ReviewScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 }

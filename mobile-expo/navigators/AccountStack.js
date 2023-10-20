@@ -9,10 +9,10 @@ const Stack = createNativeStackNavigator();
 export default function AccountStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="Profile" component={AccountScreen} />
-      <Stack.Screen name="PDFScreen" component={PDFScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Profile" component={AccountScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="PDFScreen" component={PDFScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 }
