@@ -50,7 +50,7 @@ export default function LoginScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-
+      <View style={{width: "100%"}}>
       <TouchableOpacity>
         <Button onPress={handleLogin} text="Login" />
       </TouchableOpacity>
@@ -59,6 +59,7 @@ export default function LoginScreen() {
         <TouchableOpacity onPress={handleRegister}>
           <Text style={styles.registerButton}>Register here</Text>
         </TouchableOpacity>
+      </View>
       </View>
     </View>
   );
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center"
   },
   registerText: {
     marginRight: 5,
@@ -104,5 +106,6 @@ const styles = StyleSheet.create({
   },
   registerButton: {
     color: "#396987",
+    
   },
 });
