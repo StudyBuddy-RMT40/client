@@ -22,17 +22,17 @@ const SearchBar = () => {
     <View style={styles.searchBarContainer}>
       <TextInput
         style={styles.input}
-        placeholder='Find Something'
-        placeholderTextColor='#666'
+        placeholder="Find Something"
+        placeholderTextColor="#666"
       />
-      <Svg width={24} height={24} viewBox='0 0 24 24' style={styles.searchIcon}>
+      <Svg width={24} height={24} viewBox="0 0 24 24" style={styles.searchIcon}>
         <Path
-          strokeLinecap='round'
-          strokeLinejoin='round'
-          d='M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z'
-          stroke='black'
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+          stroke="black"
           strokeWidth={1.5}
-          fill='none'
+          fill="none"
         />
       </Svg>
     </View>
@@ -48,15 +48,16 @@ const Card = ({ data, isLike, isReview }) => {
             <Svg
               width={24}
               height={24}
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
               strokeWidth={1.5}
-              stroke='red'
-              fill='red'>
+              stroke="red"
+              fill="red"
+            >
               <Path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z'
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
               />
             </Svg>
             <Text style={styles.cardAction}>Likes</Text>
@@ -67,15 +68,16 @@ const Card = ({ data, isLike, isReview }) => {
             <Svg
               width={24}
               height={24}
-              xmlns='http://www.w3.org/2000/svg'
-              viewBox='0 0 24 24'
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
               strokeWidth={1.5}
-              stroke='gold'
-              fill='gold'>
+              stroke="gold"
+              fill="gold"
+            >
               <Path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z'
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
               />
             </Svg>
             <Text style={styles.cardAction}>Rating</Text>
@@ -125,16 +127,16 @@ const ProjectCard = ({ title, progress }) => {
   );
 };
 
-
 export default function DashboardScreen() {
   const { isLoggedIn } = useAuth();
+  const navigation = useNavigation();
 
   // if (!isLoggedIn) {
   //   return <Text>Anda belum masuk. Silakan login terlebih dahulu.</Text>;
   // }
 
   const buttonItems = [
-    { icon: allProject, label: "All Projects", size: 60 },
+    { icon: allProject, label: "Add Projects", size: 60 },
     { icon: highschool, label: "School Projects", size: 60 },
     { icon: university, label: "University Projects", size: 60 },
   ];
@@ -154,17 +156,25 @@ export default function DashboardScreen() {
           fontSize: 20,
           fontWeight: "bold",
           marginLeft: 4,
-        }}>
+        }}
+      >
         Overview
       </Text>
       <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-        <Card data='1000' isLike={true} />
-        <Card data='4.6' isReview={true} />
+        <Card data="1000" isLike={true} />
+        <Card data="4.6" isReview={true} />
       </View>
       <View style={styles.buttonGrid}>
         {buttonItems.map((item, idx) => (
           <View style={styles.buttonContainer} key={idx}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                if (item.label === "Add Projects") {
+                  navigation.navigate("AddProject");
+                }
+                // Nanti tambahin yang lain
+              }}
+            >
               <Image
                 style={{
                   width: item.size,
@@ -184,7 +194,8 @@ export default function DashboardScreen() {
             fontSize: 20,
             fontWeight: "bold",
             marginLeft: 4,
-          }}>
+          }}
+        >
           Your Project
         </Text>
         {/* add progress project with bar % in here */}
@@ -196,7 +207,7 @@ export default function DashboardScreen() {
           />
         ))}
       </View>
-      <View style={{marginBottom: 30}}></View>
+      <View style={{ marginBottom: 30 }}></View>
     </ScrollView>
   );
 }
@@ -212,7 +223,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#f0f0f0",
     borderRadius: 20,
-    
   },
   input: {
     borderColor: "#ccc",
@@ -265,7 +275,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 8,
   },
-  
+
   cardContent: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -293,7 +303,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     backgroundColor: "white",
-    shadowColor: "#000", 
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -305,21 +315,20 @@ const styles = StyleSheet.create({
   progressBarContainer: {
     height: 10,
     backgroundColor: "white",
-    borderRadius: 10, 
+    borderRadius: 10,
     marginTop: 5,
   },
   progressBarFill: {
     height: 10,
     borderRadius: 10,
     backgroundColor: "white",
-    shadowColor: "#000", 
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5, 
+    elevation: 5,
   },
-  
 });

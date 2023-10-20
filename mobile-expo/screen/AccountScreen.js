@@ -4,16 +4,19 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
   ScrollView,
   Linking,
   TextInput,
+  SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import { useAuth } from "../navigators/Authcontext";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
 
 import profileImage from "../assets/dummy/hero-dummy.jpg";
+import pdfIcon from "../assets/icons/pdf.png";
+import imageIcon from "../assets/icons/images.png";
 
 export default function AccountScreen() {
   const { logout } = useAuth();
@@ -54,96 +57,140 @@ export default function AccountScreen() {
     });
   };
 
+  const renderDocumentIcon = (url) => {
+    if (url.endsWith(".pdf")) {
+      return pdfIcon;
+    } else if (
+      url.endsWith(".jpeg") ||
+      url.endsWith(".jpg") ||
+      url.endsWith(".png")
+    ) {
+      return imageIcon;
+    }
+    return null;
+  };
+
   return (
-    <ScrollView style={styles.contentContainerStyle}>
-      <View style={styles.imageContainer}>
-        <Image source={profileImage} style={styles.profileImage} />
-        <TouchableOpacity
-          style={styles.editTextContainer}
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <ScrollView
+        style={styles.contentContainerStyle}
+        contentContainerStyle={{ paddingBottom: 50 }}
+      >
+        <View style={styles.imageContainer}>
+          <Image source={profileImage} style={styles.profileImage} />
+          <Text style={styles.username}>{userProfile.name}</Text>
+        </View>
+
+        <Text style={styles.fieldTitle}>Email:</Text>
+        {isEditing ? (
+          <TextInput
+            style={styles.input}
+            value={userProfile.email}
+            onChangeText={(text) => handleChange("email", text)}
+          />
+        ) : (
+          <View style={styles.container}>
+            <Text>{userProfile.email}</Text>
+          </View>
+        )}
+
+        <Text style={styles.fieldTitle}>Role:</Text>
+        {isEditing ? (
+          <TextInput
+            style={styles.input}
+            value={userProfile.role}
+            onChangeText={(text) => handleChange("role", text)}
+          />
+        ) : (
+          <View style={styles.container}>
+            <Text>{userProfile.role}</Text>
+          </View>
+        )}
+
+        <Text style={styles.fieldTitle}>Phone:</Text>
+        {isEditing ? (
+          <TextInput
+            style={styles.input}
+            value={userProfile.phone}
+            onChangeText={(text) => handleChange("phone", text)}
+          />
+        ) : (
+          <View style={styles.container}>
+            <Text>{userProfile.phone}</Text>
+          </View>
+        )}
+
+        <Text style={styles.fieldTitle}>Address:</Text>
+        {isEditing ? (
+          <TextInput
+            style={styles.input}
+            value={userProfile.address}
+            onChangeText={(text) => handleChange("address", text)}
+          />
+        ) : (
+          <View style={styles.container}>
+            <Text>{userProfile.address}</Text>
+          </View>
+        )}
+
+        <Text style={styles.fieldTitle}>Documents:</Text>
+        {isEditing
+          ? userProfile.documents.map((doc, index) => (
+              <View key={index} style={styles.documentInputContainer}>
+                <TextInput
+                  placeholder="Document Title"
+                  value={doc.title}
+                  style={styles.input}
+                />
+                <TextInput
+                  placeholder="Document URL"
+                  value={doc.file_url}
+                  style={styles.input}
+                />
+              </View>
+            ))
+          : userProfile.documents.map((doc, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.documentContainer}
+                onPress={() => Linking.openURL(doc.file_url)}
+              >
+                <Image
+                  source={renderDocumentIcon(doc.file_url)}
+                  style={styles.documentIcon}
+                />
+                <Text>{doc.title}</Text>
+              </TouchableOpacity>
+            ))}
+
+        <Button
+          text={isEditing ? "Save" : "Edit Profile"}
           onPress={handleEditSaveProfile}
-        >
-          <Text style={styles.editText}>
-            {isEditing ? "Save" : "Edit Profile"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.title}>Name: {userProfile.name}</Text>
-
-      <Text style={styles.fieldTitle}>Email:</Text>
-      {isEditing ? (
-        <TextInput
-          style={styles.input}
-          value={userProfile.email}
-          onChangeText={(text) => handleChange("email", text)}
+          style={isEditing ? styles.saveButton : styles.editButton}
         />
-      ) : (
-        <View style={styles.container}>
-          <Text>{userProfile.email}</Text>
-        </View>
-      )}
-
-      <Text style={styles.fieldTitle}>Role:</Text>
-      {isEditing ? (
-        <TextInput
-          style={styles.input}
-          value={userProfile.role}
-          onChangeText={(text) => handleChange("role", text)}
-        />
-      ) : (
-        <View style={styles.container}>
-          <Text>{userProfile.role}</Text>
-        </View>
-      )}
-
-      <Text style={styles.fieldTitle}>Phone:</Text>
-      {isEditing ? (
-        <TextInput
-          style={styles.input}
-          value={userProfile.phone}
-          onChangeText={(text) => handleChange("phone", text)}
-        />
-      ) : (
-        <View style={styles.container}>
-          <Text>{userProfile.phone}</Text>
-        </View>
-      )}
-
-      <Text style={styles.fieldTitle}>Address:</Text>
-      {isEditing ? (
-        <TextInput
-          style={styles.input}
-          value={userProfile.address}
-          onChangeText={(text) => handleChange("address", text)}
-        />
-      ) : (
-        <View style={styles.container}>
-          <Text>{userProfile.address}</Text>
-        </View>
-      )}
-
-      <Text style={styles.fieldTitle}>Documents:</Text>
-      {userProfile.documents.map((doc, index) => (
-        <View key={index} style={styles.container}>
-          <Text onPress={() => Linking.openURL(doc.file_url)}>{doc.title}</Text>
-        </View>
-      ))}
-
-      <TouchableOpacity style={styles.containerButton}>
-        <Button text="Logout" onPress={handleLogout} />
-      </TouchableOpacity>
-    </ScrollView>
+        {!isEditing && (
+          <Button
+            text="Logout"
+            onPress={handleLogout}
+            style={styles.logoutButton}
+          />
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
-    padding: 23,
+    padding: 20,
     backgroundColor: "white",
+    paddingBottom: 100,
   },
-  title: {
+  username: {
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 10,
+    textAlign: "center",
   },
   fieldTitle: {
     fontWeight: "600",
@@ -155,20 +202,32 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
-    marginBottom: 15,
+    marginBottom: 5,
     padding: 8,
   },
   container: {
     width: "100%",
     height: 40,
     borderColor: "E0E0E0",
-    // borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
-    marginBottom: 15,
+    marginBottom: 5,
     justifyContent: "center",
     paddingHorizontal: 8,
     backgroundColor: "#E0E0E0",
+  },
+  documentInputContainer: {
+    marginBottom: 15,
+  },
+  documentContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+  },
+  documentIcon: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
   },
   imageContainer: {
     alignItems: "center",
@@ -182,19 +241,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   editTextContainer: {
-    backgroundColor: "#8B0000", // merah gelap
+    marginTop: 10,
     padding: 10,
     borderRadius: 15,
+  },
+  editButton: {
+    backgroundColor: "#B0B0B0",
+  },
+  saveButton: {
+    backgroundColor: "#32CD32",
+  },
+  logoutButton: {
+    backgroundColor: "#8B0000",
   },
   editText: {
     color: "#FFF",
     fontSize: 12,
-  },
-  containerButton: {
-    marginTop: 30,
-    backgroundColor: "#8B0000",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
+    textAlign: "center",
   },
 });
