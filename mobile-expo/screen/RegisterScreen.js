@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "reac
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png"
 import Button from "../components/Button";
+import * as Font from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -20,8 +22,15 @@ export default function RegisterScreen() {
     navigation.goBack();
   };
 
+  Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Ionicons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
        <Image
         source={Logo}
         style={styles.logo}
@@ -75,13 +84,26 @@ export default function RegisterScreen() {
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
-    backgroundColor: "white"
+    padding: 30,
+    backgroundColor: "#F7F7F7"
+  },
+  backButton: {
+    position: "absolute",
+    marginTop: 15,
+    top: 20,
+    left: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#6b9ebf",
+    justifyContent: "center",
+    alignItems: "center",
   },
   logo: {
     width: 100,
@@ -92,7 +114,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 16,
-    color: "#396987"
+    color: "#396987",
+    fontFamily: "CustomFont",
   },
   input: {
     width: "100%",
@@ -103,6 +126,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    fontFamily: "CustomFont",
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   loginContainer: {
     marginTop: 10,
@@ -111,6 +137,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     marginRight: 5,
+    fontFamily: "CustomFont",
   },
   loginButton: {
     color: "#396987",

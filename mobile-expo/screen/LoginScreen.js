@@ -11,6 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
+import * as Font from "expo-font";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -33,34 +35,44 @@ export default function LoginScreen() {
     navigation.push("Register");
   };
 
-  return (
-    <View style={styles.container}>
-      <Image source={Logo} style={styles.logo} />
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-      />
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
 
-      <TouchableOpacity>
-        <Button onPress={handleLogin} text="Login" />
-      </TouchableOpacity>
-      <View style={styles.registerContainer}>
-        <Text style={styles.registerText}>Don't have an account yet?</Text>
-        <TouchableOpacity onPress={handleRegister}>
-          <Text style={styles.registerButton}>Register here</Text>
-        </TouchableOpacity>
+  return (
+    <LinearGradient
+      colors={['#bddded', '#D8D8D8']} 
+      style={styles.container}
+    >
+      <View style={styles.containerContent}>
+        <Image source={Logo} style={styles.logo} />
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={username}
+          onChangeText={(text) => setUsername(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
+        <View style={{ width: "100%" }}>
+          <TouchableOpacity>
+            <Button onPress={handleLogin} text="Login" />
+          </TouchableOpacity>
+          <View style={styles.registerContainer}>
+            <Text style={styles.registerText}>Don't have an account yet?</Text>
+            <TouchableOpacity onPress={handleRegister}>
+              <Text style={styles.registerButton}>Register here</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -69,7 +81,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
+  },
+  containerContent: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 30,
+    // backgroundColor: "rgba(255, 255, 255, 0.8)",
+    height: "100%",
   },
   logo: {
     width: 100,
@@ -81,26 +100,31 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     color: "#396987",
-    // fontFamily: "Quicksand-Regular",
+    fontFamily: "CustomFont",
   },
   input: {
     width: "100%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
+    paddingLeft:15,
     padding: 8,
+    fontFamily: "CustomFont",
+    backgroundColor: "white",
+    fontWeight: "bold"
   },
   registerContainer: {
     marginTop: 10,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   registerText: {
     marginRight: 5,
-    // fontFamily: "Quicksand-Regular",
+    fontFamily: "CustomFont",
   },
   registerButton: {
     color: "#396987",
