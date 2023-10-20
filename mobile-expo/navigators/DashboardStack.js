@@ -6,6 +6,7 @@ import ChatScreen from "../screen/ChatScreen";
 import MeetingScreen from "../screen/MeetingScreen";
 import ProjectForm from "../screen/ProjectForm";
 import PaymentScreen from "../screen/PaymentScreen";
+import ReviewScreen from "../screen/ReviewScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export default function DashboardStack() {
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="Meeting" component={MeetingScreen} />
       <Stack.Screen name="Payment" component={PaymentScreen} />
+      <Stack.Screen name="Review" component={ReviewScreen} />
     </Stack.Navigator>
   );
 }
