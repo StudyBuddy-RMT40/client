@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  TouchableHighlight
+  TouchableHighlight,
 } from "react-native";
 import { useAuth } from "../navigators/Authcontext";
 import Svg, { Path } from "react-native-svg";
@@ -19,29 +19,11 @@ import highschool from "../assets/highschool.png";
 import university from "../assets/university.png";
 import { useNavigation } from "@react-navigation/native";
 
-const SearchBar = () => {
-  return (
-    <View style={styles.searchBarContainer}>
-      <TextInput
-        style={styles.input}
-        placeholder="Find Something..."
-        placeholderTextColor="#999"
-      />
-      <Svg width={24} height={24} viewBox="0 0 24 24" style={styles.searchIcon}>
-        <Path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-          stroke="black"
-          strokeWidth={1.5}
-          fill="none"
-        />
-      </Svg>
-    </View>
-  );
-};
-
 const Card = ({ data, isLike, isReview }) => {
+  const formatNumber = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <View style={styles.cardContainer}>
       <View style={styles.cardHeader}>
@@ -86,7 +68,9 @@ const Card = ({ data, isLike, isReview }) => {
           </View>
         )}
       </View>
-      <Text style={styles.cardTitle}>{data}</Text>
+      <Text style={styles.cardTitle}>
+        {isLike ? `${formatNumber(data)} Likes` : `${formatNumber(data)} Rating`}
+      </Text>
     </View>
   );
 };
@@ -111,26 +95,26 @@ const ProjectCard = ({ title, progress }) => {
 
   return (
     <TouchableHighlight
-    onPress={handleDetail}
-    underlayColor="#f0f0f0" 
-    style={{ borderRadius: 20, overflow: "hidden" }} 
-  >
-    <View style={styles.projectCard}>
-      <View style={styles.cardHeader}>
-        <Text style={styles.cardTitle}>{title}</Text>
+      onPress={handleDetail}
+      underlayColor="#f0f0f0"
+      style={{ borderRadius: 20, overflow: "hidden" }}
+    >
+      <View style={styles.projectCard}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.cardTitle}>{title}</Text>
+        </View>
+        <View style={styles.progressBarContainer}>
+          <View
+            style={{
+              ...styles.progressBarFill,
+              width: `${progress}%`,
+              backgroundColor: progressBarColor,
+            }}
+          ></View>
+        </View>
+        <Text style={styles.progressLabel}>{`${progress}% Complete`}</Text>
       </View>
-      <View style={styles.progressBarContainer}>
-        <View
-          style={{
-            ...styles.progressBarFill,
-            width: `${progress}%`,
-            backgroundColor: progressBarColor,
-          }}
-        ></View>
-      </View>
-      <Text style={styles.progressLabel}>{`${progress}% Complete`}</Text>
-    </View>
-  </TouchableHighlight>
+    </TouchableHighlight>
   );
 };
 
@@ -154,9 +138,17 @@ export default function DashboardScreen() {
     { title: "Project C", progress: 90 },
   ];
 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
+    <View>
+    <View style={styles.header}>
+    <Text style={styles.headerText}>The Project</Text>
+    <Text style={styles.headerSubText}>Let's check your progress...</Text>
+  </View>
     <ScrollView style={styles.container}>
-      <SearchBar />
       <Text
         style={{
           marginTop: 15,
@@ -164,7 +156,6 @@ export default function DashboardScreen() {
           fontWeight: "bold",
           marginLeft: 4,
           fontFamily: "CustomFont",
-          
         }}
       >
         Overview
@@ -216,35 +207,43 @@ export default function DashboardScreen() {
           />
         ))}
       </View>
-      <View style={{ marginBottom: 30 }}></View>
+      <View style={{ marginBottom: 150 }}></View>
     </ScrollView>
+    </View>
   );
 }
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: "white",
+    backgroundColor: "#F7F7F7",
   },
-  searchBarContainer: {
-    flexDirection: "row",
+  header: {
+    backgroundColor: "#bddded",
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
-    borderRadius: 30,
-    paddingHorizontal: 16,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 3,
-    marginVertical: 10,
+    zIndex: 1000,
+    height: 120,  
+    width: "100%",  
+  },
+  headerText: {
+    fontSize: 24,
+    color: "#0e365c",
+    fontWeight: "bold",
+    fontFamily: "CustomFont",
+    marginTop: 30, 
+  },
+  headerSubText: {
+    fontSize: 17,
+    color: "#4781a5",
+    fontFamily: "CustomFont",
+    marginTop: 5,
   },
   input: {
     flex: 1,
@@ -254,11 +253,7 @@ const styles = StyleSheet.create({
     fontFamily: "CustomFont",
     color: "#333",
   },
-  searchIcon: {
-    marginLeft: 10,
-  },
   cardContainer: {
-    marginTop: 20,
     borderRadius: 20,
     borderColor: "#ccc",
     padding: 16,
@@ -293,12 +288,11 @@ const styles = StyleSheet.create({
     fontFamily: "CustomFont",
   },
   cardTitle: {
-    fontSize: 24,
-    fontFamily: "CustomFont", 
+    fontSize: 20,
+    fontFamily: "CustomFont",
     fontWeight: "bold",
     marginTop: 8,
   },
-
   cardContent: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -320,7 +314,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "CustomFont",
     fontWeight: "bold",
-    color: "#0e365c"
+    color: "#0e365c",
   },
   projectCard: {
     borderRadius: 20,
@@ -334,7 +328,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.50,
+    shadowOpacity: 0.5,
     shadowRadius: 3.84,
     elevation: 5,
   },

@@ -15,6 +15,10 @@ export default function ReviewScreen() {
     { text: "Dummy 4", image: dummy3 },
   ];
 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
     <ScrollView style={styles.contentContainerStyle}>
       <Text style={styles.title}>Project Name</Text>
@@ -87,9 +91,7 @@ export default function ReviewScreen() {
     </ScrollView>
   );
 }
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+
 const screenWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({

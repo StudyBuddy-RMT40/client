@@ -6,6 +6,8 @@ import teacherdummy1 from "../assets/images/image1.jpg";
 import teacherdummy2 from "../assets/images/image2.jpg";
 import teacherdummy3 from "../assets/images/image3.jpg";
 import * as Font from "expo-font";
+import { LinearGradient } from 'expo-linear-gradient';
+import HorizontalSlider from "../components/HorizontalSlider";
 
 export default function ProjectForm() {
   const [projectName, setProjectName] = useState("");
@@ -15,21 +17,29 @@ export default function ProjectForm() {
   const [endDate, setEndDate] = useState("");
   const [goals, setGoals] = useState("");
 
+
   const navigation = useNavigation();
 
   const handleSubmit = () => {
     navigation.push("Payment");
   };
 
-  const carouselItems = [
-    { text: "Teacher 1", image: teacherdummy1 },
-    { text: "Teacher 2", image: teacherdummy2 },
-    { text: "Teacher 3", image: teacherdummy3 },
-  ];
+  // const carouselItems = [
+  //   { text: "Teacher 1", image: teacherdummy1 },
+  //   { text: "Teacher 2", image: teacherdummy2 },
+  //   { text: "Teacher 3", image: teacherdummy3 },
+  // ];
 
- 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
 
   return (
+    <LinearGradient
+    colors={['#bddded', '#D8D8D8']} 
+    style={styles.contentContainerStyle}
+  >
+
     <ScrollView style={styles.contentContainerStyle}>
       <Text style={styles.title}>Choose Mentor</Text>
 
@@ -38,25 +48,7 @@ export default function ProjectForm() {
         <TextInput style={styles.locationInput} placeholder="Location" />
       </View>
 
-      <View style={styles.imageContainer}>
-      <View style={styles.horizontalCardContainer}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.horizontalCardCarousel}
-        >
-          {carouselItems.map((item, idx) => (
-            <View key={idx} style={styles.horizontalCard}>
-              <TouchableOpacity>
-                <Image style={styles.horizontalCardImage} source={item.image} />
-                <Text style={styles.horizontalCardText}>{item.text}</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-      </View>
-
+      <HorizontalSlider/>
 
       <Text style={styles.title}>Add New Project</Text>
 
@@ -125,17 +117,15 @@ export default function ProjectForm() {
       </View>
       <View style={{ marginBottom: 30 }}></View>
     </ScrollView>
+    </LinearGradient>
   );
 }
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+
 
 const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   contentContainerStyle: {
-    padding: 23,
-    backgroundColor: "white",
+    padding: 13,
   },
   title: {
     fontSize: 24,
@@ -154,22 +144,26 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    backgroundColor: "white",
+    fontWeight: "bold"
   },
   containerBig: {
     width: "100%",
     height: 100,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    backgroundColor: "white",
+    fontWeight: "bold"
   },
   containerButton: {
     marginTop: 15,
@@ -182,18 +176,22 @@ const styles = StyleSheet.create({
   filterInput: {
     width: "48%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
+    backgroundColor: "white",
+    fontWeight: "bold"
   },
   locationInput: {
     width: "48%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
+    backgroundColor: "white",
+    fontWeight: "bold"
   },
   imageContainer: {
     height: 200, 

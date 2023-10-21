@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   Text,
@@ -6,12 +7,16 @@ import {
   TextInput,
   SafeAreaView,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeroCarousel from "../components/HeroCarousel";
 import ButtonGrid from "../components/ButtonGrid";
 import HorizontalSlider from "../components/HorizontalSlider";
-// import VerticalSlider from "../components/VerticalSlider";
+import { Platform } from "react-native";
 
 export default function LandingPageScreen() {
+  const insets = useSafeAreaInsets();
+  const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
@@ -22,7 +27,10 @@ export default function LandingPageScreen() {
           placeholder="Looking for your next project?"
         />
       </View>
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView
+        style={[styles.scrollContainer, { paddingTop: paddingTop }]}
+        contentContainerStyle={{ paddingBottom: 200 }}
+      >
         <View style={styles.carouselContainer}>
           <HeroCarousel />
         </View>
@@ -79,6 +87,5 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     backgroundColor: "#F7F7F7",
-    paddingTop: 200,
   },
 });

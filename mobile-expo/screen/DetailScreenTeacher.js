@@ -3,6 +3,7 @@ import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import Button from "../components/Button";
 import * as Font from "expo-font";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function DetailScreenTeacher() {
   const navigation = useNavigation();
@@ -15,7 +16,15 @@ export default function DetailScreenTeacher() {
     navigation.push("Chat");
   };
 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
+    <LinearGradient
+    colors={['#bddded', '#D8D8D8']} 
+    style={styles.contentContainerStyle}
+  >
     <ScrollView style={styles.contentContainerStyle}>
       <Text style={styles.title}>Project Name</Text>
       <View style={styles.container}>
@@ -71,16 +80,15 @@ export default function DetailScreenTeacher() {
       </View>
       <View style={{marginBottom: 30}}></View>
     </ScrollView>
+    </LinearGradient>
   );
 }
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
-    padding: 23,
-    backgroundColor: "white",
+    padding: 13,
+    
   },
   title: {
     fontSize: 20,
@@ -91,12 +99,14 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   durationContainer: {
     flexDirection: "row",
@@ -117,20 +127,24 @@ const styles = StyleSheet.create({
   },
   durationContent: {
     flex: 1,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
   },
   containerBig: {
     width: "100%",
     height: 100,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
+    backgroundColor: "#D8D8D8",
+    fontWeight: "bold"
     
   },
   containerButton: {

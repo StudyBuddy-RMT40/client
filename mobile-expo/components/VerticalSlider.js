@@ -19,6 +19,10 @@ export default function VerticalSlider() {
     { text: "Ini Nama Project 4", image: heroDummy },
   ];
 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
     <View style={styles.verticalCardContainer}>
       <Text style={styles.verticalCardTitle}>Ini Juga Title</Text>
