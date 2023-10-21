@@ -6,25 +6,17 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
 } from "react-native";
 import Button from "../components/Button";
-import * as Font from "expo-font";
-import { LinearGradient } from "expo-linear-gradient";
 import CustomHeader from "../components/CustomHeader";
 
-const screenWidth = Dimensions.get("window").width;
-
-export default function DetailScreenStudent() {
+export default function DetailScreen({ route }) {
   const navigation = useNavigation();
+  const project = route.params.project;
 
   const handleChat = () => {
     navigation.push("Chat");
   };
-
-  Font.loadAsync({
-    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-  });
 
   return (
     <>
@@ -32,43 +24,32 @@ export default function DetailScreenStudent() {
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.title}>Project Name</Text>
         <View style={styles.container}>
-          <Text>Project Name...</Text>
+          <Text>{project.title}</Text>
         </View>
 
         <Text style={styles.title}>Project Description</Text>
         <View style={styles.containerBig}>
-          <Text>Project Description...</Text>
+          <Text>{project.description}</Text>
         </View>
 
         <Text style={styles.title}>Category</Text>
         <View style={styles.container}>
-          <Text>Category...</Text>
+          <Text>{project.category}</Text>
         </View>
 
-        <Text style={styles.title}>Project Duration</Text>
-        <View style={styles.durationContainer}>
-          <View style={styles.durationItem}>
-            <Text style={styles.durationText}>Start</Text>
-            <View style={styles.durationContent}>
-              <Text>Start Duration</Text>
-            </View>
-          </View>
-          <View style={styles.durationItem}>
-            <Text style={styles.durationText}>End</Text>
-            <View style={styles.durationContent}>
-              <Text>End Duration</Text>
-            </View>
-          </View>
+        <Text style={styles.title}>Goals</Text>
+        <View style={styles.containerBig}>
+          <Text>{project.goals}</Text>
         </View>
 
         <Text style={styles.title}>Feedback</Text>
         <View style={styles.containerBig}>
-          <Text>Feedback...</Text>
+          <Text>{project.feedback}</Text>
         </View>
 
         <Text style={styles.title}>Learning Materials</Text>
         <View style={styles.containerBig}>
-          <Text>Learning Materials...</Text>
+          <Text>{project.learningMaterials}</Text>
         </View>
 
         <Text style={styles.title}>Ask AI</Text>
@@ -91,9 +72,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
     marginTop: 10,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
   },
   container: {
     width: "100%",
@@ -122,7 +102,7 @@ const styles = StyleSheet.create({
   durationText: {
     fontWeight: "bold",
     marginRight: 5,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
   },
   durationContent: {
     flex: 1,

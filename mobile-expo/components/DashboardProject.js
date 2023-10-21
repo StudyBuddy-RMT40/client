@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -9,39 +9,67 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const ProjectCard = ({ title, progress }) => {
+const ProjectCard = ({
+  title,
+  progress,
+  status,
+  description,
+  category,
+  goals,
+  feedback,
+  learningMaterials,
+}) => {
   const navigation = useNavigation();
 
   let progressBarColor;
-  if (progress <= 25) {
-    progressBarColor = "red";
-  } else if (progress <= 50) {
-    progressBarColor = "orange";
-  } else if (progress <= 75) {
-    progressBarColor = "yellow";
-  } else {
-    progressBarColor = "green";
-  }
+  if (progress <= 25) progressBarColor = "red";
+  else if (progress <= 50) progressBarColor = "orange";
+  else if (progress <= 75) progressBarColor = "yellow";
+  else progressBarColor = "green";
+
+  let displayText;
+  if (status === "Submitted") displayText = "Waiting For Buddy Approval";
+  else if (status === "Accepted") displayText = "Waiting For Payment";
+  else if (status === "Paid") displayText = "0% Complete";
+  else if (status === "On Progress" || status === "Finished")
+    displayText = `${progress}% Complete`;
+
+  let cardContent = (
+    <View>
+      <Text style={styles.projectTitle}>{title}</Text>
+      <View style={styles.progressBarContainer}>
+        <View
+          style={{
+            ...styles.progressBarFill,
+            width: `${progress}%`,
+            backgroundColor: progressBarColor,
+          }}
+        ></View>
+      </View>
+      <Text style={styles.progressLabel}>{displayText}</Text>
+    </View>
+  );
 
   return (
     <TouchableHighlight
-      onPress={() => navigation.push("Detail")}
+      onPress={() =>
+        navigation.push("Detail", {
+          project: {
+            title,
+            progress,
+            status,
+            description,
+            category,
+            goals,
+            feedback,
+            learningMaterials,
+          },
+        })
+      }
       underlayColor="#f0f0f0"
       style={styles.projectCard}
     >
-      <View>
-        <Text style={styles.projectTitle}>{title}</Text>
-        <View style={styles.progressBarContainer}>
-          <View
-            style={{
-              ...styles.progressBarFill,
-              width: `${progress}%`,
-              backgroundColor: progressBarColor,
-            }}
-          ></View>
-        </View>
-        <Text style={styles.progressLabel}>{`${progress}% Complete`}</Text>
-      </View>
+      {cardContent}
     </TouchableHighlight>
   );
 };
@@ -50,9 +78,21 @@ const DashboardProject = ({ projectData }) => {
   const [activeFilter, setActiveFilter] = useState("On Progress");
   const [loading, setLoading] = useState(false);
 
-  const filteredData = projectData.filter(
-    (project) => project.status === activeFilter
-  );
+  let filteredData = [];
+  if (activeFilter === "Proposed") {
+    filteredData = projectData.filter(
+      (project) =>
+        project.status === "Submitted" || project.status === "Accepted"
+    );
+  } else if (activeFilter === "On Progress") {
+    filteredData = projectData.filter(
+      (project) => project.status === "Paid" || project.status === "On Progress"
+    );
+  } else if (activeFilter === "Finished") {
+    filteredData = projectData.filter(
+      (project) => project.status === "Finished"
+    );
+  }
 
   return (
     <View>
@@ -61,13 +101,13 @@ const DashboardProject = ({ projectData }) => {
       <View style={styles.filterContainer}>
         <TouchableOpacity
           onPress={() => {
-            setLoading(true); // Memulai loading
-            setActiveFilter("Submitted");
-            setTimeout(() => setLoading(false), 500); // Selesai loading setelah setengah detik
+            setLoading(true);
+            setActiveFilter("Proposed");
+            setTimeout(() => setLoading(false), 500);
           }}
           style={[
             styles.filterButton,
-            activeFilter === "Submitted" && styles.activeFilter,
+            activeFilter === "Proposed" && styles.activeFilter,
           ]}
         >
           <Text style={styles.filterText}>Proposed</Text>
@@ -75,9 +115,9 @@ const DashboardProject = ({ projectData }) => {
 
         <TouchableOpacity
           onPress={() => {
-            setLoading(true); // Memulai loading
+            setLoading(true);
             setActiveFilter("On Progress");
-            setTimeout(() => setLoading(false), 500); // Selesai loading setelah setengah detik
+            setTimeout(() => setLoading(false), 500);
           }}
           style={[
             styles.filterButton,
@@ -89,9 +129,9 @@ const DashboardProject = ({ projectData }) => {
 
         <TouchableOpacity
           onPress={() => {
-            setLoading(true); // Memulai loading
+            setLoading(true);
             setActiveFilter("Finished");
-            setTimeout(() => setLoading(false), 500); // Selesai loading setelah setengah detik
+            setTimeout(() => setLoading(false), 500);
           }}
           style={[
             styles.filterButton,
@@ -110,11 +150,7 @@ const DashboardProject = ({ projectData }) => {
         />
       ) : filteredData.length ? (
         filteredData.map((project, idx) => (
-          <ProjectCard
-            key={idx}
-            title={project.title}
-            progress={project.progress}
-          />
+          <ProjectCard key={idx} {...project} />
         ))
       ) : (
         <Text style={styles.noProjectText}>No Project Yet</Text>

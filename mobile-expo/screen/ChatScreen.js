@@ -1,44 +1,38 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from "react-native";
-
-export default function ChatScreen() {
-  const [messages, setMessages] = useState([
-    { id: 1, sender: "User", content: "Hello!" },
-    { id: 2, sender: "Bot", content: "Hi there!" },
-    
-  ]);
-
-  const [newMessage, setNewMessage] = useState("");
-
-  const handleSend = () => {
-    if (newMessage.trim() !== "") {
-      setMessages([...messages, { id: messages.length + 1, sender: "User", content: newMessage }]);
-      setNewMessage("");
-    }
+import React from "react";
+// import * as TalkRn from '@talkjs/react-native';
+import { View, StyleSheet } from "react-native";
+import * as TalkRn from "@talkjs/expo";
+export default function ChatScreen(props) {
+  const me = {
+    id: "123456789",
+    name: "Alice",
+    email: "alice@example.com",
+    photoUrl: "https://talkjs.com/images/avatar-1.jpg",
+    welcomeMessage: "Hey there! How are you? :-)",
+    role: "default",
   };
+
+  const other = {
+    id: "987654321",
+    name: "Sebastian",
+    email: "Sebastian@example.com",
+    photoUrl: "https://talkjs.com/images/avatar-5.jpg",
+    welcomeMessage: "Hey, how can I help? https://google.com",
+    role: "default",
+  };
+
+  const conversationBuilder = TalkRn.getConversationBuilder(
+    TalkRn.oneOnOneId(me, other)
+  );
+
+  conversationBuilder.setParticipant(me);
+  conversationBuilder.setParticipant(other);
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={messages}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.messageContainer}>
-            <Text style={item.sender === "User" ? styles.userMessage : styles.botMessage}>{item.content}</Text>
-          </View>
-        )}
-      />
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Type a message..."
-          value={newMessage}
-          onChangeText={(text) => setNewMessage(text)}
-        />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-          <Text style={styles.sendButtonText}>Send</Text>
-        </TouchableOpacity>
-      </View>
+      <TalkRn.Session appId="t8orPdLy" me={me}>
+        <TalkRn.Chatbox conversationBuilder={conversationBuilder} />
+      </TalkRn.Session>
     </View>
   );
 }
@@ -46,45 +40,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
-    backgroundColor: "#F0F0F0",
-  },
-  messageContainer: {
-    marginBottom: 10,
-  },
-  userMessage: {
-    padding: 8,
-    backgroundColor: "#4CAF50",
-    borderRadius: 8,
-    alignSelf: "flex-end",
-    color: "white",
-  },
-  botMessage: {
-    padding: 8,
-    backgroundColor: "#2196F3",
-    borderRadius: 8,
-    alignSelf: "flex-start",
-    color: "white",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: "#ccc",
-    backgroundColor: "white",
-    paddingVertical: 8,
-  },
-  input: {
-    flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    fontSize: 16,
-  },
-  sendButton: {
-    paddingHorizontal: 16,
-  },
-  sendButtonText: {
-    color: "#2196F3",
-    fontWeight: "bold",
+    borderRadius: 20,
+    padding: 7,
   },
 });

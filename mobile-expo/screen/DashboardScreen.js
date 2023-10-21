@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { useAuth } from "../navigators/Authcontext";
 import ButtonGrid from "../components/ButtonGrid";
@@ -22,23 +22,83 @@ export default function DashboardScreen() {
     },
   ];
 
-  const projectData = [
+  const [projectData, setProjectData] = useState([
     {
-      title: "Design Thinking Fundamental 3",
+      id: 1,
+      title: "Design Thinking Intro",
       progress: 0,
       status: "Submitted",
+      description:
+        "An introductory course to Design Thinking methodology. This course provides a foundational understanding of the principles and techniques used in Design Thinking.",
+      category: "Design",
+      goals:
+        "The goals of this course are to help participants grasp the basics of design thinking, understand its problem-solving approach, and apply it to real-world challenges.",
+      feedback:
+        "Your submission has been received and is currently awaiting review. Our team will evaluate your application and provide feedback soon.",
+      learningMaterials:
+        "Once your application is approved, you will gain access to a variety of learning materials, including video lectures, case studies, and design templates.",
     },
     {
-      title: "Design Thinking Fundamental 2",
-      progress: 40,
-      status: "On Progress",
+      id: 2,
+      title: "Design Thinking Advanced",
+      progress: 0,
+      status: "Accepted",
+      description:
+        "An advanced-level course in Design Thinking, building on the concepts introduced in the introductory course. This course dives deeper into the methodology and its applications.",
+      category: "Design",
+      goals:
+        "In this advanced course, participants will delve deeper into design thinking concepts, explore advanced techniques for problem-solving and innovation, and gain practical experience.",
+      feedback:
+        "Congratulations! Your application has been accepted. You are now one step closer to unlocking the full potential of Design Thinking.",
+      learningMaterials:
+        "Access to advanced learning materials and resources will be provided upon payment for the course.",
     },
-    // {
-    //   title: "Design Thinking Fundamental 1",
-    //   progress: 100,
-    //   status: "Finished",
-    // },
-  ];
+    {
+      id: 3,
+      title: "Design Thinking Masterclass",
+      progress: 0,
+      status: "Paid",
+      description:
+        "A comprehensive Design Thinking Masterclass designed for individuals seeking to master all aspects of the methodology. This course covers advanced topics and practical applications.",
+      category: "Design",
+      goals:
+        "The masterclass aims to equip participants with a deep understanding of design thinking, allowing them to lead innovation initiatives and solve complex challenges effectively.",
+      feedback:
+        "Payment successful! You are now enrolled in the Design Thinking Masterclass. Get ready to embark on a transformative learning journey.",
+      learningMaterials:
+        "Upon enrollment, you will gain access to a premium set of learning materials, including exclusive video lectures, case studies, and expert-led workshops.",
+    },
+    {
+      id: 4,
+      title: "Design Thinking Intermediate",
+      progress: 50,
+      status: "On Progress",
+      description:
+        "An intermediate-level course that bridges the gap between foundational and advanced Design Thinking. Participants apply their knowledge to real-world projects.",
+      category: "Design",
+      goals:
+        "This intermediate course covers a range of design thinking techniques and tools, allowing participants to tackle complex problems with confidence.",
+      feedback:
+        "Great progress so far! Keep up the good work. You're halfway through the course and making excellent strides in your understanding of Design Thinking.",
+      learningMaterials:
+        "Access a comprehensive set of learning materials, including video tutorials, case studies, and practical exercises, to support your learning journey.",
+    },
+    {
+      id: 5,
+      title: "Design Thinking Final",
+      progress: 100,
+      status: "Finished",
+      description:
+        "The final installment in the Design Thinking series, where participants demonstrate their mastery of the methodology through a capstone project.",
+      category: "Design",
+      goals:
+        "Conclude your Design Thinking journey by successfully completing a capstone project that applies all your acquired knowledge and skills.",
+      feedback:
+        "Congratulations on completing the Design Thinking Final course! You've successfully demonstrated your expertise in this innovative problem-solving approach.",
+      learningMaterials:
+        "Access a complete set of learning materials, including recorded lectures, project templates, and additional resources, to help you excel in your capstone project.",
+    },
+  ]);
 
   return (
     <>
