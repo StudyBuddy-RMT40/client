@@ -7,7 +7,6 @@ import university from "../assets/university.png";
 import browseLocation from "../assets/location.png";
 import topProject from "../assets/top-projects.png";
 import topBuddy from "../assets/top-teacher.png";
-import * as Font from "expo-font";
 
 export default function ButtonGrid() {
   const buttonItems = [
@@ -35,9 +34,6 @@ export default function ButtonGrid() {
     </View>
   );
 }
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
 
 const styles = StyleSheet.create({
   buttonGrid: {
@@ -56,7 +52,7 @@ const styles = StyleSheet.create({
     color: "#0e365c",
     marginTop: 5,
     textAlign: "center",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
     fontWeight: "bold",
   },
 });
