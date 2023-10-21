@@ -6,8 +6,8 @@ import teacherdummy1 from "../assets/images/image1.jpg";
 import teacherdummy2 from "../assets/images/image2.jpg";
 import teacherdummy3 from "../assets/images/image3.jpg";
 import * as Font from "expo-font";
+import { LinearGradient } from 'expo-linear-gradient';
 import HorizontalSlider from "../components/HorizontalSlider";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function ProjectForm() {
   const [projectName, setProjectName] = useState("");
@@ -35,6 +35,11 @@ export default function ProjectForm() {
   });
 
   return (
+    <LinearGradient
+    colors={['#bddded', '#D8D8D8']} 
+    style={styles.contentContainerStyle}
+  >
+
     <ScrollView style={styles.contentContainerStyle}>
       <Text style={styles.title}>Choose Mentor</Text>
 
@@ -112,6 +117,7 @@ export default function ProjectForm() {
       </View>
       <View style={{ marginBottom: 30 }}></View>
     </ScrollView>
+    </LinearGradient>
   );
 }
 
@@ -119,9 +125,7 @@ export default function ProjectForm() {
 const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   contentContainerStyle: {
-    padding: 25,
-    marginTop: 20,
-    backgroundColor: "white",
+    padding: 13,
   },
   title: {
     fontSize: 24,
@@ -140,25 +144,25 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
-    backgroundColor: "#D8D8D8",
+    backgroundColor: "white",
     fontWeight: "bold"
   },
   containerBig: {
     width: "100%",
     height: 100,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
     padding: 8,
-    backgroundColor: "#D8D8D8",
+    backgroundColor: "white",
     fontWeight: "bold"
   },
   containerButton: {
@@ -172,21 +176,21 @@ const styles = StyleSheet.create({
   filterInput: {
     width: "48%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
-    backgroundColor: "#D8D8D8",
+    backgroundColor: "white",
     fontWeight: "bold"
   },
   locationInput: {
     width: "48%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     padding: 8,
-    backgroundColor: "#D8D8D8",
+    backgroundColor: "white",
     fontWeight: "bold"
   },
   imageContainer: {

@@ -138,6 +138,10 @@ export default function DashboardScreen() {
     { title: "Project C", progress: 90 },
   ];
 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
     <View>
     <View style={styles.header}>
@@ -208,9 +212,7 @@ export default function DashboardScreen() {
     </View>
   );
 }
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+
 
 const styles = StyleSheet.create({
   container: {

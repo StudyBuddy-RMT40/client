@@ -19,6 +19,10 @@ export default function ButtonGrid() {
     { icon: topBuddy, label: "Top Buddy", size: 60 },
   ];
 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
     <View style={styles.buttonGrid}>
       {buttonItems.map((item, idx) => (
@@ -35,9 +39,7 @@ export default function ButtonGrid() {
     </View>
   );
 }
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+
 
 const styles = StyleSheet.create({
   buttonGrid: {
