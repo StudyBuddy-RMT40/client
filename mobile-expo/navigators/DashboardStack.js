@@ -15,7 +15,7 @@ export default function DashboardStack() {
     <Stack.Navigator>
       <Stack.Screen name="Welcome" component={DashboardScreen} options={{ headerShown: false }} />
       <Stack.Screen name="AddProject" component={ProjectForm}  options={{ headerShown: false }}/>
-      <Stack.Screen name="Detail" component={DetailScreenStudent} options={{ headerShown: false }} />
+      <Stack.Screen name="Detail" component={DetailScreenTeacher} options={{ headerShown: false }} />
       <Stack.Screen name="Chat" component={ChatScreen} options={{ headerShown: false }}/>
       <Stack.Screen name="Meeting" component={MeetingScreen} options={{ headerShown: false }}/>
       <Stack.Screen name="Payment" component={PaymentScreen} options={{ headerShown: false }}/>
