@@ -12,10 +12,34 @@ import HeroCarousel from "../components/HeroCarousel";
 import ButtonGrid from "../components/ButtonGrid";
 import HorizontalSlider from "../components/HorizontalSlider";
 import { Platform } from "react-native";
+import allProject from "../assets/public.png";
+import highschool from "../assets/highschool.png";
+import university from "../assets/university.png";
+import browseLocation from "../assets/location.png";
+import topProject from "../assets/top-projects.png";
+import topBuddy from "../assets/top-teacher.png";
 
 export default function LandingPageScreen() {
   const insets = useSafeAreaInsets();
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
+  const buttonItems = [
+    { icon: allProject, label: "All Projects", size: 60, onPress: () => {} },
+    { icon: highschool, label: "School Projects", size: 60, onPress: () => {} },
+    {
+      icon: university,
+      label: "University Projects",
+      size: 60,
+      onPress: () => {},
+    },
+    {
+      icon: browseLocation,
+      label: "Projects Near Me",
+      size: 60,
+      onPress: () => {},
+    },
+    { icon: topProject, label: "Top Projects", size: 60, onPress: () => {} },
+    { icon: topBuddy, label: "Top Buddy", size: 60, onPress: () => {} },
+  ];
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -34,7 +58,7 @@ export default function LandingPageScreen() {
         <View style={styles.carouselContainer}>
           <HeroCarousel />
         </View>
-        <ButtonGrid />
+        <ButtonGrid items={buttonItems} />
         <HorizontalSlider />
         <HorizontalSlider />
         <HorizontalSlider />

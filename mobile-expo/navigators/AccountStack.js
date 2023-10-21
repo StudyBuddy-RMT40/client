@@ -11,7 +11,11 @@ export default function AccountStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="Profile" component={AccountScreen} />
+      <Stack.Screen
+        name="Profile"
+        component={AccountScreen}
+        options={{ headerShown: true }}
+      />
       <Stack.Screen name="PDFScreen" component={PDFScreen} />
     </Stack.Navigator>
   );

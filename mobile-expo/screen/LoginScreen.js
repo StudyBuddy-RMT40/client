@@ -98,9 +98,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    marginBottom: 16,
+    marginBottom: 20,
     color: "#396987",
     fontFamily: "Lato-Bold",
+    minHeight: 30,
   },
   input: {
     width: "100%",
