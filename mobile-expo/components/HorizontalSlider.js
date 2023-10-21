@@ -47,6 +47,10 @@ export default function HorizontalSlider() {
     { text: "Ini Nama Project 4", image: dummy3 },
   ];
 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ini Judul</Text>
@@ -75,9 +79,7 @@ export default function HorizontalSlider() {
     </View>
   );
 }
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+
 
 const styles = StyleSheet.create({
   container: {

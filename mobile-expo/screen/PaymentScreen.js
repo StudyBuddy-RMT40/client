@@ -41,6 +41,10 @@ export default function PaymentScreen() {
     currency: "IDR",
   });
 
+  Font.loadAsync({
+    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Order Details</Text>
@@ -71,9 +75,7 @@ export default function PaymentScreen() {
   );
 }
 
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+
 
 const styles = StyleSheet.create({
   container: {

@@ -5,6 +5,7 @@ import Logo from "../assets/StudyBuddy.png"
 import Button from "../components/Button";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -27,6 +28,10 @@ export default function RegisterScreen() {
   });
 
   return (
+     <LinearGradient
+      colors={['#bddded', '#D8D8D8']} 
+      style={styles.container}
+    >
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
         <Ionicons name="arrow-back" size={24} color="white" />
@@ -81,6 +86,7 @@ export default function RegisterScreen() {
         </TouchableOpacity>
       </View>
     </View>
+    </LinearGradient>
   );
 }
 
@@ -89,9 +95,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    padding: 30,
-    backgroundColor: "#F7F7F7"
+    alignItems: "center", // Center horizontally
+    padding: 20,
   },
   backButton: {
     position: "absolute",
@@ -118,16 +123,17 @@ const styles = StyleSheet.create({
     fontFamily: "CustomFont",
   },
   input: {
-    width: "100%",
+    width: 330,
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
+    paddingLeft:15,
     padding: 8,
     fontFamily: "CustomFont",
-    backgroundColor: "#D8D8D8",
+    backgroundColor: "white",
     fontWeight: "bold"
   },
   loginContainer: {
@@ -143,3 +149,4 @@ const styles = StyleSheet.create({
     color: "#396987",
   },
 });
+

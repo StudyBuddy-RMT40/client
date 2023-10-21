@@ -13,6 +13,11 @@ import HorizontalSlider from "../components/HorizontalSlider";
 // import VerticalSlider from "../components/VerticalSlider";
 
 export default function LandingPageScreen() {
+  
+Font.loadAsync({
+  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
+});
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
@@ -39,9 +44,6 @@ export default function LandingPageScreen() {
   );
 }
 
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
 
 const styles = StyleSheet.create({
   container: {
