@@ -83,15 +83,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   containerContent: {
-    width: "80%",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    borderRadius: 16,
-    height: 650,
-    width: 350
-
+    padding: 30,
+    // backgroundColor: "rgba(255, 255, 255, 0.8)",
+    height: "100%",
   },
   logo: {
     width: 100,
@@ -108,14 +105,15 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
+    paddingLeft:15,
     padding: 8,
     fontFamily: "CustomFont",
-    backgroundColor: "#D8D8D8",
+    backgroundColor: "white",
     fontWeight: "bold"
   },
   registerContainer: {

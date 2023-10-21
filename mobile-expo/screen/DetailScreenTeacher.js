@@ -3,7 +3,6 @@ import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import Button from "../components/Button";
 import * as Font from "expo-font";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function DetailScreenTeacher() {
   const navigation = useNavigation();
