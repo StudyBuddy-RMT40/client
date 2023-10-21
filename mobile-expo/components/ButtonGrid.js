@@ -1,33 +1,11 @@
-import React from "react";
 import { View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
 
-import allProject from "../assets/public.png";
-import highschool from "../assets/highschool.png";
-import university from "../assets/university.png";
-import browseLocation from "../assets/location.png";
-import topProject from "../assets/top-projects.png";
-import topBuddy from "../assets/top-teacher.png";
-import * as Font from "expo-font";
-
-export default function ButtonGrid() {
-  const buttonItems = [
-    { icon: allProject, label: "All Projects", size: 60 },
-    { icon: highschool, label: "School Projects", size: 60 },
-    { icon: university, label: "University Projects", size: 60 },
-    { icon: browseLocation, label: "Projects Near Me", size: 60 },
-    { icon: topProject, label: "Top Projects", size: 60 },
-    { icon: topBuddy, label: "Top Buddy", size: 60 },
-  ];
-
-  Font.loadAsync({
-    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-  });
-
+export default function ButtonGrid({ items }) {
   return (
     <View style={styles.buttonGrid}>
-      {buttonItems.map((item, idx) => (
+      {items.map((item, idx) => (
         <View style={styles.buttonContainer} key={idx}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={item.onPress}>
             <Image
               style={{ width: item.size, height: item.size }}
               source={item.icon}
@@ -39,7 +17,6 @@ export default function ButtonGrid() {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   buttonGrid: {
@@ -58,7 +35,7 @@ const styles = StyleSheet.create({
     color: "#0e365c",
     marginTop: 5,
     textAlign: "center",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
     fontWeight: "bold",
   },
 });

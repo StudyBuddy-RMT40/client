@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   Text,
@@ -6,17 +7,39 @@ import {
   TextInput,
   SafeAreaView,
 } from "react-native";
-import * as Font from "expo-font";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeroCarousel from "../components/HeroCarousel";
 import ButtonGrid from "../components/ButtonGrid";
 import HorizontalSlider from "../components/HorizontalSlider";
-// import VerticalSlider from "../components/VerticalSlider";
+import { Platform } from "react-native";
+import allProject from "../assets/public.png";
+import highschool from "../assets/highschool.png";
+import university from "../assets/university.png";
+import browseLocation from "../assets/location.png";
+import topProject from "../assets/top-projects.png";
+import topBuddy from "../assets/top-teacher.png";
 
 export default function LandingPageScreen() {
-  
-Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
+  const insets = useSafeAreaInsets();
+  const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
+  const buttonItems = [
+    { icon: allProject, label: "All Projects", size: 60, onPress: () => {} },
+    { icon: highschool, label: "School Projects", size: 60, onPress: () => {} },
+    {
+      icon: university,
+      label: "University Projects",
+      size: 60,
+      onPress: () => {},
+    },
+    {
+      icon: browseLocation,
+      label: "Projects Near Me",
+      size: 60,
+      onPress: () => {},
+    },
+    { icon: topProject, label: "Top Projects", size: 60, onPress: () => {} },
+    { icon: topBuddy, label: "Top Buddy", size: 60, onPress: () => {} },
+  ];
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -28,30 +51,30 @@ Font.loadAsync({
           placeholder="Looking for your next project?"
         />
       </View>
-      <ScrollView style={styles.scrollContainer}>
+      <ScrollView
+        style={[styles.scrollContainer, { paddingTop: paddingTop }]}
+        contentContainerStyle={{ paddingBottom: 200 }}
+      >
         <View style={styles.carouselContainer}>
           <HeroCarousel />
         </View>
-        <ButtonGrid />
+        <ButtonGrid items={buttonItems} />
         <HorizontalSlider />
         <HorizontalSlider />
         <HorizontalSlider />
         <HorizontalSlider />
         {/* <VerticalSlider /> */}
       </ScrollView>
-      
     </SafeAreaView>
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F7F7F7",
+    backgroundColor: "white",
   },
   carouselContainer: {
     marginTop: 10,
-    
   },
   header: {
     position: "absolute",
@@ -71,12 +94,12 @@ const styles = StyleSheet.create({
     color: "#0e365c",
     fontWeight: "bold",
     marginTop: 50,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
   },
   headerSubText: {
     fontSize: 17,
     color: "#4781a5",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
   },
   searchBar: {
     marginTop: 20,
@@ -87,7 +110,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    backgroundColor: "#F7F7F7",
-    paddingTop: 200,
+    backgroundColor: "#FFFFFF",
   },
 });

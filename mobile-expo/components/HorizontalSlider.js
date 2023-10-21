@@ -8,7 +8,6 @@ import {
   Dimensions,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import * as Font from "expo-font";
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
 import dummy1 from "../assets/dummy/dummy1.png";
 import dummy2 from "../assets/dummy/dummy2.png";
@@ -47,10 +46,6 @@ export default function HorizontalSlider() {
     { text: "Ini Nama Project 4", image: dummy3 },
   ];
 
-  Font.loadAsync({
-    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-  });
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ini Judul</Text>
@@ -79,8 +74,6 @@ export default function HorizontalSlider() {
     </View>
   );
 }
-
-
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
@@ -89,10 +82,9 @@ const styles = StyleSheet.create({
   title: {
     paddingHorizontal: 10,
     fontSize: 20,
-    fontWeight: "bold",
     color: "#0e365c",
     marginBottom: 15,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
   },
   carousel: {
     flexDirection: "row",
@@ -108,12 +100,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 10,
   },
-  popularCourseText: {
-    marginTop: 10,
-    color: "#0e365c",
-    textAlign: "center",
-    fontFamily: "CustomFont",
-  },
   courseInfo: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -122,12 +108,12 @@ const styles = StyleSheet.create({
   },
   courseTitle: {
     color: "#0e365c",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
   },
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Light",
   },
   starIcon: {
     width: 16,
@@ -152,7 +138,6 @@ const styles = StyleSheet.create({
   courseLocation: {
     color: "#6b9ebf",
     marginLeft: 5,
-    fontFamily: "CustomFont",
-    fontWeight: "bold",
+    fontFamily: "Lato-Light",
   },
 });

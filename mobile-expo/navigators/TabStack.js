@@ -12,7 +12,10 @@ export default function TabStacks() {
       initialRouteName="Home"
       activeColor="#4781a5"
       inactiveColor="#bddded"
-      barStyle={{ backgroundColor: "white", borderColor: "black" }}
+      barStyle={{
+        backgroundColor: "white",
+        topBottomColor: "#ccc",
+      }}
     >
       <Tab.Screen
         name="Home"

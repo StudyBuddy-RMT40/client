@@ -11,8 +11,6 @@ import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
-import * as Font from "expo-font";
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -35,44 +33,39 @@ export default function LoginScreen() {
     navigation.push("Register");
   };
 
-  Font.loadAsync({
-    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-  });
-
   return (
-    <LinearGradient
-      colors={['#bddded', '#D8D8D8']} 
-      style={styles.container}
-    >
-      <View style={styles.containerContent}>
-        <Image source={Logo} style={styles.logo} />
-        <Text style={styles.title}>Login</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <View style={{ width: "100%" }}>
-          <TouchableOpacity>
-            <Button onPress={handleLogin} text="Login" />
+    <View style={styles.containerContent}>
+      <Image source={Logo} style={styles.logo} />
+      <Text style={styles.title}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={username}
+        onChangeText={(text) => setUsername(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+      />
+      <View style={{ width: "100%" }}>
+        <TouchableOpacity>
+          <Button
+            onPress={handleLogin}
+            text="Login"
+            style={styles.buttonSize}
+          />
+        </TouchableOpacity>
+        <View style={styles.registerContainer}>
+          <Text style={styles.registerText}>Don't have an account yet?</Text>
+          <TouchableOpacity onPress={handleRegister}>
+            <Text style={styles.registerButton}>Register here</Text>
           </TouchableOpacity>
-          <View style={styles.registerContainer}>
-            <Text style={styles.registerText}>Don't have an account yet?</Text>
-            <TouchableOpacity onPress={handleRegister}>
-              <Text style={styles.registerButton}>Register here</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
@@ -87,7 +80,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 30,
-    // backgroundColor: "rgba(255, 255, 255, 0.8)",
     height: "100%",
   },
   logo: {
@@ -98,9 +90,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    marginBottom: 16,
+    marginBottom: 20,
     color: "#396987",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
+    minHeight: 30,
   },
   input: {
     width: "100%",
@@ -110,11 +103,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
-    paddingLeft:15,
+    paddingLeft: 15,
     padding: 8,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
     backgroundColor: "white",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   registerContainer: {
     marginTop: 10,
@@ -124,7 +117,7 @@ const styles = StyleSheet.create({
   },
   registerText: {
     marginRight: 5,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
   },
   registerButton: {
     color: "#396987",

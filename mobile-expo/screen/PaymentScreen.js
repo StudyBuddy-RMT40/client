@@ -7,7 +7,7 @@ import {
   Linking,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import * as Font from "expo-font";
+import CustomHeader from "../components/CustomHeader";
 
 export default function PaymentScreen() {
   const navigation = useNavigation();
@@ -17,12 +17,11 @@ export default function PaymentScreen() {
   };
 
   const handleContinuePayment = () => {
-   
-    const paymentGatewayURL = 'https://www.midtrans.com/'; 
+    const paymentGatewayURL = "https://www.midtrans.com/";
 
-  
-    Linking.openURL(paymentGatewayURL)
-      .catch((err) => console.error('An error occurred: ', err));
+    Linking.openURL(paymentGatewayURL).catch((err) =>
+      console.error("An error occurred: ", err)
+    );
   };
 
   const orderDetails = [
@@ -41,41 +40,43 @@ export default function PaymentScreen() {
     currency: "IDR",
   });
 
-  Font.loadAsync({
-    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-  });
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Order Details</Text>
-      <View style={styles.summaryContainer}>
-        {orderDetails.map((item, index) => (
-          <View key={index} style={styles.summaryItem}>
-            <Text>{item.label}</Text>
-            <Text>{formatter.format(item.price)}</Text>
-          </View>
-        ))}
-      </View>
-
-      <Text style={styles.header}>Summary</Text>
-      <View style={styles.cardDetails}>
-        <View style={styles.totalItem}>
-          <Text style={styles.totalText}>TOTAL</Text>
-          <Text style={styles.totalAmount}>{formatter.format(totalAmount)}</Text>
+    <>
+      <CustomHeader />
+      <View style={styles.container}>
+        <Text style={styles.header}>Order Details</Text>
+        <View style={styles.summaryContainer}>
+          {orderDetails.map((item, index) => (
+            <View key={index} style={styles.summaryItem}>
+              <Text>{item.label}</Text>
+              <Text>{formatter.format(item.price)}</Text>
+            </View>
+          ))}
         </View>
-      </View>
 
-      <TouchableOpacity style={styles.payButton} onPress={handleContinuePayment}>
-        <Text style={styles.buttonText}>Continue Payment</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-        <Text style={styles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
-    </View>
+        <Text style={styles.header}>Summary</Text>
+        <View style={styles.cardDetails}>
+          <View style={styles.totalItem}>
+            <Text style={styles.totalText}>TOTAL</Text>
+            <Text style={styles.totalAmount}>
+              {formatter.format(totalAmount)}
+            </Text>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.payButton}
+          onPress={handleContinuePayment}
+        >
+          <Text style={styles.buttonText}>Continue Payment</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
   },
   cardDetails: {
     marginBottom: 20,
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
   },
   summaryContainer: {
     borderWidth: 2,
@@ -161,12 +162,11 @@ const styles = StyleSheet.create({
   totalText: {
     fontWeight: "bold",
     fontSize: 20,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
   },
   totalAmount: {
     fontWeight: "bold",
     fontSize: 18,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
   },
 });
-

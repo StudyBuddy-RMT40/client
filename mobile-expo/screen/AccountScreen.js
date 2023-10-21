@@ -13,8 +13,6 @@ import {
 import { useAuth } from "../navigators/Authcontext";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
-import * as Font from "expo-font";
-import { LinearGradient } from 'expo-linear-gradient';
 import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
@@ -102,16 +100,8 @@ export default function AccountScreen() {
     setIsEditing(!isEditing);
   };
 
-  Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-});
-
   return (
     <SafeAreaView style={styles.containerSafeArea}>
-      <LinearGradient
-      colors={['#bddded', '#D8D8D8']} 
-      style={styles.contentContainerStyle}
-    ></LinearGradient>
       <ScrollView
         style={styles.contentContainerStyle}
         contentContainerStyle={{ paddingBottom: 50 }}
@@ -248,30 +238,29 @@ export default function AccountScreen() {
   );
 }
 
-
 const styles = StyleSheet.create({
   containerSafeArea: {
-    flex: 1, 
-    backgroundColor: "white" 
+    flex: 1,
+    backgroundColor: "white",
   },
   contentContainerStyle: {
     padding: 30,
     backgroundColor: "white",
     paddingBottom: 40,
-    borderRadius: 10
+    borderRadius: 10,
   },
   username: {
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 10,
     textAlign: "center",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
     color: "#333",
   },
   fieldTitle: {
     fontWeight: "bold",
     marginTop: 15,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
     color: "#6b9ebf",
   },
   input: {

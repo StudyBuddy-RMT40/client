@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Logo from "../assets/StudyBuddy.png"
+import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
-import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -16,30 +21,21 @@ export default function RegisterScreen() {
 
   const navigation = useNavigation();
 
-  const handleRegister = () => {
-  };
+  const handleRegister = () => {};
 
   const handleLogin = () => {
     navigation.goBack();
   };
 
-  Font.loadAsync({
-  CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-  });
-
   return (
-     <LinearGradient
-      colors={['#bddded', '#D8D8D8']} 
-      style={styles.container}
-    >
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.backButton}
+      >
         <Ionicons name="arrow-back" size={24} color="white" />
       </TouchableOpacity>
-       <Image
-        source={Logo}
-        style={styles.logo}
-      />
+      <Image source={Logo} style={styles.logo} />
       <Text style={styles.title}>Register</Text>
       <TextInput
         style={styles.input}
@@ -74,10 +70,14 @@ export default function RegisterScreen() {
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
-      <View style={{width: "100%"}}>
-      <TouchableOpacity onPress={handleRegister}>
-        <Button text="Register" />
-      </TouchableOpacity>
+      <View style={{ width: "100%" }}>
+        <TouchableOpacity onPress={handleRegister}>
+          <Button
+            onPress={handleRegister}
+            text="Register"
+            style={styles.buttonSize}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.loginContainer}>
         <Text style={styles.loginText}>Already have an account?</Text>
@@ -86,21 +86,19 @@ export default function RegisterScreen() {
         </TouchableOpacity>
       </View>
     </View>
-    </LinearGradient>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center", // Center horizontally
+    alignItems: "center",
     padding: 20,
   },
   backButton: {
     position: "absolute",
-    marginTop: 15,
+    marginTop: 30,
     top: 20,
     left: 20,
     width: 40,
@@ -118,9 +116,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    marginBottom: 16,
+    marginBottom: 20,
     color: "#396987",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
+    minHeight: 30,
   },
   input: {
     width: 330,
@@ -130,11 +129,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
-    paddingLeft:15,
+    paddingLeft: 15,
     padding: 8,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
     backgroundColor: "white",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   loginContainer: {
     marginTop: 10,
@@ -143,10 +142,13 @@ const styles = StyleSheet.create({
   },
   loginText: {
     marginRight: 5,
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Regular",
   },
   loginButton: {
     color: "#396987",
   },
+  buttonSize: {
+    width: 330,
+    height: 40,
+  },
 });
-

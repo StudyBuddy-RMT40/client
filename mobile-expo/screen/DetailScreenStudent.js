@@ -1,9 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import Button from "../components/Button";
 import * as Font from "expo-font";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
+import CustomHeader from "../components/CustomHeader";
+
+const screenWidth = Dimensions.get("window").width;
 
 export default function DetailScreenStudent() {
   const navigation = useNavigation();
@@ -15,68 +25,65 @@ export default function DetailScreenStudent() {
   Font.loadAsync({
     CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
   });
+
   return (
-    <LinearGradient
-    colors={['#bddded', '#D8D8D8']} 
-    style={styles.contentContainerStyle}
-  >
-    <ScrollView style={styles.contentContainerStyle}>
-      <Text style={styles.title}>Project Name</Text>
-      <View style={styles.container}>
-        <Text>Project Name...</Text>
-      </View>
+    <>
+      <CustomHeader title="Project Detail" />
+      <ScrollView style={styles.contentContainerStyle}>
+        <Text style={styles.title}>Project Name</Text>
+        <View style={styles.container}>
+          <Text>Project Name...</Text>
+        </View>
 
-      <Text style={styles.title}>Project Description</Text>
-      <View style={styles.containerBig}>
-        <Text>Project Description...</Text>
-      </View>
+        <Text style={styles.title}>Project Description</Text>
+        <View style={styles.containerBig}>
+          <Text>Project Description...</Text>
+        </View>
 
-      <Text style={styles.title}>Category</Text>
-      <View style={styles.container}>
-        <Text>Category...</Text>
-      </View>
+        <Text style={styles.title}>Category</Text>
+        <View style={styles.container}>
+          <Text>Category...</Text>
+        </View>
 
-      <Text style={styles.title}>Project Duration</Text>
-      <View style={styles.durationContainer}>
-        <View style={styles.durationItem}>
-          <Text style={styles.durationText}>Start</Text>
-          <View style={styles.durationContent}>
-            <Text>Start Duration</Text>
+        <Text style={styles.title}>Project Duration</Text>
+        <View style={styles.durationContainer}>
+          <View style={styles.durationItem}>
+            <Text style={styles.durationText}>Start</Text>
+            <View style={styles.durationContent}>
+              <Text>Start Duration</Text>
+            </View>
+          </View>
+          <View style={styles.durationItem}>
+            <Text style={styles.durationText}>End</Text>
+            <View style={styles.durationContent}>
+              <Text>End Duration</Text>
+            </View>
           </View>
         </View>
-        <View style={styles.durationItem}>
-          <Text style={styles.durationText}>End</Text>
-          <View style={styles.durationContent}>
-            <Text>End Duration</Text>
-          </View>
+
+        <Text style={styles.title}>Feedback</Text>
+        <View style={styles.containerBig}>
+          <Text>Feedback...</Text>
         </View>
-      </View>
 
-      <Text style={styles.title}>Feedback</Text>
-      <View style={styles.containerBig}>
-        <Text>Feedback...</Text>
-      </View>
+        <Text style={styles.title}>Learning Materials</Text>
+        <View style={styles.containerBig}>
+          <Text>Learning Materials...</Text>
+        </View>
 
-      <Text style={styles.title}>Learning Materials</Text>
-      <View style={styles.containerBig}>
-        <Text>Learning Materials...</Text>
-      </View>
-
-      <Text style={styles.title}>Ask AI</Text>
-      <View style={styles.containerBig}>
-        <Text>Ask AI...</Text>
-      </View>
-      <View style={styles.containerButton}>
-        <TouchableOpacity onPress={handleChat}>
-          <Button text="CHAT WITH MENTOR" />
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-    </LinearGradient>
+        <Text style={styles.title}>Ask AI</Text>
+        <View style={styles.containerBig}>
+          <Text>Ask AI...</Text>
+        </View>
+        <View style={styles.containerButton}>
+          <TouchableOpacity onPress={handleChat}>
+            <Button text="CHAT WITH MENTOR" />
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
@@ -98,7 +105,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
     backgroundColor: "#D8D8D8",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   durationContainer: {
     flexDirection: "row",
@@ -124,7 +131,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     backgroundColor: "#D8D8D8",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   containerBig: {
     width: "100%",
@@ -136,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
     backgroundColor: "#D8D8D8",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   containerButton: {
     marginBottom: 30,
