@@ -11,7 +11,6 @@ import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -29,66 +28,64 @@ export default function RegisterScreen() {
   };
 
   return (
-    <LinearGradient colors={["#bddded", "#D8D8D8"]} style={styles.container}>
-      <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Ionicons name="arrow-back" size={24} color="white" />
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.backButton}
+      >
+        <Ionicons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
+      <Image source={Logo} style={styles.logo} />
+      <Text style={styles.title}>Register</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={(text) => setUsername(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        keyboardType="email-address"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={(text) => setPassword(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Phone Number"
+        keyboardType="phone-pad"
+        value={phoneNumber}
+        onChangeText={(text) => setPhoneNumber(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Address"
+        value={address}
+        onChangeText={(text) => setAddress(text)}
+      />
+      <View style={{ width: "100%" }}>
+        <TouchableOpacity onPress={handleRegister}>
+          <Button
+            onPress={handleRegister}
+            text="Register"
+            style={styles.buttonSize}
+          />
         </TouchableOpacity>
-        <Image source={Logo} style={styles.logo} />
-        <Text style={styles.title}>Register</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          keyboardType="phone-pad"
-          value={phoneNumber}
-          onChangeText={(text) => setPhoneNumber(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Address"
-          value={address}
-          onChangeText={(text) => setAddress(text)}
-        />
-        <View style={{ width: "100%" }}>
-          <TouchableOpacity onPress={handleRegister}>
-            <Button
-              onPress={handleRegister}
-              text="Register"
-              style={styles.buttonSize}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.loginContainer}>
-          <Text style={styles.loginText}>Already have an account?</Text>
-          <TouchableOpacity onPress={handleLogin}>
-            <Text style={styles.loginButton}>Login here</Text>
-          </TouchableOpacity>
-        </View>
       </View>
-    </LinearGradient>
+      <View style={styles.loginContainer}>
+        <Text style={styles.loginText}>Already have an account?</Text>
+        <TouchableOpacity onPress={handleLogin}>
+          <Text style={styles.loginButton}>Login here</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 

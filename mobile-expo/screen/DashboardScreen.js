@@ -33,10 +33,8 @@ export default function DashboardScreen() {
       category: "Design",
       goals:
         "The goals of this course are to help participants grasp the basics of design thinking, understand its problem-solving approach, and apply it to real-world challenges.",
-      feedback:
-        "Your submission has been received and is currently awaiting review. Our team will evaluate your application and provide feedback soon.",
-      learningMaterials:
-        "Once your application is approved, you will gain access to a variety of learning materials, including video lectures, case studies, and design templates.",
+      feedback: null,
+      learningMaterials: null,
     },
     {
       id: 2,
@@ -48,10 +46,8 @@ export default function DashboardScreen() {
       category: "Design",
       goals:
         "In this advanced course, participants will delve deeper into design thinking concepts, explore advanced techniques for problem-solving and innovation, and gain practical experience.",
-      feedback:
-        "Congratulations! Your application has been accepted. You are now one step closer to unlocking the full potential of Design Thinking.",
-      learningMaterials:
-        "Access to advanced learning materials and resources will be provided upon payment for the course.",
+      feedback: null,
+      learningMaterials: null,
     },
     {
       id: 3,
@@ -63,10 +59,8 @@ export default function DashboardScreen() {
       category: "Design",
       goals:
         "The masterclass aims to equip participants with a deep understanding of design thinking, allowing them to lead innovation initiatives and solve complex challenges effectively.",
-      feedback:
-        "Payment successful! You are now enrolled in the Design Thinking Masterclass. Get ready to embark on a transformative learning journey.",
-      learningMaterials:
-        "Upon enrollment, you will gain access to a premium set of learning materials, including exclusive video lectures, case studies, and expert-led workshops.",
+      feedback: null,
+      learningMaterials: null,
     },
     {
       id: 4,
@@ -122,6 +116,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: "#F7F7F7",
+    backgroundColor: "#FFFFF",
   },
 });

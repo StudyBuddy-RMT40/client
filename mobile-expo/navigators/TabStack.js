@@ -14,6 +14,7 @@ export default function TabStacks() {
       inactiveColor="#bddded"
       barStyle={{
         backgroundColor: "white",
+        topBottomColor: "#ccc",
       }}
     >
       <Tab.Screen

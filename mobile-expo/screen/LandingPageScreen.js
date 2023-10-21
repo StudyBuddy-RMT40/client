@@ -71,7 +71,7 @@ export default function LandingPageScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F7F7F7",
+    backgroundColor: "white",
   },
   carouselContainer: {
     marginTop: 10,
@@ -110,6 +110,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    backgroundColor: "#F7F7F7",
+    backgroundColor: "#FFFFFF",
   },
 });
