@@ -63,7 +63,7 @@ const DashboardProject = ({ projectData }) => {
           onPress={() => {
             setLoading(true); // Memulai loading
             setActiveFilter("Submitted");
-            setTimeout(() => setLoading(false), 1000); // Selesai loading setelah 1 detik (contoh delay)
+            setTimeout(() => setLoading(false), 500); // Selesai loading setelah setengah detik
           }}
           style={[
             styles.filterButton,
@@ -74,7 +74,11 @@ const DashboardProject = ({ projectData }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => setActiveFilter("On Progress")}
+          onPress={() => {
+            setLoading(true); // Memulai loading
+            setActiveFilter("On Progress");
+            setTimeout(() => setLoading(false), 500); // Selesai loading setelah setengah detik
+          }}
           style={[
             styles.filterButton,
             activeFilter === "On Progress" && styles.activeFilter,
@@ -84,7 +88,11 @@ const DashboardProject = ({ projectData }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => setActiveFilter("Finished")}
+          onPress={() => {
+            setLoading(true); // Memulai loading
+            setActiveFilter("Finished");
+            setTimeout(() => setLoading(false), 500); // Selesai loading setelah setengah detik
+          }}
           style={[
             styles.filterButton,
             activeFilter === "Finished" && styles.activeFilter,
@@ -94,7 +102,13 @@ const DashboardProject = ({ projectData }) => {
         </TouchableOpacity>
       </View>
 
-      {filteredData.length ? (
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color="#4781a5"
+          style={{ marginTop: 20 }}
+        />
+      ) : filteredData.length ? (
         filteredData.map((project, idx) => (
           <ProjectCard
             key={idx}

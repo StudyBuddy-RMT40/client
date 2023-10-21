@@ -16,7 +16,7 @@ export default function DashboardStack() {
       <Stack.Screen
         name="Project Dashboard"
         component={DashboardScreen}
-        options={{ headerShown: true }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="AddProject"

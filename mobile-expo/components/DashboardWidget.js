@@ -70,7 +70,14 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 100,
     width: "48%",
-    borderWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
   projectOverviewTitle: {
     fontSize: 18,

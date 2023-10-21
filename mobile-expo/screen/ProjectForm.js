@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity } from "react-native";
+import { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
-import teacherdummy1 from "../assets/images/image1.jpg";
-import teacherdummy2 from "../assets/images/image2.jpg";
-import teacherdummy3 from "../assets/images/image3.jpg";
-import * as Font from "expo-font";
-import { LinearGradient } from 'expo-linear-gradient';
 import HorizontalSlider from "../components/HorizontalSlider";
+import CustomHeader from "../components/CustomHeader";
 
 export default function ProjectForm() {
   const [projectName, setProjectName] = useState("");
@@ -16,7 +20,8 @@ export default function ProjectForm() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [goals, setGoals] = useState("");
-
+  const [location, setLocation] = useState("");
+  const [displaySlider, setDisplaySlider] = useState(false);
 
   const navigation = useNavigation();
 
@@ -24,122 +29,258 @@ export default function ProjectForm() {
     navigation.push("Payment");
   };
 
-  // const carouselItems = [
-  //   { text: "Teacher 1", image: teacherdummy1 },
-  //   { text: "Teacher 2", image: teacherdummy2 },
-  //   { text: "Teacher 3", image: teacherdummy3 },
-  // ];
+  const handleSearchBuddy = () => {
+    if (category && location) {
+      setDisplaySlider(true);
+    } else {
+      alert("Please fill in both category and location!");
+    }
+  };
 
-  Font.loadAsync({
-    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-  });
+  const [filterQuery, setFilterQuery] = useState("");
+  const categories = [
+    "Matematika",
+    "Fisika",
+    "Kimia",
+    "Biologi",
+    "Bahasa Inggris",
+    "Bahasa Indonesia",
+    "Sejarah",
+    "Ekonomi",
+    "Bahasa Asing",
+    "Ilmu Komputer",
+    "Teknik",
+    "Ilmu Sosial",
+    "Penulisan Tesis",
+    "Riset dan Analisis Data",
+    "Pengembangan Perangkat Lunak",
+    "Studi Kasus Bisnis",
+    "Analisis Keuangan",
+    "Desain Arsitektur",
+    "Proyek Teknik",
+    "Perencanaan Bisnis",
+    "Pemasaran dan Strategi Penjualan",
+    "Analisis Pasar",
+    "Manajemen Proyek",
+    "Pengembangan Produk",
+    "Manajemen Keuangan",
+    "Konsultasi Startup",
+    "Kewirausahaan Sosial",
+    "Pengembangan Bisnis UMKM",
+    "Strategi Pemasaran UMKM",
+    "Manajemen Keuangan UMKM",
+    "Peningkatan Efisiensi Operasional UMKM",
+    "Pelatihan Keterampilan Kerja",
+    "Pendampingan Pemilik UMKM",
+    "Fotografi",
+    "Seni dan Kreativitas",
+    "Penulisan Kreatif",
+    "Proyek Kesehatan Masyarakat",
+    "Proyek Lingkungan",
+    "Proyek Sosial dan Kemanusiaan",
+    "Pengembangan Aplikasi Web",
+    "Keamanan Cyber",
+    "Pengembangan Aplikasi Mobile",
+    "Pengembangan Game",
+    "Pembuatan Situs Web",
+    "Desain UI/UX",
+    "Desain Grafis",
+    "Seni Lukis",
+    "Seni Rupa",
+    "Desain Mode",
+    "Seni Pertunjukan",
+    "Seni Musik",
+    "Gizi dan Diet",
+    "Kebugaran dan Olahraga",
+    "Kesehatan Mental",
+    "Konseling",
+    "Pengelolaan Stres",
+    "Pengembangan Keterampilan Kepribadian",
+  ];
+  const locations = ["Jakarta", "Bandung", "Yogyakarta", "Surabaya", "Medan"];
+
+  const [filteredCategories, setFilteredCategories] = useState(categories);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+
+  const [locationQuery, setLocationQuery] = useState("");
+
+  const [filteredLocations, setFilteredLocations] = useState(locations);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+
+  useEffect(() => {
+    if (filterQuery) {
+      const filtered = categories.filter((cat) =>
+        cat.toLowerCase().includes(filterQuery.toLowerCase())
+      );
+      setFilteredCategories(filtered);
+    } else {
+      setFilteredCategories(categories);
+    }
+  }, [filterQuery]);
+
+  useEffect(() => {
+    if (locationQuery) {
+      const filtered = locations.filter((loc) =>
+        loc.toLowerCase().includes(locationQuery.toLowerCase())
+      );
+      setFilteredLocations(filtered);
+    } else {
+      setFilteredLocations(locations);
+    }
+  }, [locationQuery]);
 
   return (
-    <LinearGradient
-    colors={['#bddded', '#D8D8D8']} 
-    style={styles.contentContainerStyle}
-  >
+    <>
+      <CustomHeader title="Add New Project" />
 
-    <ScrollView style={styles.contentContainerStyle}>
-      <Text style={styles.title}>Choose Mentor</Text>
+      <ScrollView style={styles.contentContainerStyle}>
+        <Text style={styles.label}>Choose Your Mentor</Text>
 
-      <View style={styles.filterLocationContainer}>
-        <TextInput style={styles.filterInput} placeholder="Filter" />
-        <TextInput style={styles.locationInput} placeholder="Location" />
-      </View>
+        <View style={styles.filterLocationContainer}>
+          <TextInput
+            style={styles.filterInput}
+            placeholder="Select Category"
+            value={filterQuery}
+            onChangeText={(text) => {
+              setFilterQuery(text);
+              if (text) {
+                setShowCategoryDropdown(true);
+                setShowLocationDropdown(false);
+              } else {
+                setShowCategoryDropdown(false);
+              }
+            }}
+            onBlur={() => setTimeout(() => setShowCategoryDropdown(false), 150)}
+          />
 
-      <HorizontalSlider/>
+          {showCategoryDropdown && filteredCategories.length > 0 && (
+            <View style={styles.dropdownContainer}>
+              <View style={{ flex: 1 }}>
+                <ScrollView nestedScrollEnabled style={{ maxHeight: 200 }}>
+                  {filteredCategories.map((category) => (
+                    <TouchableOpacity
+                      style={styles.dropdownItem}
+                      key={category}
+                      onPress={() => {
+                        setCategory(category);
+                        setFilterQuery(category);
+                        setShowCategoryDropdown(false);
+                      }}
+                    >
+                      <Text>{category}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          )}
 
-      <Text style={styles.title}>Add New Project</Text>
+          <TextInput
+            style={styles.locationInput}
+            placeholder="Select Location"
+            value={locationQuery}
+            onChangeText={(text) => {
+              setLocationQuery(text);
+              if (text) {
+                setShowLocationDropdown(true);
+                setShowCategoryDropdown(false);
+              } else {
+                setShowLocationDropdown(false);
+              }
+            }}
+            onBlur={() => setTimeout(() => setShowLocationDropdown(false), 150)}
+          />
 
-      <Text style={styles.label}>Project Name</Text>
-      <View style={styles.container}>
-        <TextInput
-          value={projectName}
-          onChangeText={setProjectName}
-          placeholder="Enter project name"
+          {showLocationDropdown && filteredLocations.length > 0 && (
+            <View style={[styles.dropdownContainer, { left: "52%" }]}>
+              <View style={{ flex: 1 }}>
+                <ScrollView nestedScrollEnabled style={{ maxHeight: 200 }}>
+                  {filteredLocations.map((loc) => (
+                    <TouchableOpacity
+                      style={styles.dropdownItem}
+                      key={loc}
+                      onPress={() => {
+                        setLocation(loc);
+                        setLocationQuery(loc);
+                        setShowLocationDropdown(false);
+                      }}
+                    >
+                      <Text>{loc}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          )}
+        </View>
+
+        <Button
+          text="Search Buddy"
+          onPress={handleSearchBuddy}
+          style={styles.searchButton}
         />
-      </View>
 
-      <Text style={styles.label}>Project Description</Text>
-      <View style={styles.containerBig}>
-        <TextInput
-          value={projectDescription}
-          onChangeText={setProjectDescription}
-          placeholder="Enter project description"
-          multiline
-          numberOfLines={4}
-          textAlignVertical="top"
-        />
-      </View>
+        {displaySlider && <HorizontalSlider />}
 
-      <Text style={styles.label}>Category</Text>
-      <View style={styles.container}>
-        <TextInput
-          value={category}
-          onChangeText={setCategory}
-          placeholder="Enter category"
-        />
-      </View>
+        <Text style={styles.label}>Project Name</Text>
+        <View style={styles.container}>
+          <TextInput
+            value={projectName}
+            onChangeText={setProjectName}
+            placeholder="Enter project name"
+          />
+        </View>
 
-      <Text style={styles.label}>Start Date</Text>
-      <View style={styles.container}>
-        <TextInput
-          value={startDate}
-          onChangeText={setStartDate}
-          placeholder="Enter start date (YYYY-MM-DD)"
-        />
-      </View>
+        <Text style={styles.label}>Project Description</Text>
+        <View style={styles.containerBig}>
+          <TextInput
+            value={projectDescription}
+            onChangeText={setProjectDescription}
+            placeholder="Enter project description"
+            multiline
+            numberOfLines={4}
+            textAlignVertical="top"
+          />
+        </View>
 
-      <Text style={styles.label}>End Date</Text>
-      <View style={styles.container}>
-        <TextInput
-          value={endDate}
-          onChangeText={setEndDate}
-          placeholder="Enter end date (YYYY-MM-DD)"
-        />
-      </View>
+        <Text style={styles.label}>Goals</Text>
+        <View style={styles.containerBig}>
+          <TextInput
+            value={goals}
+            onChangeText={setGoals}
+            placeholder="Enter goals for the project"
+            multiline
+            numberOfLines={4}
+            textAlignVertical="top"
+          />
+        </View>
 
-      <Text style={styles.label}>Goals</Text>
-      <View style={styles.containerBig}>
-        <TextInput
-          value={goals}
-          onChangeText={setGoals}
-          placeholder="Enter goals for the project"
-          multiline
-          numberOfLines={4}
-          textAlignVertical="top"
-        />
-      </View>
-
-      <View style={styles.containerButton}>
-        <Button text="Submit" onPress={handleSubmit} />
-      </View>
-      <View style={{ marginBottom: 30 }}></View>
-    </ScrollView>
-    </LinearGradient>
+        <View>
+          <Button text="Submit" onPress={handleSubmit} />
+        </View>
+        <View style={{ marginBottom: 30 }}></View>
+      </ScrollView>
+    </>
   );
 }
 
-
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   contentContainerStyle: {
     padding: 13,
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
     marginTop: 10,
     marginBottom: 20,
     textAlign: "left",
-    fontFamily: "CustomFont",
+    fontFamily: "Lato-Bold",
   },
   label: {
     fontSize: 18,
     marginVertical: 10,
-    fontFamily: "CustomFont",
-    fontWeight: "bold",
+    marginTop: 10,
+    fontFamily: "Lato-Regular",
   },
   container: {
     width: "100%",
@@ -151,7 +292,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
     backgroundColor: "white",
-    fontWeight: "bold"
   },
   containerBig: {
     width: "100%",
@@ -163,15 +303,16 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
     backgroundColor: "white",
-    fontWeight: "bold"
   },
-  containerButton: {
-    marginTop: 15,
+  searchButton: {
+    backgroundColor: "#6b9ebf",
+    marginBottom: 15,
   },
   filterLocationContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    zIndex: 9999,
+    elevation: 5,
   },
   filterInput: {
     width: "48%",
@@ -181,7 +322,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     backgroundColor: "white",
-    fontWeight: "bold"
   },
   locationInput: {
     width: "48%",
@@ -191,48 +331,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     backgroundColor: "white",
-    fontWeight: "bold"
   },
-  imageContainer: {
-    height: 200, 
-    marginBottom: 20,
+  dropdownContainer: {
+    position: "absolute",
+    top: 40,
+    width: "48%",
+    maxHeight: 250,
+    backgroundColor: "white",
+    borderColor: "#ccc",
+    borderWidth: 1,
+    zIndex: 9999,
+    elevation: 5,
   },
-  swiper: {
-    marginBottom: 10,
-    marginTop: 10
-  },
-  slide: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    flex: 1,
-    resizeMode: 'contain', 
-    width: '100%',
-  },
-  horizontalCardContainer: {
+  dropdownItem: {
     padding: 10,
-  },
-  horizontalCardCarousel: {
-    flexDirection: "row",
-  },
-  horizontalCard: {
-    width: screenWidth * 0.6,
-    marginRight: 10,
-    padding: 10,
-    borderRadius: 10,
-  },
-  horizontalCardImage: {
-    width: screenWidth * 0.6,
-    height: 150,
-    resizeMode: "cover",
-    borderRadius: 8,
-  },
-  horizontalCardText: {
-    marginTop: 5,
-    color: "#0e365c",
-    textAlign: "center",
-    fontFamily: "CustomFont",
+    borderBottomColor: "#f0f0f0",
+    borderBottomWidth: 1,
   },
 });

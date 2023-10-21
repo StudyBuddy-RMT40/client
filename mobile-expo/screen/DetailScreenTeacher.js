@@ -1,9 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import Button from "../components/Button";
 import * as Font from "expo-font";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function DetailScreenTeacher() {
   const navigation = useNavigation();
@@ -21,10 +27,10 @@ export default function DetailScreenTeacher() {
   });
 
   return (
-    <LinearGradient
-    colors={['#bddded', '#D8D8D8']} 
-    style={styles.contentContainerStyle}
-  >
+    //   <LinearGradient
+    //   colors={['#bddded', '#D8D8D8']}
+    //   style={styles.contentContainerStyle}
+    // >
     <ScrollView style={styles.contentContainerStyle}>
       <Text style={styles.title}>Project Name</Text>
       <View style={styles.container}>
@@ -78,17 +84,15 @@ export default function DetailScreenTeacher() {
           <Button onPress={handleChat} text="CHAT WITH STUDENT" />
         </TouchableOpacity>
       </View>
-      <View style={{marginBottom: 30}}></View>
+      <View style={{ marginBottom: 30 }}></View>
     </ScrollView>
-    </LinearGradient>
+    // </LinearGradient>
   );
 }
-
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
     padding: 13,
-    
   },
   title: {
     fontSize: 20,
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
     backgroundColor: "#D8D8D8",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   durationContainer: {
     flexDirection: "row",
@@ -132,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     backgroundColor: "#D8D8D8",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   containerBig: {
     width: "100%",
@@ -144,10 +148,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 8,
     backgroundColor: "#D8D8D8",
-    fontWeight: "bold"
-    
+    fontWeight: "bold",
   },
   containerButton: {
     marginTop: 5,
-  }
+  },
 });
