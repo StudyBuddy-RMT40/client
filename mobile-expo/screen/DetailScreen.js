@@ -23,7 +23,8 @@ export default function DetailScreen({ route }) {
   };
 
   const handlePayProject = () => {
-    setProject({ ...project, status: "Paid" });
+    // setProject({ ...project, status: "Paid" });
+    navigation.push("Payment");
   };
 
   const handleFinishProject = () => {

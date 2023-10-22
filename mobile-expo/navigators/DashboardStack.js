@@ -6,6 +6,7 @@ import ProjectForm from "../screen/ProjectForm";
 import PaymentScreen from "../screen/PaymentScreen";
 import ReviewScreen from "../screen/ReviewScreen";
 import DetailScreen from "../screen/DetailScreen";
+import MidtransScreen from "../screen/MidtransScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,11 @@ export default function DashboardStack() {
       <Stack.Screen
         name="Payment"
         component={PaymentScreen}
+        options={{ headerShown: false }}
+      />
+        <Stack.Screen
+        name="Midtrans"
+        component={MidtransScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
