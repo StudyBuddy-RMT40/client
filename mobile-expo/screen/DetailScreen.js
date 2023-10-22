@@ -16,14 +16,15 @@ export default function DetailScreen({ route }) {
   const [project, setProject] = useState(route.params.project);
   const [price, setPrice] = useState("");
 
-  const userRole = "Buddy";
+  const userRole = "Student";
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
   };
 
   const handlePayProject = () => {
-    setProject({ ...project, status: "Paid" });
+    // setProject({ ...project, status: "Paid" });
+    navigation.push("Payment");
   };
 
   const handleFinishProject = () => {
