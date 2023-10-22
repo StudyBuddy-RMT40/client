@@ -25,11 +25,20 @@ export const AuthProvider = ({ children }) => {
       phone,
       address,
       documents: [],
+      accessToken: "dummy_access_token",
+      role: null,
+      specializations: [],
     };
 
     setUsers((prevUsers) => [...prevUsers, newUser]);
     setCurrentUser(newUser);
     setIsLoggedIn(true);
+  };
+
+  const updateUserRoleAndSpec = (role, specs) => {
+    if (currentUser) {
+      setCurrentUser((prev) => ({ ...prev, role, specializations: specs }));
+    }
   };
 
   const logout = () => {
@@ -39,7 +48,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, login, logout, register, currentUser }}
+      value={{
+        isLoggedIn,
+        login,
+        logout,
+        register,
+        currentUser,
+        updateUserRoleAndSpec,
+      }}
     >
       {children}
     </AuthContext.Provider>

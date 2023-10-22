@@ -48,7 +48,7 @@ export default function RegisterScreen() {
     }
 
     register(username, email, phoneNumber, address);
-    navigation.navigate("Profile");
+    navigation.navigate("Dashboard");
   };
 
   const handleLogin = () => {

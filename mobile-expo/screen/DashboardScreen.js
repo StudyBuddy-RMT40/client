@@ -1,17 +1,26 @@
-import { useState } from "react";
-import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
+import { useState, useEffect } from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { useAuth } from "../navigators/Authcontext";
 import ButtonGrid from "../components/ButtonGrid";
-
 import allProject from "../assets/public.png";
 import { useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";
 import DashboardProject from "../components/DashboardProject";
 import CustomHeader from "../components/CustomHeader";
+import RoleModal from "../components/modal/RoleModal";
 
 export default function DashboardScreen() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, updateUserRoleAndSpec, currentUser } = useAuth();
+
+  useEffect(() => {
+    if (currentUser && !currentUser.role) {
+      setShowRoleModal(true);
+    }
+  }, [currentUser]);
+
   const navigation = useNavigation();
+
+  const [showRoleModal, setShowRoleModal] = useState(false);
 
   const buttonItems = [
     {
@@ -97,7 +106,6 @@ export default function DashboardScreen() {
   return (
     <>
       <CustomHeader title="Dashboard" />
-
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
@@ -107,6 +115,15 @@ export default function DashboardScreen() {
           <ButtonGrid items={buttonItems} />
           <DashboardProject projectData={projectData} />
         </ScrollView>
+
+        <RoleModal
+          isVisible={showRoleModal}
+          onClose={() => setShowRoleModal(false)}
+          onSave={(role, specs) => {
+            updateUserRoleAndSpec(role, specs);
+            setShowRoleModal(false);
+          }}
+        />
       </View>
     </>
   );
