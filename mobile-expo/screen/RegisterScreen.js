@@ -18,10 +18,67 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [usernameError, setUsernameError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [phoneError, setPhoneError] = useState(null);
+  const [addressError, setAddressError] = useState(null);
+
+  const isValidEmail = (email) => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
+
+  const isEmailAlreadyTaken = (email) => {
+    // return false; 
+  };
 
   const navigation = useNavigation();
 
-  const handleRegister = () => {};
+  const handleRegister = () => {
+    setUsernameError(null);
+    setEmailError(null);
+    setPasswordError(null);
+    setPhoneError(null);
+    setAddressError(null);
+
+    let hasError = false;
+
+    if (!username) {
+      setUsernameError("Username must be filled");
+      hasError = true;
+    }
+
+    if (!email) {
+      setEmailError("Email must be filled");
+      hasError = true;
+    } else if (!isValidEmail(email)) {
+      setEmailError("Format Email is not valid");
+      hasError = true;
+    }
+
+    if (!password) {
+      setPasswordError("Password must be filled");
+      hasError = true;
+    }
+
+    if (!phoneNumber) {
+      setPhoneError("Phone Number must be filled");
+      hasError = true;
+    }
+
+    if (!address) {
+      setAddressError("Address must be filled");
+      hasError = true;
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    // TODO: 
+  };
+
+  
 
   const handleLogin = () => {
     navigation.goBack();
@@ -43,6 +100,7 @@ export default function RegisterScreen() {
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
+      {usernameError && <Text style={styles.errorText}>{usernameError}</Text>}
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -50,6 +108,7 @@ export default function RegisterScreen() {
         value={email}
         onChangeText={(text) => setEmail(text)}
       />
+       {emailError && <Text style={styles.errorText}>{emailError}</Text>}
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -57,6 +116,7 @@ export default function RegisterScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
+      {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
       <TextInput
         style={styles.input}
         placeholder="Phone Number"
@@ -64,12 +124,14 @@ export default function RegisterScreen() {
         value={phoneNumber}
         onChangeText={(text) => setPhoneNumber(text)}
       />
+           {phoneError && <Text style={styles.errorText}>{phoneError}</Text>}
       <TextInput
         style={styles.input}
         placeholder="Address"
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
+      {addressError && <Text style={styles.errorText}>{addressError}</Text>}
       <View style={{ width: "100%" }}>
         <TouchableOpacity onPress={handleRegister}>
           <Button
@@ -150,5 +212,12 @@ const styles = StyleSheet.create({
   buttonSize: {
     width: 330,
     height: 40,
+  },
+  errorText: {
+    backgroundColor: '#FFCACA',
+    color: "red",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 20,
   },
 });
