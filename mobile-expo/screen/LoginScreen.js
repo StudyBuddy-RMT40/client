@@ -19,7 +19,7 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { login, accessToken } = useAuth();
+  const { login, accessToken, isLoggedIn } = useAuth();
   const navigation = useNavigation();
 
   const handleLogin = async () => {
@@ -29,16 +29,13 @@ export default function LoginScreen() {
       return;
     }
 
-    if (username === "riska@gmail.com" && password === "asdasd") {
-      try {
-        await login(username, password);
+    try {
+      await login(username, password);
+      if (isLoggedIn) {
         navigation.navigate("Dashboard");
-      } catch (error) {
-        setModalMessage("Something went wrong. Try again later!");
-        setShowModal(true);
       }
-    } else {
-      setModalMessage("Invalid email or password");
+    } catch (error) {
+      setModalMessage("Something went wrong. Try again later!");
       setShowModal(true);
     }
   };

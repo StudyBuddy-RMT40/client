@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -18,7 +18,14 @@ import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
 
 export default function AccountScreen() {
-  const { logout } = useAuth();
+  const { currentUser, logout } = useAuth();
+
+  useEffect(() => {
+    if (currentUser) {
+      setUserProfile(currentUser);
+    }
+  }, [currentUser]);
+
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
   const [userProfile, setUserProfile] = useState({

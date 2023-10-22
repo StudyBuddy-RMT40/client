@@ -1,56 +1,46 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useState, useContext } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [accessToken, setAccessToken] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect(() => {
-    const storeAccessToken = async () => {
-      try {
-        if (accessToken) {
-          await AsyncStorage.setItem("accessToken", accessToken);
-        } else {
-          await AsyncStorage.removeItem("accessToken");
-        }
-      } catch (error) {
-        console.log("Error saving access token:", error);
-      }
+  const login = (email, password) => {
+    const foundUser = users.find((u) => u.email === email);
+
+    if (foundUser && password === "asdasd") {
+      setCurrentUser(foundUser);
+      setIsLoggedIn(true);
+    } else {
+      alert("Invalid login credentials");
+    }
+  };
+
+  const register = (username, email, phone, address) => {
+    const newUser = {
+      username,
+      email,
+      phone,
+      address,
+      documents: [],
     };
 
-    storeAccessToken();
-  }, [accessToken]);
-
-  useEffect(() => {
-    const fetchAccessToken = async () => {
-      try {
-        const storedAccessToken = await AsyncStorage.getItem("accessToken");
-        if (storedAccessToken) {
-          setAccessToken(storedAccessToken);
-        }
-      } catch (error) {
-        console.log("Error fetch access token:", error);
-      }
-    };
-
-    fetchAccessToken();
-  }, []);
-
-  const login = () => {
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+    setCurrentUser(newUser);
     setIsLoggedIn(true);
-    setAccessToken("123123");
-    console.log("Logging in...");
   };
 
   const logout = () => {
     setIsLoggedIn(false);
-    setAccessToken(null);
+    setCurrentUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout, accessToken }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, login, logout, register, currentUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
