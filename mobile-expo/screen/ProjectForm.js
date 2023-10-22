@@ -22,11 +22,70 @@ export default function ProjectForm() {
   const [goals, setGoals] = useState("");
   const [location, setLocation] = useState("");
   const [displaySlider, setDisplaySlider] = useState(false);
+  //handle error
+  const [projectNameError, setProjectNameError] = useState(null);
+  const [projectDescriptionError, setProjectDescriptionError] = useState(null);
+  const [categoryError, setCategoryError] = useState(null);
+  const [startDateError, setStartDateError] = useState(null);
+  const [endDateError, setEndDateError] = useState(null);
+  const [goalsError, setGoalsError] = useState(null);
+  const [locationError, setLocationError] = useState(null);
 
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    navigation.push("Payment");
+  setProjectNameError(null);
+  setProjectDescriptionError(null);
+  setCategoryError(null);
+  setStartDateError(null);
+  setEndDateError(null);
+  setGoalsError(null);
+  setLocationError(null);
+
+  let hasError = false;
+
+  if (!projectName) {
+    setProjectNameError("Project Name must be filled");
+    hasError = true;
+  }
+
+  if (!projectDescription) {
+    setProjectDescriptionError("Project Description must be filled");
+    hasError = true;
+  }
+
+  if (!category) {
+    setCategoryError("Category must be filled");
+    hasError = true;
+  }
+
+  if (!startDate) {
+    setStartDateError("Start Date must be filled");
+    hasError = true;
+  }
+
+  if (!endDate) {
+    setEndDateError("End Date must be filled");
+    hasError = true;
+  }
+
+  if (!goals) {
+    setGoalsError("Goals must be filled");
+    hasError = true;
+  }
+
+  if (!location) {
+    setLocationError("Location must be filled");
+    hasError = true;
+  }
+
+  if (hasError) {
+    return;
+  }
+
+  // TODO:
+  
+  navigation.push("Payment");
   };
 
   const handleSearchBuddy = () => {
@@ -152,6 +211,7 @@ export default function ProjectForm() {
             }}
             onBlur={() => setTimeout(() => setShowCategoryDropdown(false), 150)}
           />
+          
 
           {showCategoryDropdown && filteredCategories.length > 0 && (
             <View style={styles.dropdownContainer}>
@@ -190,6 +250,7 @@ export default function ProjectForm() {
             }}
             onBlur={() => setTimeout(() => setShowLocationDropdown(false), 150)}
           />
+          
 
           {showLocationDropdown && filteredLocations.length > 0 && (
             <View style={[styles.dropdownContainer, { left: "52%" }]}>
@@ -213,6 +274,8 @@ export default function ProjectForm() {
             </View>
           )}
         </View>
+        <Text style={styles.errorText}>{categoryError}</Text>
+        <Text style={styles.errorText}>{locationError}</Text>
 
         <Button
           text="Search Buddy"
@@ -230,6 +293,7 @@ export default function ProjectForm() {
             placeholder="Enter project name"
           />
         </View>
+        <Text style={styles.errorText}>{projectNameError}</Text>
 
         <Text style={styles.label}>Project Description</Text>
         <View style={styles.containerBig}>
@@ -242,6 +306,7 @@ export default function ProjectForm() {
             textAlignVertical="top"
           />
         </View>
+        <Text style={styles.errorText}>{projectDescriptionError}</Text>
 
         <Text style={styles.label}>Goals</Text>
         <View style={styles.containerBig}>
@@ -254,6 +319,7 @@ export default function ProjectForm() {
             textAlignVertical="top"
           />
         </View>
+        <Text style={styles.errorText}>{goalsError}</Text>
 
         <View>
           <Button text="Submit" onPress={handleSubmit} />
@@ -376,5 +442,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomColor: "#f0f0f0",
     borderBottomWidth: 1,
+  },
+  errorText: {
+    backgroundColor: '#FFCACA',
+    color: "red",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 10,
+    marginTop: 10
   },
 });

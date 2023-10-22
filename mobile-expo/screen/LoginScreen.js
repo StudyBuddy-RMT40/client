@@ -15,14 +15,45 @@ import { useAuth } from "../navigators/Authcontext";
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+
   const { login, accessToken } = useAuth();
+  
 
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    console.log(">> klik login button <<");
-    login();
-    navigation.navigate("Profile");
+  const handleLogin = async () => {
+    setUsernameError(null);
+    setPasswordError(null);
+
+    let hasError = false;
+
+    if (!username) {
+      setUsernameError("Email must be filled");
+      hasError = true;
+    }
+
+    if (!password) {
+      setPasswordError("Password must be filled");
+      hasError = true;
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    try {
+      // Try to login
+      await login(username, password);
+      navigation.navigate("Profile");
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        setUsernameError("Invalid email or password");
+      } else {
+        setUsernameError("An error occurred. Please try again later.");
+      }
+    }
   };
 
   useEffect(() => {
@@ -43,6 +74,7 @@ export default function LoginScreen() {
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
+      {usernameError && <Text style={styles.errorText}>{usernameError}</Text>}
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -50,6 +82,7 @@ export default function LoginScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
+      {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
       <View style={{ width: "100%" }}>
         <TouchableOpacity>
           <Button
@@ -121,5 +154,12 @@ const styles = StyleSheet.create({
   },
   registerButton: {
     color: "#396987",
+  },
+  errorText: {
+    backgroundColor: '#FFCACA',
+    color: "red",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 20,
   },
 });
