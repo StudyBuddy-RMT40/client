@@ -16,7 +16,7 @@ export default function DetailScreen({ route }) {
   const [project, setProject] = useState(route.params.project);
   const [price, setPrice] = useState("");
 
-  const userRole = "Buddy";
+  const userRole = "Student";
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });

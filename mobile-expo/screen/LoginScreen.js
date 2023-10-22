@@ -11,48 +11,35 @@ import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
+import ErrorModal from "../components/modal/ErrorModal";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [usernameError, setUsernameError] = useState(null);
-  const [passwordError, setPasswordError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const { login, accessToken } = useAuth();
-  
-
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    setUsernameError(null);
-    setPasswordError(null);
-
-    let hasError = false;
-
-    if (!username) {
-      setUsernameError("Email must be filled");
-      hasError = true;
-    }
-
-    if (!password) {
-      setPasswordError("Password must be filled");
-      hasError = true;
-    }
-
-    if (hasError) {
+    if (!username || !password) {
+      setModalMessage("Email and Password required!");
+      setShowModal(true);
       return;
     }
 
-    try {
-      // Try to login
-      await login(username, password);
-      navigation.navigate("Profile");
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        setUsernameError("Invalid email or password");
-      } else {
-        setUsernameError("An error occurred. Please try again later.");
+    if (username === "riska@gmail.com" && password === "asdasd") {
+      try {
+        await login(username, password);
+        navigation.navigate("Dashboard");
+      } catch (error) {
+        setModalMessage("Something went wrong. Try again later!");
+        setShowModal(true);
       }
+    } else {
+      setModalMessage("Invalid email or password");
+      setShowModal(true);
     }
   };
 
@@ -74,7 +61,6 @@ export default function LoginScreen() {
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
-      {usernameError && <Text style={styles.errorText}>{usernameError}</Text>}
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -82,15 +68,8 @@ export default function LoginScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-      {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
       <View style={{ width: "100%" }}>
-        <TouchableOpacity>
-          <Button
-            onPress={handleLogin}
-            text="Login"
-            style={styles.buttonSize}
-          />
-        </TouchableOpacity>
+        <Button onPress={handleLogin} text="Login" style={styles.buttonSize} />
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>Don't have an account yet?</Text>
           <TouchableOpacity onPress={handleRegister}>
@@ -98,6 +77,12 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
       </View>
+      <ErrorModal
+        visible={showModal}
+        title="Error"
+        message={modalMessage}
+        onClose={() => setShowModal(false)}
+      />
     </View>
   );
 }
@@ -156,7 +141,7 @@ const styles = StyleSheet.create({
     color: "#396987",
   },
   errorText: {
-    backgroundColor: '#FFCACA',
+    backgroundColor: "#FFCACA",
     color: "red",
     padding: 10,
     borderRadius: 8,
