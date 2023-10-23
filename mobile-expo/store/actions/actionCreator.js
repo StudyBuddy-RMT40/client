@@ -1,6 +1,6 @@
 import { STUDENT_PROFILE_FETCH_SUCCESS, BUDDY_PROFILE_FETCH_SUCCESS, PROJECTS_FETCH_SUCCESS, PROJECT_FETCH_SUCCESS, RATINGS_FETCH_SUCCESS, USERS_FETCH_SUCCESS, USER_FETCH_SUCCESS, REVIEWS_FETCH_SUCCESS, CATEGORIES_FETCH_SUCCESS } from './actionTypes';
 
-const BASE_URL = 'https://080a-182-0-140-235.ngrok-free.app'
+const BASE_URL = 'https://09f5-182-0-147-255.ngrok-free.app/'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 

@@ -60,7 +60,7 @@ export default function HorizontalSlider(props) {
         style={styles.carousel}
       >
         {carouselItems.map((item, idx) => (
-       <TouchableOpacity       onPress={() =>
+       <TouchableOpacity onPress={() =>
         navigation.push("Detail", {
           project: {
             name: item.name, 
