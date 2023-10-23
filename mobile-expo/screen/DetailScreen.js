@@ -1,31 +1,25 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   ScrollView,
+  TextInput,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
-  CheckBox,
+  Image,
 } from "react-native";
-import Button from "../components/Button";
-import CustomHeader from "../components/CustomHeader";
 import { useNavigation } from "@react-navigation/native";
+import CheckBox from "react-native-check-box";
+import CustomHeader from "../components/CustomHeader";
+import { Rating } from "react-native-ratings";
 
 export default function DetailScreen({ route }) {
   const navigation = useNavigation();
   const [project, setProject] = useState(route.params.project);
   const [price, setPrice] = useState("");
-  const [learningMaterials, setLearningMaterials] = useState(
-    route.params.project.learningMaterials || []
-  );
-
-  // Accepted => Ketika buddy accept
-  // Paid => Pas student udah bayar && todo === 0
-  // On Progress => udah dibayar dan todo > 0
-  // To Review => todo 100%
-  // Finished => todo 100% && udah Review
-
+  const [studentFeedback, setStudentFeedback] = useState("");
+  const [buddyFeedback, setBuddyFeedback] = useState("");
+  const [rating, setRating] = useState(0);
   const userRole = "Buddy";
 
   const handleAcceptProposal = () => {
@@ -33,7 +27,6 @@ export default function DetailScreen({ route }) {
   };
 
   const handlePayProject = () => {
-    // setProject({ ...project, status: "Paid" });
     navigation.push("Payment");
   };
 
@@ -41,110 +34,169 @@ export default function DetailScreen({ route }) {
     setProject({ ...project, status: "Finished" });
   };
 
-  const handleChat = () => {
-    navigation.push("Chat");
-  };
-
-  const handleAddMaterial = () => {
-    setLearningMaterials([...learningMaterials, { text: "", checked: false }]);
+  const handleUpdateLearningMaterial = (text, index) => {
+    const updatedMaterials = [...project.learningMaterials];
+    updatedMaterials[index].text = text;
+    setProject({ ...project, learningMaterials: updatedMaterials });
   };
 
   const handleRemoveMaterial = (index) => {
-    const newMaterials = [...learningMaterials];
+    const newMaterials = [...project.learningMaterials];
     newMaterials.splice(index, 1);
-    setLearningMaterials(newMaterials);
+    setProject({ ...project, learningMaterials: newMaterials });
   };
 
-  const handleUpdateLearningMaterial = (text, index) => {
-    const updatedMaterials = [...learningMaterials];
-    updatedMaterials[index].text = text;
-    setLearningMaterials(updatedMaterials);
+  const handleToggleMaterialChecked = (index) => {
+    const updatedMaterials = [...project.learningMaterials];
+    updatedMaterials[index].checked = !updatedMaterials[index].checked;
+    setProject({ ...project, learningMaterials: updatedMaterials });
+  };
+
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
   };
 
   return (
     <>
       <CustomHeader title="Project Detail" />
+
       <ScrollView style={styles.contentContainerStyle}>
-        <Text style={styles.title}>Project Name</Text>
+        <Text style={styles.label}>Project Name</Text>
         <View style={styles.container}>
-          <Text>{project.name}</Text>
+          <Text>{project.title}</Text>
         </View>
 
-        <Text style={styles.title}>Project Description</Text>
+        <Text style={styles.label}>Project Description</Text>
         <View style={styles.containerBig}>
           <Text>{project.description}</Text>
         </View>
 
-        <Text style={styles.title}>Category</Text>
+        <Text style={styles.label}>Category</Text>
         <View style={styles.container}>
           <Text>{project.category}</Text>
         </View>
 
-        <Text style={styles.title}>Goals</Text>
+        <Text style={styles.label}>Goals</Text>
         <View style={styles.containerBig}>
           <Text>{project.goals}</Text>
         </View>
 
-        {["To Review", "Finished"].includes(project.status) && (
+        {userRole === "Buddy" && project.status === "Submitted" && (
           <>
-            <Text style={styles.title}>Feedback</Text>
+            <Text style={styles.label}>Proposal Price</Text>
             <TextInput
-              style={styles.containerBig}
-              value={project.feedback}
-              onChangeText={(text) =>
-                setProject((prev) => ({ ...prev, feedback: text }))
-              }
-              editable={project.status !== "Finished"}
+              style={styles.editableContainer}
+              placeholder="Enter Price"
+              value={price}
+              onChangeText={setPrice}
             />
+            <TouchableOpacity
+              style={styles.acceptButton}
+              onPress={handleAcceptProposal}
+            >
+              <Text style={styles.buttonText}>Accept Project Proposal</Text>
+            </TouchableOpacity>
           </>
         )}
 
-        {userRole === "Buddy" && project.status === "Submitted" && (
+        {project.status === "Accepted" && userRole === "Student" && (
+          <TouchableOpacity onPress={handlePayProject} style={styles.payButton}>
+            <Text style={styles.buttonText}>Proceed Payment</Text>
+          </TouchableOpacity>
+        )}
+
+        {(project.status === "Paid" || project.status === "On Progress") && (
           <>
-            <Text style={styles.title}>Learning Materials</Text>
-            {learningMaterials.map((material, index) => (
-              <View key={index} style={styles.learningItem}>
+            <Text style={styles.label}>To-Do List</Text>
+            {project.learningMaterials.map((material, index) => (
+              <View key={index} style={styles.todoItem}>
                 <CheckBox
-                  value={material.checked}
-                  onValueChange={() => {
-                    const updatedMaterials = [...learningMaterials];
-                    updatedMaterials[index].checked =
-                      !updatedMaterials[index].checked;
-                    setLearningMaterials(updatedMaterials);
-                  }}
+                  isChecked={material.checked}
+                  onClick={() => handleToggleMaterialChecked(index)}
+                  disabled={userRole === "Buddy"} // Buddy ga bisa ceklis, hanya Student
                 />
                 <TextInput
+                  style={styles.editableTodoText}
                   value={material.text}
                   onChangeText={(text) =>
                     handleUpdateLearningMaterial(text, index)
                   }
-                  style={{ flex: 1 }}
+                  editable={
+                    userRole === "Buddy" &&
+                    (project.status === "Paid" ||
+                      project.status === "On Progress")
+                  } // Hanya Buddy yang bisa edit
                 />
-                <TouchableOpacity onPress={() => handleRemoveMaterial(index)}>
-                  <Text>Remove</Text>
-                </TouchableOpacity>
+                {userRole === "Buddy" &&
+                  (project.status === "Paid" ||
+                    project.status === "On Progress") && (
+                    <TouchableOpacity
+                      onPress={() => handleRemoveMaterial(index)}
+                    >
+                      <Text style={styles.removeText}>Remove</Text>
+                    </TouchableOpacity>
+                  )}
               </View>
             ))}
-            <TouchableOpacity onPress={handleAddMaterial}>
-              <Text>Add Material</Text>
-            </TouchableOpacity>
-
-            <TextInput
-              placeholder="Enter Price"
-              value={price}
-              onChangeText={setPrice}
-              style={styles.container}
-            />
-            <Button text="Accept Proposal" onPress={handleAcceptProposal} />
           </>
         )}
 
-        {userRole === "Student" && project.status === "Accepted" && (
-          <Button text="Pay for Project" onPress={handlePayProject} />
+        {project.status === "To Review" && (
+          <>
+            {userRole === "Student" && (
+              <>
+                <Text style={styles.label}>Student Feedback</Text>
+                <TextInput
+                  style={styles.editableContainer}
+                  placeholder="Enter feedback"
+                  value={studentFeedback}
+                  onChangeText={setStudentFeedback}
+                />
+                <Text style={styles.label}>Student Rating</Text>
+                <Rating
+                  showRating
+                  onFinishRating={handleRatingChange}
+                  style={{ paddingVertical: 10 }}
+                />
+                <TouchableOpacity style={styles.submitFeedbackButton}>
+                  <Text style={styles.buttonText}>Submit Feedback</Text>
+                </TouchableOpacity>
+              </>
+            )}
+
+            {userRole === "Buddy" && (
+              <>
+                <Text style={styles.label}>Buddy Feedback</Text>
+                <TextInput
+                  style={styles.editableContainer}
+                  placeholder="Enter feedback"
+                  value={buddyFeedback}
+                  onChangeText={setBuddyFeedback}
+                />
+                <Text style={styles.label}>Buddy Rating</Text>
+                <Rating
+                  showRating
+                  onFinishRating={handleRatingChange}
+                  style={{ paddingVertical: 10 }}
+                />
+                <TouchableOpacity
+                  onPress={handleFinishProject}
+                  style={styles.finishProjectButton}
+                >
+                  <Text style={styles.buttonText}>Finish Project</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </>
         )}
 
-        {userRole === "Buddy" && project.status === "To Review" && (
-          <Button text="Finish Project" onPress={handleFinishProject} />
+        {project.status === "Finished" && (
+          <Image
+            source={{
+              uri: "https://miro.medium.com/v2/resize:fit:1400/format:webp/1*KuGlXZjyTw7q38uzY_aZRA.png",
+            }}
+            style={styles.projectImage}
+          />
         )}
       </ScrollView>
     </>
@@ -156,9 +208,10 @@ const styles = StyleSheet.create({
     padding: 13,
     backgroundColor: "#FFFFFF",
   },
-  title: {
+  label: {
     fontSize: 20,
     marginTop: 10,
+    marginBottom: 10,
     fontFamily: "Lato-Bold",
     color: "#333",
   },
@@ -166,6 +219,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 40,
     borderColor: "#e0e0e0",
+    justifyContent: "center",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
@@ -185,6 +239,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 100,
     borderColor: "#e0e0e0",
+    justifyContent: "center",
     borderWidth: 1,
     borderRadius: 8,
     marginTop: 5,
@@ -200,12 +255,81 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.18,
     shadowRadius: 1.0,
   },
-  containerButton: {
-    marginBottom: 30,
+  editableContainer: {
+    height: 100,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 8,
+    borderRadius: 4,
   },
-  learningItem: {
+  todoItem: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 5,
+    marginBottom: 8,
+    backgroundColor: "#FFF",
+    padding: 8,
+    borderRadius: 4,
+  },
+  todoText: {
+    flex: 1,
+    marginLeft: 8,
+    color: "#555",
+  },
+  editableTodoText: {
+    flex: 1,
+    marginLeft: 8,
+    borderColor: "#e0e0e0",
+    borderWidth: 1,
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    color: "#333",
+  },
+  removeText: {
+    color: "red",
+    marginLeft: 8,
+  },
+  buttonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  acceptButton: {
+    backgroundColor: "#6b9ebf",
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  payButton: {
+    backgroundColor: "#6B9EBF",
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  submitFeedbackButton: {
+    backgroundColor: "#6B9EBF",
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  finishProjectButton: {
+    backgroundColor: "#6B9EBF",
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  projectImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 8,
+    marginTop: 16,
   },
 });

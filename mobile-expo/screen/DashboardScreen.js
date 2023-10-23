@@ -34,7 +34,10 @@ export default function DashboardScreen() {
       goals:
         "The goals of this course are to help participants grasp the basics of design thinking, understand its problem-solving approach, and apply it to real-world challenges.",
       feedback: null,
-      learningMaterials: null,
+      learningMaterials: [
+        { text: "Video Tutorial 1", checked: false },
+        { text: "E-book Design Basics", checked: false },
+      ],
     },
     {
       id: 2,
@@ -47,7 +50,10 @@ export default function DashboardScreen() {
       goals:
         "In this advanced course, participants will delve deeper into design thinking concepts, explore advanced techniques for problem-solving and innovation, and gain practical experience.",
       feedback: null,
-      learningMaterials: null,
+      learningMaterials: [
+        { text: "Video Tutorial 1", checked: false },
+        { text: "E-book Design Basics", checked: false },
+      ],
     },
     {
       id: 3,
@@ -60,7 +66,10 @@ export default function DashboardScreen() {
       goals:
         "The masterclass aims to equip participants with a deep understanding of design thinking, allowing them to lead innovation initiatives and solve complex challenges effectively.",
       feedback: null,
-      learningMaterials: null,
+      learningMaterials: [
+        { text: "Video Tutorial 1", checked: false },
+        { text: "E-book Design Basics", checked: false },
+      ],
     },
     {
       id: 4,
