@@ -12,7 +12,7 @@ import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../navigators/Authcontext";
-import ErrorModal from "../components/modal/ErrorModal"; // Import ErrorModal
+import ErrorModal from "../components/modal/ErrorModal";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");

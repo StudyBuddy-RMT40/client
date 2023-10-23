@@ -86,36 +86,42 @@ const ProjectCard = ({
   );
 };
 
-const DashboardProject = ({ projectData }) => {
+const DashboardProject = ({ projectData = [] }) => {
   const [activeFilter, setActiveFilter] = useState("On Progress");
   const [loading, setLoading] = useState(false);
 
+  // if (!projectData) {
+  //   return <Text style={styles.noProjectText}>No projects available.</Text>;
+  // }
+
   let filteredData = [];
-  switch (activeFilter) {
-    case "Proposed":
-      filteredData = projectData.filter(
-        (project) =>
-          project.status === "Submitted" || project.status === "Accepted"
-      );
-      break;
-    case "On Progress":
-      filteredData = projectData.filter(
-        (project) =>
-          project.status === "Paid" || project.status === "On Progress"
-      );
-      break;
-    case "To Review":
-      filteredData = projectData.filter(
-        (project) => project.status === "To Review"
-      );
-      break;
-    default:
-      break;
+  if (projectData && projectData.length > 0) {
+    switch (activeFilter) {
+      case "Proposed":
+        filteredData = projectData.filter(
+          (project) =>
+            project.status === "Submitted" || project.status === "Accepted"
+        );
+        break;
+      case "On Progress":
+        filteredData = projectData.filter(
+          (project) =>
+            project.status === "Paid" || project.status === "On Progress"
+        );
+        break;
+      case "To Review":
+        filteredData = projectData.filter(
+          (project) => project.status === "To Review"
+        );
+        break;
+      default:
+        break;
+    }
   }
 
   return (
     <View>
-      <Text style={styles.yourProjectTitle}>My Course</Text>
+      <Text style={styles.yourProjectTitle}>My Projects</Text>
 
       <View style={styles.filterContainer}>
         <TouchableOpacity
@@ -167,12 +173,15 @@ const DashboardProject = ({ projectData }) => {
           color="#4781a5"
           style={{ marginTop: 20 }}
         />
-      ) : filteredData.length ? (
-        filteredData.map((project, idx) => (
-          <ProjectCard key={idx} {...project} />
-        ))
       ) : (
-        <Text style={styles.noProjectText}>No Project Yet</Text>
+        <>
+          {filteredData.map((project, idx) => (
+            <ProjectCard key={idx} {...project} />
+          ))}
+          {filteredData.length === 0 && (
+            <Text style={styles.noProjectText}>No projects available.</Text>
+          )}
+        </>
       )}
     </View>
   );
