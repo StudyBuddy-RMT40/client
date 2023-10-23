@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { useAuth } from "../navigators/Authcontext";
 import ButtonGrid from "../components/ButtonGrid";
-import allProject from "../assets/public.png";
+import addProject from "../assets/tap.png";
+import History from "../assets/certificate.png";
+import Wallet from "../assets/money.png";
 import { useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";
 import DashboardProject from "../components/DashboardProject";
@@ -130,16 +132,21 @@ export default function DashboardScreen() {
 
   const buttonItems = [
     {
-      icon: allProject,
+      icon: addProject,
       label: "Add Projects",
       size: 60,
       onPress: () => navigation.navigate("AddProject"),
     },
     {
-      icon: allProject,
+      icon: History,
       label: "Project History",
       size: 60,
       onPress: () => navigation.navigate("Archive", { data: finishedProjects }),
+    },
+    { icon: Wallet, 
+      label: "Wallet", 
+      size: 60, 
+      onPress: () => navigation.navigate("Wallet"), 
     },
   ];
 

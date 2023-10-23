@@ -20,7 +20,7 @@ export default function DetailScreen({ route }) {
   const [studentFeedback, setStudentFeedback] = useState("");
   const [buddyFeedback, setBuddyFeedback] = useState("");
   const [rating, setRating] = useState(0);
-  const userRole = "Buddy";
+  const userRole = "Student";
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
@@ -180,6 +180,15 @@ export default function DetailScreen({ route }) {
                   style={{ paddingVertical: 10 }}
                 />
                 <TouchableOpacity
+                  onPress={() => {
+                    // Handle Multer
+                  }}
+                  style={styles.uploadDocumentationButton}
+                >
+                  <Text style={styles.buttonText}>Upload Documentation</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
                   onPress={handleFinishProject}
                   style={styles.finishProjectButton}
                 >
@@ -322,6 +331,12 @@ const styles = StyleSheet.create({
   },
   finishProjectButton: {
     backgroundColor: "#6B9EBF",
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  uploadDocumentationButton: {
+    backgroundColor: "#808080",
     padding: 12,
     borderRadius: 8,
     marginVertical: 8,

@@ -10,10 +10,11 @@ import {
 } from "react-native";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
-import HorizontalSlider from "../components/HorizontalSlider";
 import CustomHeader from "../components/CustomHeader";
 import ErrorModal from "../components/modal/ErrorModal";
 import BuddySlider from "../components/BuddySlider";
+import CheckBox from "react-native-check-box";
+import { ActivityIndicator } from "react-native";
 
 export default function ProjectForm() {
   const [projectName, setProjectName] = useState("");
@@ -24,6 +25,8 @@ export default function ProjectForm() {
   const [goals, setGoals] = useState("");
   const [location, setLocation] = useState("");
   const [displaySlider, setDisplaySlider] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [todoList, setTodoList] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -128,6 +131,21 @@ export default function ProjectForm() {
 
   const [filteredLocations, setFilteredLocations] = useState(locations);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+
+  const generateToDoList = () => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      const generatedList = [
+        { tugas: `Ini tugas 1 untuk ${projectName}` },
+        { tugas: `Ini tugas 2 untuk ${projectName}` },
+        { tugas: `Ini tugas 3 untuk ${projectName}` },
+      ];
+
+      setTodoList(generatedList);
+      setIsLoading(false);
+    }, 1000);
+  };
 
   useEffect(() => {
     if (filterQuery) {
@@ -276,6 +294,24 @@ export default function ProjectForm() {
             textAlignVertical="top"
           />
         </View>
+
+        <Button text="AI-Generated To Do List" onPress={generateToDoList} />
+
+        {isLoading && <ActivityIndicator size="large" color="#6b9ebf" />}
+
+        {todoList.map((item, index) => (
+          <CheckBox
+            key={index}
+            style={{ flex: 1, padding: 10 }}
+            onClick={() => {
+              const newTodoList = [...todoList];
+              newTodoList[index].checked = !item.checked;
+              setTodoList(newTodoList);
+            }}
+            isChecked={item.checked}
+            leftText={item.tugas}
+          />
+        ))}
 
         <View>
           <Button text="Submit" onPress={handleSubmit} />

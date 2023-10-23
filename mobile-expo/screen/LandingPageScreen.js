@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -19,27 +19,37 @@ import browseLocation from "../assets/location.png";
 import topProject from "../assets/top-projects.png";
 import topBuddy from "../assets/top-teacher.png";
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { getProjects } from "../store/actions/actionCreator";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LandingPageScreen() {
+  const navigation = useNavigation();
+  const dispatch = useDispatch()
+  const { projects } = useSelector((state) => state.projectReducer)
+  useEffect(() => {
+    dispatch(getProjects())
+  }, [])
+
   const insets = useSafeAreaInsets();
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
-    { icon: allProject, label: "All Projects", size: 60, onPress: () => {} },
-    { icon: highschool, label: "School Projects", size: 60, onPress: () => {} },
+    { icon: allProject, label: "All Projects", size: 60, onPress: () => navigation.navigate("Project") },
+    { icon: highschool, label: "School Projects", size: 60, onPress: () => navigation.navigate("Project") },
     {
       icon: university,
       label: "University Projects",
       size: 60,
-      onPress: () => {},
+      onPress: () => navigation.navigate("Project"),
     },
     {
       icon: browseLocation,
       label: "Projects Near Me",
       size: 60,
-      onPress: () => {},
+      onPress: () => navigation.navigate("Project"),
     },
-    { icon: topProject, label: "Top Projects", size: 60, onPress: () => {} },
-    { icon: topBuddy, label: "Top Buddy", size: 60, onPress: () => {} },
+    { icon: topProject, label: "Top Projects", size: 60, onPress: () => navigation.navigate("Project") },
+    { icon: topBuddy, label: "Top Buddy", size: 60, onPress: () => navigation.navigate("Project") },
   ];
 
   const [data, setData] = useState([
@@ -101,7 +111,7 @@ export default function LandingPageScreen() {
   // Filter top ratings
   const topRatings = data
     .slice()
-    .sort((a, b) => {})
+    .sort((a, b) => { })
     .reverse()
     .slice(0, 5);
 
