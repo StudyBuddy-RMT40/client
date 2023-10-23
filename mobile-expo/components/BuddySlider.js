@@ -3,12 +3,15 @@ import {
   View,
   ScrollView,
   Image,
-  TouchableOpacity,
   Text,
   StyleSheet,
   Dimensions,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import heroDummy from "../assets/dummy/hero-dummy.jpg";
+import dummy1 from "../assets/dummy/dummy1.png";
+import dummy2 from "../assets/dummy/dummy2.png";
+import dummy3 from "../assets/dummy/dummy3.png";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -35,70 +38,91 @@ const LocationSVG = () => (
   </Svg>
 );
 
-export default function VerticalSlider(props) {
-  const { data } = props;
-
-  const carouselItems = data.map((item, idx) => ({
-    name: item.name,
-    image: item.image,
-    description: item.description,
-    // rating:
-    goals: item.goals,
-    category: item.Category.name,
-    address: item.Teacher.address,
-  }));
+export default function BuddySlider() {
+  const carouselItems = [
+    { text: "Buddy Kurnia", image: heroDummy, location: "Planet Bekasi" },
+    { text: "Buddy Dummy 1", image: dummy1, location: "Di Sini Senang" },
+    { text: "Buddy Dummy 2", image: dummy2, location: "Di Sana Senang" },
+    {
+      text: "Buddy Dummy 3",
+      image: dummy3,
+      location: "Di Mana-Mana Hatiku Senang",
+    },
+  ];
 
   return (
-    <View style={styles.verticalCardContainer}>
-      <ScrollView vertical showsVerticalScrollIndicator={false}>
-        {data.map((item, idx) => (
-          <TouchableOpacity key={idx} onPress={() => onItemClick(item)}>
-            <View style={styles.verticalCard}>
-              <Image style={styles.verticalCardImage} source={item.image} />
-              <Text style={styles.verticalCardText}>{item.name}</Text>
-              <View style={styles.locationContainer}>
-                <LocationSVG />
-                <Text style={styles.courseLocation}>{item.address}</Text>
-              </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>Ini Buddy</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.carousel}
+      >
+        {carouselItems.map((item, idx) => (
+          <View key={idx} style={styles.card}>
+            <Image style={styles.image} source={item.image} />
+            <View style={styles.courseInfo}>
+              <Text style={styles.courseTitle}>{item.text}</Text>
               <View style={styles.ratingContainer}>
                 <StarSVG />
                 <Text style={styles.courseRating}>4.5</Text>
               </View>
             </View>
-          </TouchableOpacity>
+            <View style={styles.locationContainer}>
+              <LocationSVG />
+              <Text style={styles.courseLocation}>{item.location}</Text>
+            </View>
+          </View>
         ))}
       </ScrollView>
     </View>
   );
 }
-
 const styles = StyleSheet.create({
-  verticalCardContainer: {
-    padding: 10,
+  container: {
     marginTop: 10,
-  },
-  verticalCard: {
-    borderRadius: 10,
     marginBottom: 20,
-    alignItems: "center",
   },
-  verticalCardImage: {
-    width: screenWidth * 0.9,
+  title: {
+    paddingHorizontal: 10,
+    fontSize: 20,
+    color: "#0e365c",
+    marginBottom: 15,
+    fontFamily: "Lato-Bold",
+  },
+  carousel: {
+    flexDirection: "row",
+  },
+  card: {
+    paddingHorizontal: 10,
+    width: screenWidth * 0.6,
+    marginRight: 20,
+  },
+  image: {
+    width: screenWidth * 0.6,
     height: 150,
     resizeMode: "cover",
     borderRadius: 10,
   },
-  verticalCardText: {
+  courseInfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+    paddingHorizontal: 10,
+  },
+  courseTitle: {
     color: "#0e365c",
-    fontSize: 16,
-    marginTop: 5,
-    textAlign: "center",
     fontFamily: "Lato-Regular",
   },
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
     fontFamily: "Lato-Light",
+  },
+  starIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 5,
   },
   courseRating: {
     color: "#0e365c",
@@ -108,6 +132,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 5,
+    marginLeft: 10,
+  },
+  locationIcon: {
+    width: 14,
+    height: 14,
+    marginRight: 5,
   },
   courseLocation: {
     color: "#6b9ebf",

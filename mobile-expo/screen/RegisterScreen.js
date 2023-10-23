@@ -24,7 +24,7 @@ export default function RegisterScreen() {
   const [address, setAddress] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const isValidEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);
@@ -54,12 +54,12 @@ export default function RegisterScreen() {
     // navigation.navigate("Dashboard");
     dispatch(register({ username, email, password, phoneNumber, address }))
       .then(() => {
-        navigation.navigate("Dashboard")
+        navigation.navigate("Dashboard");
       })
       .catch((err) => {
-        setModalMessage(err.response.data.message)
-        setShowModal(true)
-      })
+        setModalMessage(err.response.data.message);
+        setShowModal(true);
+      });
   };
 
   const handleLogin = () => {

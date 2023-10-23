@@ -22,15 +22,6 @@ export default function DashboardScreen() {
 
   const [showRoleModal, setShowRoleModal] = useState(false);
 
-  const buttonItems = [
-    {
-      icon: allProject,
-      label: "Add Projects",
-      size: 60,
-      onPress: () => navigation.navigate("AddProject"),
-    },
-  ];
-
   const [projectData, setProjectData] = useState([
     {
       id: 1,
@@ -83,8 +74,10 @@ export default function DashboardScreen() {
         "This intermediate course covers a range of design thinking techniques and tools, allowing participants to tackle complex problems with confidence.",
       feedback:
         "Great progress so far! Keep up the good work. You're halfway through the course and making excellent strides in your understanding of Design Thinking.",
-      learningMaterials:
-        "Access a comprehensive set of learning materials, including video tutorials, case studies, and practical exercises, to support your learning journey.",
+      learningMaterials: [
+        { text: "Video Tutorial 1", checked: false },
+        { text: "E-book Design Basics", checked: false },
+      ],
     },
     {
       id: 5,
@@ -98,10 +91,48 @@ export default function DashboardScreen() {
         "Conclude your Design Thinking journey by successfully completing a capstone project that applies all your acquired knowledge and skills.",
       feedback:
         "Congratulations on completing the Design Thinking Final course! You've successfully demonstrated your expertise in this innovative problem-solving approach.",
-      learningMaterials:
-        "Access a complete set of learning materials, including recorded lectures, project templates, and additional resources, to help you excel in your capstone project.",
+      learningMaterials: [
+        { text: "Video Tutorial 1", checked: false },
+        { text: "E-book Design Basics", checked: false },
+      ],
+    },
+    {
+      id: 6,
+      title: "LALALA Review",
+      progress: 100,
+      status: "To Review",
+      description:
+        "The final installment in the Design Thinking series, where participants demonstrate their mastery of the methodology through a capstone project.",
+      category: "Design",
+      goals:
+        "Conclude your Design Thinking journey by successfully completing a capstone project that applies all your acquired knowledge and skills.",
+      feedback:
+        "Congratulations on completing the Design Thinking Final course! You've successfully demonstrated your expertise in this innovative problem-solving approach.",
+      learningMaterials: [
+        { text: "Video Tutorial 1", checked: false },
+        { text: "E-book Design Basics", checked: false },
+      ],
     },
   ]);
+
+  const finishedProjects = projectData.filter(
+    (project) => project.status === "Finished"
+  );
+
+  const buttonItems = [
+    {
+      icon: allProject,
+      label: "Add Projects",
+      size: 60,
+      onPress: () => navigation.navigate("AddProject"),
+    },
+    {
+      icon: allProject,
+      label: "Project History",
+      size: 60,
+      onPress: () => navigation.navigate("Archive", { data: finishedProjects }),
+    },
+  ];
 
   return (
     <>
