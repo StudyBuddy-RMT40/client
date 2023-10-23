@@ -1,4 +1,4 @@
-const BASE_URL = 'https://c061-182-0-140-235.ngrok-free.app'
+const BASE_URL = 'https://01de-182-0-140-235.ngrok-free.app'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 
