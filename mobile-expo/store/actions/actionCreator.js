@@ -13,7 +13,7 @@ export function handleLogin(form) {
             throw err
         }
     }
-}
+};
 
 export function register(form) {
     return async () => {
@@ -115,7 +115,7 @@ export function getStudentProfile() {
             throw err
         }
     }
-}
+};
 
 export function getBuddyProfile() {
     return async (dispatch) => {

@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
   View,
@@ -7,9 +6,12 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  TouchableOpacity
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import heroDummy from "../assets/dummy/hero-dummy.jpg";
+import dummy1 from "../assets/dummy/dummy1.png";
+import dummy2 from "../assets/dummy/dummy2.png";
+import dummy3 from "../assets/dummy/dummy3.png";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -36,43 +38,31 @@ const LocationSVG = () => (
   </Svg>
 );
 
-export default function HorizontalSlider(props) {
-  const { data, title } = props;
-  const navigation = useNavigation();
-
-  const carouselItems = data.map((item, idx) => ({
-    name: item.name,
-    image: item.image,
-    description: item.description,
-    // rating:
-    goals: item.goals,
-    category: item.Category.name,
-    address: item.Teacher.address,
-
-  }));
+export default function BuddySlider() {
+  const carouselItems = [
+    { text: "Buddy Kurnia", image: heroDummy, location: "Planet Bekasi" },
+    { text: "Buddy Dummy 1", image: dummy1, location: "Di Sini Senang" },
+    { text: "Buddy Dummy 2", image: dummy2, location: "Di Sana Senang" },
+    {
+      text: "Buddy Dummy 3",
+      image: dummy3,
+      location: "Di Mana-Mana Hatiku Senang",
+    },
+  ];
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>Ini Buddy</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.carousel}
       >
         {carouselItems.map((item, idx) => (
-       <TouchableOpacity       onPress={() =>
-        navigation.push("Detail", {
-          project: {
-            name: item.name, 
-            description: item.description,
-            category: item.category,
-            goals: item.goals
-          },
-        })
-      } style={styles.card}>
+          <View key={idx} style={styles.card}>
             <Image style={styles.image} source={item.image} />
             <View style={styles.courseInfo}>
-              <Text style={styles.courseTitle}>{item.name}</Text>
+              <Text style={styles.courseTitle}>{item.text}</Text>
               <View style={styles.ratingContainer}>
                 <StarSVG />
                 <Text style={styles.courseRating}>4.5</Text>
@@ -80,9 +70,9 @@ export default function HorizontalSlider(props) {
             </View>
             <View style={styles.locationContainer}>
               <LocationSVG />
-              <Text style={styles.courseLocation}>{item.address}</Text>
+              <Text style={styles.courseLocation}>{item.location}</Text>
             </View>
-            </TouchableOpacity>
+          </View>
         ))}
       </ScrollView>
     </View>

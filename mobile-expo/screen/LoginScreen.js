@@ -12,8 +12,8 @@ import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
 import ErrorModal from "../components/modal/ErrorModal";
-import { useDispatch } from 'react-redux'
-import { getProjects, handleLogin } from "../store/actions/actionCreator";
+import { useDispatch } from "react-redux";
+import { handleLogin } from "../store/actions/actionCreator";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -24,18 +24,17 @@ export default function LoginScreen() {
   const { login, accessToken, isLoggedIn, setIsLoggedIn } = useAuth();
   console.log(isLoggedIn)
   const navigation = useNavigation();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleLoginSubmit = async () => {
     dispatch(handleLogin({ email, password }))
       .then(() => {
-        navigation.navigate('Dashboard')
-        setIsLoggedIn(true)
+        navigation.navigate("Dashboard");
       })
       .catch((err) => {
-        setModalMessage(err.response.data.message)
-        setShowModal(true)
-      })
+        setModalMessage(err.response.data.message);
+        setShowModal(true);
+      });
   };
 
   useEffect(() => {
@@ -63,7 +62,11 @@ export default function LoginScreen() {
         onChangeText={(text) => setPassword(text)}
       />
       <View style={{ width: "100%" }}>
-        <Button onPress={handleLoginSubmit} text="Login" style={styles.buttonSize} />
+        <Button
+          onPress={handleLoginSubmit}
+          text="Login"
+          style={styles.buttonSize}
+        />
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>Don't have an account yet?</Text>
           <TouchableOpacity onPress={handleRegister}>
