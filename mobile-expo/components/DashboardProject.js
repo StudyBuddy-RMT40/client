@@ -39,7 +39,11 @@ const ProjectCard = ({
   if (status === "Submitted") displayText = "Waiting For Buddy Approval";
   else if (status === "Accepted") displayText = "Waiting For Payment";
   else if (status === "Paid") displayText = "0% Complete";
-  else if (status === "On Progress" || status === "Finished")
+  else if (
+    status === "On Progress" ||
+    status === "Finished" ||
+    status === "To Review"
+  )
     displayText = `${progress}% Complete`;
 
   let cardContent = (
@@ -87,19 +91,31 @@ const DashboardProject = ({ projectData }) => {
   const [loading, setLoading] = useState(false);
 
   let filteredData = [];
-  if (activeFilter === "Proposed") {
-    filteredData = projectData.filter(
-      (project) =>
-        project.status === "Submitted" || project.status === "Accepted"
-    );
-  } else if (activeFilter === "On Progress") {
-    filteredData = projectData.filter(
-      (project) => project.status === "Paid" || project.status === "On Progress"
-    );
-  } else if (activeFilter === "Finished") {
-    filteredData = projectData.filter(
-      (project) => project.status === "Finished"
-    );
+  switch (activeFilter) {
+    case "Proposed":
+      filteredData = projectData.filter(
+        (project) =>
+          project.status === "Submitted" || project.status === "Accepted"
+      );
+      break;
+    case "On Progress":
+      filteredData = projectData.filter(
+        (project) =>
+          project.status === "Paid" || project.status === "On Progress"
+      );
+      break;
+    case "Finished":
+      filteredData = projectData.filter(
+        (project) => project.status === "Finished"
+      );
+      break;
+    case "To Review":
+      filteredData = projectData.filter(
+        (project) => project.status === "To Review"
+      );
+      break;
+    default:
+      break;
   }
 
   return (
@@ -147,6 +163,20 @@ const DashboardProject = ({ projectData }) => {
           ]}
         >
           <Text style={styles.filterText}>Finished</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            setLoading(true);
+            setActiveFilter("To Review");
+            setTimeout(() => setLoading(false), 500);
+          }}
+          style={[
+            styles.filterButton,
+            activeFilter === "To Review" && styles.activeFilter,
+          ]}
+        >
+          <Text style={styles.filterText}>To Review</Text>
         </TouchableOpacity>
       </View>
 
