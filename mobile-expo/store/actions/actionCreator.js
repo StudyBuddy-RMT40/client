@@ -8,6 +8,11 @@ import {
   USER_FETCH_SUCCESS,
   REVIEWS_FETCH_SUCCESS,
   CATEGORIES_FETCH_SUCCESS,
+  CATEGORIES_BY_NAME_FETCH_SUCCESS,
+  SPECIALIST_FETCH_SUCCESS,
+  SPECIALIST_BY_ID_FETCH_SUCCESS,
+  LIKES_FETCH_SUCCESS,
+  TODOS_FETCH_SUCCESS,
 } from "./actionTypes";
 
 const BASE_URL = "https://6c90-114-124-213-71.ngrok-free.app";
@@ -25,7 +30,7 @@ export function handleLogin(form) {
   };
 }
 
-export function register(form) {
+export function handleRegister(form) {
   return async () => {
     try {
       const { data } = await axios.post(`${BASE_URL}/register`, form);
@@ -383,6 +388,196 @@ export function getCategories() {
         type: CATEGORIES_FETCH_SUCCESS,
         payload: data,
       });
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function getCategoriesByName(name, address) {
+  return async (dispatch) => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios(`${BASE_URL}/categories/${name}`, {
+        headers: {
+          access_token,
+        },
+        params: {
+          address,
+        },
+      });
+      dispatch({
+        type: CATEGORIES_BY_NAME_FETCH_SUCCESS,
+        payload: data,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function getAllSpecialist() {
+  return async (dispatch) => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios(`${BASE_URL}/specialist`, {
+        headers: {
+          access_token,
+        },
+      });
+      dispatch({
+        type: SPECIALIST_FETCH_SUCCESS,
+        payload: data,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function getSpecialistById(id) {
+  return async (dispatch) => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios(`${BASE_URL}/specialist/${id}`, {
+        headers: {
+          access_token,
+        },
+      });
+      dispatch({
+        type: SPECIALIST_BY_ID_FETCH_SUCCESS,
+        payload: data,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function addSpecialist(specialist) {
+  return async () => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios.post(
+        `${BASE_URL}/specialist`,
+        { specialist },
+        {
+          headers: {
+            access_token,
+          },
+        }
+      );
+      console.log(data);
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function getAllLike() {
+  return async (dispatch) => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios(`${BASE_URL}/likes`, {
+        headers: {
+          access_token,
+        },
+      });
+      dispatch({
+        type: LIKES_FETCH_SUCCESS,
+        payload: data,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function addLike(projectId) {
+  return async () => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios.post(
+        `${BASE_URL}/likes`,
+        { projectId },
+        {
+          headers: {
+            access_token,
+          },
+        }
+      );
+      console.log(data);
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function deleteLike(projectId) {
+  return async () => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios.delete(
+        `${BASE_URL}/likes`,
+        { projectId },
+        {
+          headers: {
+            access_token,
+          },
+        }
+      );
+      console.log(data);
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function getTodos() {
+  return async (dispatch) => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios(`${BASE_URL}/todos`, {
+        headers: {
+          access_token,
+        },
+      });
+      dispatch({
+        type: TODOS_FETCH_SUCCESS,
+        payload: data,
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function updateTodo(id) {
+  return async () => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios.put(`${BASE_URL}/todos/${id}`, {
+        headers: {
+          access_token,
+        },
+      });
+      console.log(data);
+    } catch (err) {
+      throw err;
+    }
+  };
+}
+
+export function deleteTodo(id) {
+  return async () => {
+    try {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const { data } = await axios.delete(`${BASE_URL}/todos/${id}`, {
+        headers: {
+          access_token,
+        },
+      });
+      console.log(data);
     } catch (err) {
       throw err;
     }

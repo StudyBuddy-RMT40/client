@@ -23,32 +23,21 @@ export default function RegisterScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const isValidEmail = (email) => {
-    return /\S+@\S+\.\S+/.test(email);
-  };
+  // const isValidEmail = (email) => {
+  //   return /\S+@\S+\.\S+/.test(email);
+  // };
 
   const navigation = useNavigation();
   const { register } = useAuth();
 
-  const handleRegister = () => {
-    let errorMessage = "";
-
-    if (!username) errorMessage += "Username must be filled. ";
-    if (!email) errorMessage += "Email must be filled. ";
-    else if (!isValidEmail(email))
-      errorMessage += "Format Email is not valid. ";
-    if (!password) errorMessage += "Password must be filled. ";
-    if (!phoneNumber) errorMessage += "Phone Number must be filled. ";
-    if (!address) errorMessage += "Address must be filled. ";
-
-    if (errorMessage) {
-      setModalMessage(errorMessage.trim());
+  const handleRegister = async () => {
+    try {
+      await register(username, email, password, phoneNumber, address);
+      navigation.navigate("Dashboard");
+    } catch (err) {
+      setModalMessage(err.response.data.message);
       setShowModal(true);
-      return;
     }
-
-    register(username, email, phoneNumber, address);
-    navigation.navigate("Dashboard");
   };
 
   const handleLogin = () => {

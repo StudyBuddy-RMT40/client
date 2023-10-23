@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -17,29 +17,28 @@ import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
 import { useSelector, useDispatch } from "react-redux";
+import { getStudentProfile } from "../store/actions/actionCreator";
 
 export default function AccountScreen() {
+  const { studentProfile } = useSelector((state) => state.userReducer)
+  const dispatch = useDispatch()
   const { logout } = useAuth();
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
   const [userProfile, setUserProfile] = useState({
-    name: "Riska",
-    email: "riska@gmail.com",
-    role: "student",
-    phone: "10239123012",
-    address: "Jalan jalan jalan",
-    documents: [
-      {
-        title: "Curicullum Vitae Riska",
-        file_url:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        title: "Curicullum Vitae Riska 2",
-        file_url: "https://dummyimage.com/600x400/000/fff.jpeg",
-      },
-    ],
+    username: "",
+    email: "",
+    role: "",
+    phoneNumber: "",
+    address: "",
   });
+
+  useEffect(() => {
+    dispatch(getStudentProfile())
+      .then(() => {
+        setUserProfile(studentProfile)
+      })
+  }, [])
 
   const handleLogout = () => {
     logout();
@@ -53,51 +52,7 @@ export default function AccountScreen() {
     });
   };
 
-  const renderDocumentIcon = (url) => {
-    if (url.endsWith(".pdf")) {
-      return pdfIcon;
-    } else if (
-      url.endsWith(".jpeg") ||
-      url.endsWith(".jpg") ||
-      url.endsWith(".png")
-    ) {
-      return imageIcon;
-    }
-    return null;
-  };
-
-  const [documentCount, setDocumentCount] = useState(
-    userProfile.documents.length
-  );
-
-  const addNewDocument = () => {
-    setUserProfile((prevState) => ({
-      ...prevState,
-      documents: [...prevState.documents, { title: "", file_url: "" }],
-    }));
-  };
-
-  const removeDocument = (indexToRemove) => {
-    setUserProfile((prevState) => ({
-      ...prevState,
-      documents: prevState.documents.filter(
-        (_, index) => index !== indexToRemove
-      ),
-    }));
-  };
-
   const handleEditSaveProfile = () => {
-    const areDocumentsValid = userProfile.documents.every(
-      (doc) => doc.title && doc.file_url
-    );
-
-    if (!areDocumentsValid) {
-      alert(
-        "Please fill out all document fields or remove empty ones before saving."
-      );
-      return;
-    }
-
     setIsEditing(!isEditing);
   };
 
@@ -109,7 +64,7 @@ export default function AccountScreen() {
       >
         <View style={styles.imageContainer}>
           <Image source={profileImage} style={styles.profileImage} />
-          <Text style={styles.username}>{userProfile.name}</Text>
+          <Text style={styles.username}>{studentProfile.username}</Text>
         </View>
 
         <Text style={styles.fieldTitle}>Email:</Text>
@@ -121,7 +76,7 @@ export default function AccountScreen() {
           />
         ) : (
           <View style={styles.container}>
-            <Text>{userProfile.email}</Text>
+            <Text>{studentProfile.email}</Text>
           </View>
         )}
 
@@ -134,7 +89,7 @@ export default function AccountScreen() {
           />
         ) : (
           <View style={styles.container}>
-            <Text>{userProfile.role}</Text>
+            <Text>{studentProfile.role}</Text>
           </View>
         )}
 
@@ -142,12 +97,12 @@ export default function AccountScreen() {
         {isEditing ? (
           <TextInput
             style={styles.input}
-            value={userProfile.phone}
+            value={userProfile.phoneNumber}
             onChangeText={(text) => handleChange("phone", text)}
           />
         ) : (
           <View style={styles.container}>
-            <Text>{userProfile.phone}</Text>
+            <Text>{studentProfile.phoneNumber}</Text>
           </View>
         )}
 
@@ -160,66 +115,8 @@ export default function AccountScreen() {
           />
         ) : (
           <View style={styles.container}>
-            <Text>{userProfile.address}</Text>
+            <Text>{studentProfile.address}</Text>
           </View>
-        )}
-
-        <Text style={styles.fieldTitle}>Documents:</Text>
-        {isEditing ? (
-          <>
-            {userProfile.documents.map((doc, index) => (
-              <View key={index} style={styles.documentInputGroup}>
-                <View style={styles.documentInputContainer}>
-                  <TextInput
-                    placeholder="Document Title"
-                    value={doc.title}
-                    style={[styles.input, styles.documentInput]}
-                    onChangeText={(text) => {
-                      const newDocs = [...userProfile.documents];
-                      newDocs[index].title = text;
-                      setUserProfile({ ...userProfile, documents: newDocs });
-                    }}
-                  />
-                  <TextInput
-                    placeholder="Document URL"
-                    value={doc.file_url}
-                    style={[styles.input, styles.documentInput]}
-                    onChangeText={(text) => {
-                      const newDocs = [...userProfile.documents];
-                      newDocs[index].file_url = text;
-                      setUserProfile({ ...userProfile, documents: newDocs });
-                    }}
-                  />
-                </View>
-                <TouchableOpacity
-                  onPress={() => removeDocument(index)}
-                  style={styles.roundRemoveButton}
-                >
-                  <Text style={styles.removeButtonText}>X</Text>
-                  {/* Kalau sempet ganti Icon */}
-                </TouchableOpacity>
-              </View>
-            ))}
-            <Button
-              text="Add More Documents"
-              onPress={addNewDocument}
-              style={styles.addButton}
-            />
-          </>
-        ) : (
-          userProfile.documents.map((doc, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.documentContainer}
-              onPress={() => Linking.openURL(doc.file_url)}
-            >
-              <Image
-                source={renderDocumentIcon(doc.file_url)}
-                style={styles.documentIcon}
-              />
-              <Text>{doc.title}</Text>
-            </TouchableOpacity>
-          ))
         )}
 
         <Button
@@ -227,15 +124,17 @@ export default function AccountScreen() {
           onPress={handleEditSaveProfile}
           style={isEditing ? styles.saveButton : styles.editButton}
         />
-        {!isEditing && (
-          <Button
-            text="Logout"
-            onPress={handleLogout}
-            style={styles.logoutButton}
-          />
-        )}
-      </ScrollView>
-    </SafeAreaView>
+        {
+          !isEditing && (
+            <Button
+              text="Logout"
+              onPress={handleLogout}
+              style={styles.logoutButton}
+            />
+          )
+        }
+      </ScrollView >
+    </SafeAreaView >
   );
 }
 

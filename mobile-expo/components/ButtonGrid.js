@@ -2,12 +2,11 @@ import { useNavigation } from "@react-navigation/native";
 import { View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
 
 export default function ButtonGrid({ items }) {
-
   return (
     <View style={styles.buttonGrid}>
       {items.map((item, idx) => (
         <View style={styles.buttonContainer} key={idx}>
-            <TouchableOpacity onPress={item.onPress}>
+          <TouchableOpacity onPress={item.onPress}>
             <Image
               style={{ width: item.size, height: item.size }}
               source={item.icon}

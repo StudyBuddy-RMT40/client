@@ -1,7 +1,8 @@
-import { CATEGORIES_FETCH_SUCCESS } from "../actions/actionTypes";
+import { CATEGORIES_BY_NAME_FETCH_SUCCESS, CATEGORIES_FETCH_SUCCESS } from "../actions/actionTypes";
 
 const initialState = {
-    categories: []
+    categories: [],
+    categoriesByName: []
 }
 
 function categoryReducer(state = initialState, action) {
@@ -10,6 +11,11 @@ function categoryReducer(state = initialState, action) {
             return {
                 ...state,
                 categories: action.payload
+            }
+        case CATEGORIES_BY_NAME_FETCH_SUCCESS:
+            return {
+                ...state,
+                categoriesByName: action.payload
             }
         default:
             return state;
