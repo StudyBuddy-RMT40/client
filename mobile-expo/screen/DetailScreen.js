@@ -67,7 +67,7 @@ export default function DetailScreen({ route }) {
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.title}>Project Name</Text>
         <View style={styles.container}>
-          <Text>{project.title}</Text>
+          <Text>{project.name}</Text>
         </View>
 
         <Text style={styles.title}>Project Description</Text>

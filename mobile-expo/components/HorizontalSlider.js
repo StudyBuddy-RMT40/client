@@ -43,8 +43,12 @@ export default function HorizontalSlider(props) {
   const carouselItems = data.map((item, idx) => ({
     name: item.name,
     image: item.image,
+    description: item.description,
     // rating:
+    goals: item.goals,
+    category: item.Category.name,
     address: item.Teacher.address,
+
   }));
 
   return (
@@ -59,8 +63,10 @@ export default function HorizontalSlider(props) {
        <TouchableOpacity       onPress={() =>
         navigation.push("Detail", {
           project: {
-            name: item.name,
-            address: item.address
+            name: item.name, 
+            description: item.description,
+            category: item.category,
+            goals: item.goals
           },
         })
       } style={styles.card}>
