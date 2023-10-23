@@ -21,7 +21,7 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { login, accessToken, isLoggedIn } = useAuth();
+  const { login, accessToken, isLoggedIn, setIsLoggedIn } = useAuth();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -37,8 +37,7 @@ export default function LoginScreen() {
   };
 
   useEffect(() => {
-    console.log("Current access token:", accessToken);
-  }, [accessToken]);
+  }, []);
 
   const handleRegister = () => {
     navigation.push("Register");

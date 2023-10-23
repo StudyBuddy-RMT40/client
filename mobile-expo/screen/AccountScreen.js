@@ -16,6 +16,7 @@ import Button from "../components/Button";
 import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function AccountScreen() {
   const { logout } = useAuth();
