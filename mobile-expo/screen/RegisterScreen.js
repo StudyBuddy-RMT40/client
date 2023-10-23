@@ -13,6 +13,8 @@ import Button from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../navigators/Authcontext";
 import ErrorModal from "../components/modal/ErrorModal"; // Import ErrorModal
+import { register } from "../store/actions/actionCreator";
+import { useDispatch } from "react-redux";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -22,33 +24,42 @@ export default function RegisterScreen() {
   const [address, setAddress] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const dispatch = useDispatch()
 
   const isValidEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);
   };
 
   const navigation = useNavigation();
-  const { register } = useAuth();
+  // const { register } = useAuth();
 
   const handleRegister = () => {
-    let errorMessage = "";
+    // let errorMessage = "";
 
-    if (!username) errorMessage += "Username must be filled. ";
-    if (!email) errorMessage += "Email must be filled. ";
-    else if (!isValidEmail(email))
-      errorMessage += "Format Email is not valid. ";
-    if (!password) errorMessage += "Password must be filled. ";
-    if (!phoneNumber) errorMessage += "Phone Number must be filled. ";
-    if (!address) errorMessage += "Address must be filled. ";
+    // if (!username) errorMessage += "Username must be filled. ";
+    // if (!email) errorMessage += "Email must be filled. ";
+    // else if (!isValidEmail(email))
+    //   errorMessage += "Format Email is not valid. ";
+    // if (!password) errorMessage += "Password must be filled. ";
+    // if (!phoneNumber) errorMessage += "Phone Number must be filled. ";
+    // if (!address) errorMessage += "Address must be filled. ";
 
-    if (errorMessage) {
-      setModalMessage(errorMessage.trim());
-      setShowModal(true);
-      return;
-    }
+    // if (errorMessage) {
+    //   setModalMessage(errorMessage.trim());
+    //   setShowModal(true);
+    //   return;
+    // }
 
-    register(username, email, phoneNumber, address);
-    navigation.navigate("Dashboard");
+    // register(username, email, phoneNumber, address);
+    // navigation.navigate("Dashboard");
+    dispatch(register({ username, email, password, phoneNumber, address }))
+      .then(() => {
+        navigation.navigate("Dashboard")
+      })
+      .catch((err) => {
+        setModalMessage(err.response.data.message)
+        setShowModal(true)
+      })
   };
 
   const handleLogin = () => {
