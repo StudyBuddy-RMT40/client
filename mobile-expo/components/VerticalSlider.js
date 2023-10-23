@@ -43,19 +43,19 @@ export default function VerticalSlider(props) {
     image: item.image,
     description: item.description,
     // rating:
-    goals: item.goals,
-    category: item.Category.name,
-    address: item.Teacher.address,
+    // goals: item.goals,
+    // category: item.Category.name,
+    // address: item.Teacher.address,
   }));
 
   return (
     <View style={styles.verticalCardContainer}>
       <ScrollView vertical showsVerticalScrollIndicator={false}>
         {carouselItems.map((item, idx) => (
-          <TouchableOpacity key={idx} onPress={() => (item)}>
+          <TouchableOpacity key={idx} onPress={() => item}>
             <View style={styles.verticalCard}>
-            <Image style={styles.verticalCardImage} source={item.image} />
-              <Text style={styles.verticalCardText}>{item.name}</Text>
+              <Image style={styles.verticalCardImage} source={item.image} />
+              <Text style={styles.verticalCardText}>{item.title}</Text>
               <View style={styles.locationContainer}>
                 <LocationSVG />
                 <Text style={styles.courseLocation}>{item.address}</Text>
