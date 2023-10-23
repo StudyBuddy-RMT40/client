@@ -9,28 +9,22 @@ import {
   Dimensions,
 } from "react-native";
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
+
 const screenWidth = Dimensions.get("window").width;
 
-export default function VerticalSlider() {
-  const carouselItems = [
-    { text: "Ini Nama Project 1", image: heroDummy },
-    { text: "Ini Nama Project 2", image: heroDummy },
-    { text: "Ini Nama Project 3", image: heroDummy },
-    { text: "Ini Nama Project 4", image: heroDummy },
-  ];
-
-  Font.loadAsync({
-    CustomFont: require("../assets/fonts/Quicksand-Regular.ttf"),
-  });
-
+export default function VerticalSlider({
+  title = "Default Title",
+  data = [],
+  onItemClick = () => {}, // Set a default function for the onItemClick prop
+}) {
   return (
     <View style={styles.verticalCardContainer}>
-      <Text style={styles.verticalCardTitle}>Ini Juga Title</Text>
+      <Text style={styles.verticalCardTitle}>{title}</Text>
       <ScrollView vertical showsVerticalScrollIndicator={false}>
-        {carouselItems.map((item, idx) => (
-          <TouchableOpacity key={idx}>
+        {data.map((item, idx) => (
+          <TouchableOpacity key={idx} onPress={() => onItemClick(item)}>
             <View style={styles.verticalCard}>
-              <Image style={styles.verticalCardImage} source={heroDummy} />
+              <Image style={styles.verticalCardImage} source={item.image} />
               <Text style={styles.verticalCardText}>{item.text}</Text>
             </View>
           </TouchableOpacity>

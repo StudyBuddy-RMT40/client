@@ -22,15 +22,6 @@ export default function DashboardScreen() {
 
   const [showRoleModal, setShowRoleModal] = useState(false);
 
-  const buttonItems = [
-    {
-      icon: allProject,
-      label: "Add Projects",
-      size: 60,
-      onPress: () => navigation.navigate("AddProject"),
-    },
-  ];
-
   const [projectData, setProjectData] = useState([
     {
       id: 1,
@@ -123,6 +114,25 @@ export default function DashboardScreen() {
       ],
     },
   ]);
+
+  const finishedProjects = projectData.filter(
+    (project) => project.status === "Finished"
+  );
+
+  const buttonItems = [
+    {
+      icon: allProject,
+      label: "Add Projects",
+      size: 60,
+      onPress: () => navigation.navigate("AddProject"),
+    },
+    {
+      icon: allProject,
+      label: "Project History",
+      size: 60,
+      onPress: () => navigation.navigate("Archive", { data: finishedProjects }),
+    },
+  ];
 
   return (
     <>

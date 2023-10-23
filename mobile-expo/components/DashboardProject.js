@@ -104,11 +104,6 @@ const DashboardProject = ({ projectData }) => {
           project.status === "Paid" || project.status === "On Progress"
       );
       break;
-    case "Finished":
-      filteredData = projectData.filter(
-        (project) => project.status === "Finished"
-      );
-      break;
     case "To Review":
       filteredData = projectData.filter(
         (project) => project.status === "To Review"
@@ -149,20 +144,6 @@ const DashboardProject = ({ projectData }) => {
           ]}
         >
           <Text style={styles.filterText}>On Progress</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            setLoading(true);
-            setActiveFilter("Finished");
-            setTimeout(() => setLoading(false), 500);
-          }}
-          style={[
-            styles.filterButton,
-            activeFilter === "Finished" && styles.activeFilter,
-          ]}
-        >
-          <Text style={styles.filterText}>Finished</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
