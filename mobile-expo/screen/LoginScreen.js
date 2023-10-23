@@ -13,7 +13,7 @@ import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
 import ErrorModal from "../components/modal/ErrorModal";
 import { useDispatch } from 'react-redux'
-import { handleLogin } from "../store/actions/actionCreator";
+import { getProjects, handleLogin } from "../store/actions/actionCreator";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -21,7 +21,8 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { login, accessToken, isLoggedIn } = useAuth();
+  const { login, accessToken, isLoggedIn, setIsLoggedIn } = useAuth();
+  console.log(isLoggedIn)
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
@@ -29,6 +30,7 @@ export default function LoginScreen() {
     dispatch(handleLogin({ email, password }))
       .then(() => {
         navigation.navigate('Dashboard')
+        setIsLoggedIn(true)
       })
       .catch((err) => {
         setModalMessage(err.response.data.message)
@@ -37,8 +39,7 @@ export default function LoginScreen() {
   };
 
   useEffect(() => {
-    console.log("Current access token:", accessToken);
-  }, [accessToken]);
+  }, []);
 
   const handleRegister = () => {
     navigation.push("Register");

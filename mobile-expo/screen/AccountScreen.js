@@ -15,11 +15,21 @@ import Button from "../components/Button";
 import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function AccountScreen() {
   const { currentUser, logout } = useAuth();
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
+  const [profile, setProfile] = useState({
+    username: "",
+    email: "",
+    role: "",
+    phoneNumber: "",
+    address: ""
+  })
+  const { studentProfile } = useSelector((state) => state.userReducer)
+  console.log(studentProfile, "aa<<<<")
 
   const renderDocumentIcon = (url) => {
     if (url.endsWith(".pdf")) {
@@ -47,40 +57,40 @@ export default function AccountScreen() {
       >
         <View style={styles.imageContainer}>
           <Image source={profileImage} style={styles.profileImage} />
-          <Text style={styles.username}>{currentUser.username}</Text>
+          <Text style={styles.username}>{profile.username}</Text>
         </View>
 
         <Text style={styles.fieldTitle}>Email:</Text>
         <View style={styles.container}>
-          <Text>{currentUser.email}</Text>
+          <Text>{profile.email}</Text>
         </View>
 
         <Text style={styles.fieldTitle}>Role:</Text>
         <View style={styles.container}>
-          <Text>{currentUser.role}</Text>
+          <Text>{profile.role}</Text>
         </View>
 
-        {currentUser.role === "Buddy" && currentUser.specialist && (
+        {/* {currentUser.role === "buddy" && currentUser.specialist && (
           <>
             <Text style={styles.fieldTitle}>Specializations:</Text>
             <View style={styles.container}>
               <Text>{currentUser.specialist.join(", ")}</Text>
             </View>
           </>
-        )}
+        )} */}
 
         <Text style={styles.fieldTitle}>Phone:</Text>
         <View style={styles.container}>
-          <Text>{currentUser.phone}</Text>
+          <Text>{profile.phoneNumber}</Text>
         </View>
 
         <Text style={styles.fieldTitle}>Address:</Text>
         <View style={styles.container}>
-          <Text>{currentUser.address}</Text>
+          <Text>{profile.address}</Text>
         </View>
 
         <Text style={styles.fieldTitle}>Documents:</Text>
-        {currentUser.documents.map((doc, index) => (
+        {/* {currentUser.documents.map((doc, index) => (
           <TouchableOpacity
             key={index}
             style={styles.documentContainer}
@@ -92,7 +102,7 @@ export default function AccountScreen() {
             />
             <Text>{doc.title}</Text>
           </TouchableOpacity>
-        ))}
+        ))} */}
 
         <Button
           text={isEditing ? "Save" : "Edit Profile"}
