@@ -21,6 +21,7 @@ export const AuthProvider = ({ children }) => {
       })
       .then((access_token) => {
         if (access_token) {
+          console.log(access_token)
           setIsLoggedIn(true)
         }
       })
@@ -29,8 +30,8 @@ export const AuthProvider = ({ children }) => {
       })
   };
 
-  const register = (username, email, password, phone, address) => {
-    return dispatch(handleRegister({ username, email, password, phone, address }))
+  const register = (username, email, password, phoneNumber, address) => {
+    return dispatch(handleRegister({ username, email, password, phoneNumber, address }))
       .catch((err) => {
         throw err
       })

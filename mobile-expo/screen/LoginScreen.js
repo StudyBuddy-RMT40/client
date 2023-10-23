@@ -31,9 +31,7 @@ export default function LoginScreen() {
 
     try {
       await login(username, password);
-      if (isLoggedIn) {
-        navigation.navigate("Dashboard");
-      }
+      navigation.navigate("Dashboard");
     } catch (error) {
       setModalMessage(error.response.data.message);
       setShowModal(true);

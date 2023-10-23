@@ -23,11 +23,11 @@ const ProjectCard = ({
   const navigation = useNavigation();
   const { accessToken } = useAuth();
 
-  useEffect(() => {
-    if (!accessToken) {
-      navigation.navigate("Login");
-    }
-  }, [accessToken, navigation]);
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     navigation.navigate("Login");
+  //   }
+  // }, [accessToken, navigation]);
 
   let progressBarColor;
   if (progress <= 25) progressBarColor = "red";

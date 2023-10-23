@@ -9,7 +9,7 @@ export default function ButtonGrid({ items }) {
     <View style={styles.buttonGrid}>
       {items.map((item, idx) => (
         <View style={styles.buttonContainer} key={idx}>
-            <TouchableOpacity onPress={() => navigation.navigate("Project")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Project")}>
             <Image
               style={{ width: item.size, height: item.size }}
               source={item.icon}
