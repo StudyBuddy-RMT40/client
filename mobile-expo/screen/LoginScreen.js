@@ -12,32 +12,33 @@ import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { useAuth } from "../navigators/Authcontext";
 import ErrorModal from "../components/modal/ErrorModal";
-import { useDispatch } from "react-redux";
-import { handleLogin } from "../store/actions/actionCreator";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { login, accessToken, isLoggedIn, setIsLoggedIn } = useAuth();
+  const { login, isLoggedIn } = useAuth();
   const navigation = useNavigation();
-  const dispatch = useDispatch();
 
-  const handleLoginSubmit = async () => {
-    dispatch(handleLogin({ email, password }))
-      .then(() => {
+  const handleLogin = async () => {
+    // if (!username || !password) {
+    //   setModalMessage("Email and Password required!");
+    //   setShowModal(true);
+    //   return;
+    // }
+
+    try {
+      await login(username, password);
+      if (isLoggedIn) {
         navigation.navigate("Dashboard");
-      })
-      .catch((err) => {
-        setModalMessage(err.response.data.message);
-        setShowModal(true);
-      });
+      }
+    } catch (error) {
+      setModalMessage(error.response.data.message);
+      setShowModal(true);
+    }
   };
-
-  useEffect(() => {
-  }, []);
 
   const handleRegister = () => {
     navigation.push("Register");
@@ -50,8 +51,8 @@ export default function LoginScreen() {
       <TextInput
         style={styles.input}
         placeholder="Email"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
+        value={username}
+        onChangeText={(text) => setUsername(text)}
       />
       <TextInput
         style={styles.input}
@@ -61,11 +62,7 @@ export default function LoginScreen() {
         onChangeText={(text) => setPassword(text)}
       />
       <View style={{ width: "100%" }}>
-        <Button
-          onPress={handleLoginSubmit}
-          text="Login"
-          style={styles.buttonSize}
-        />
+        <Button onPress={handleLogin} text="Login" style={styles.buttonSize} />
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>Don't have an account yet?</Text>
           <TouchableOpacity onPress={handleRegister}>
