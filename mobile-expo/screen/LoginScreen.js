@@ -22,7 +22,6 @@ export default function LoginScreen() {
   const [modalMessage, setModalMessage] = useState("");
 
   const { login, accessToken, isLoggedIn, setIsLoggedIn } = useAuth();
-  console.log(isLoggedIn)
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
