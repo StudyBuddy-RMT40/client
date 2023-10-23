@@ -8,6 +8,7 @@ import ReviewScreen from "../screen/ReviewScreen";
 import DetailScreen from "../screen/DetailScreen";
 import MidtransScreen from "../screen/MidtransScreen";
 import ArchiveScreen from "../screen/ArchiveScreen";
+import WalletScreen from "../screen/WalletScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +58,11 @@ export default function DashboardStack() {
       <Stack.Screen
         name="Review"
         component={ReviewScreen}
+        options={{ headerShown: false }}
+      />
+        <Stack.Screen
+        name="Wallet"
+        component={WalletScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
