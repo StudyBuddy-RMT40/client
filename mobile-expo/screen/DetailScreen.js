@@ -16,7 +16,14 @@ export default function DetailScreen({ route }) {
   const [project, setProject] = useState(route.params.project);
   const [price, setPrice] = useState("");
 
-  const userRole = "Student";
+  // Submitted => Ketika student submit
+  // Accepted => Ketika buddy accept
+  // Paid => Pas student udah bayar && todo === 0
+  // On Progress => udah dibayar dan todo > 0
+  // To Review => todo 100%
+  // Finished => todo 100% && udah Review
+
+  const userRole = "Buddy";
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
