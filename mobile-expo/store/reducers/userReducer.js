@@ -1,7 +1,7 @@
 import { STUDENT_PROFILE_FETCH_SUCCESS, BUDDY_PROFILE_FETCH_SUCCESS, USERS_FETCH_SUCCESS, USER_FETCH_SUCCESS } from "../actions/actionTypes";
 
 const initialState = {
-    studentProfile: null,
+    studentProfile: {},
     buddyProfile: null,
     users: [],
     user: null
