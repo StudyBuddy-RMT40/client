@@ -7,11 +7,13 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
+import { SecureStore } from 'expo';
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
-import { useAuth } from "../navigators/Authcontext";
 import ErrorModal from "../components/modal/ErrorModal";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/actions/actionCreators";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -19,33 +21,40 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { login, accessToken } = useAuth();
-  const navigation = useNavigation();
+  const {access_token, role} = useSelector( (state) => {
+    return state.auth
+  })
 
-  const handleLogin = async () => {
+  useEffect(() => {
+    console.log(access_token) 
+  }, [])
+
+  const navigation = useNavigation();
+  const dispatch = useDispatch()
+
+  const handleLogin = () => {
     if (!username || !password) {
       setModalMessage("Email and Password required!");
       setShowModal(true);
       return;
     }
-
-    if (username === "riska@gmail.com" && password === "asdasd") {
-      try {
-        await login(username, password);
-        navigation.navigate("Dashboard");
-      } catch (error) {
-        setModalMessage("Something went wrong. Try again later!");
+  
+    dispatch(loginUser({username, password}))
+      .then(() => {
+        if (access_token) {
+          SecureStore.setItemAsync('access_token', access_token);
+          navigation.navigate('Dashboard');
+        } else {
+          setModalMessage("Access token not received. Please try again.");
+          setShowModal(true);
+        }
+      })
+      .catch(error => {
+        setModalMessage("An error occurred during login.");
         setShowModal(true);
-      }
-    } else {
-      setModalMessage("Invalid email or password");
-      setShowModal(true);
-    }
+      });
   };
-
-  useEffect(() => {
-    console.log("Current access token:", accessToken);
-  }, [accessToken]);
+  
 
   const handleRegister = () => {
     navigation.push("Register");

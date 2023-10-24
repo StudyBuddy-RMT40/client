@@ -10,7 +10,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import { useAuth } from "../navigators/Authcontext";
+// import { useAuth } from "../navigators/Authcontext";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
 import profileImage from "../assets/dummy/hero-dummy.jpg";
@@ -18,7 +18,7 @@ import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
 
 export default function AccountScreen() {
-  const { logout } = useAuth();
+  // const { logout } = useAuth();
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
   const [userProfile, setUserProfile] = useState({
