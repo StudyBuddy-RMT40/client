@@ -105,8 +105,8 @@ export const fetchLocations = () => {
     try {
       const { data } = await axios({
         method: "get",
-        url: baseUrl + "pub/location",
-      });
+        url: baseUrl + "pub/locations",
+      })
       dispatch({
         type: FETCH_LOCATIONS_SUCCESS,
         payload: data,
