@@ -10,39 +10,79 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import { useAuth } from "../navigators/Authcontext";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
 import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../store/actions/actionCreator";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../store/actions/actionCreators";
+import axios from "axios";
+import ErrorModal from "../components/modal/ErrorModal";
+
+const baseUrl =
+  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
 
 export default function AccountScreen() {
-  const { studentProfile } = useSelector((state) => state.userReducer)
-  const dispatch = useDispatch()
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const [userProfile, setUserProfile] = useState({
-    username: "",
     email: "",
+    name: "",
+    email: "",
+    role: "",
     phoneNumber: "",
     address: "",
   });
+  const { access_token, role } = useSelector((state) => {
+    return state.auth;
+  });
+
+  const fetchProfile = async () => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + role + "_profile",
+        headers: {
+          access_token
+        }
+      });
+      setUserProfile(data)
+    } catch (err) {
+      console.log(err.response.data)
+      setModalMessage(err.response.data.message);
+      setShowModal(true);
+    }
+  }
+
+  const editProfile = async () => {
+    try {
+      const { data } = await axios({
+        method: "put",
+        url: baseUrl + "users",
+        data: userProfile,
+        headers: {
+          access_token
+        }
+      })
+      console.log(data)
+    } catch (err) {
+      console.log(err.response.data)
+      throw err
+    }
+  }
 
   useEffect(() => {
-    if (studentProfile.username) {
-      setUserProfile(studentProfile)
-    }
-  }, [studentProfile])
+    fetchProfile()
+  }, [])
 
   const handleLogout = () => {
-    logout();
-    navigation.navigate("Login");
+    dispatch(logoutUser());
+    navigation.navigate("Home");
   };
-
   const handleChange = (field, value) => {
     setUserProfile({
       ...userProfile,
@@ -50,29 +90,31 @@ export default function AccountScreen() {
     });
   };
 
-  const handleSaveProfile = () => {
-    dispatch(updateUser({
-      username: userProfile.username,
-      email: userProfile.email,
-      phoneNumber: userProfile.phoneNumber,
-      address: userProfile.address
-    }))
-    setIsEditing(false);
+  const handleEditProfile = () => {
+    setIsEditing(true);
   };
 
-  const handleEditProfile = () => {
-    setIsEditing(true)
+  const handleSaveProfile = () => {
+    editProfile()
+      .then(() => {
+        setIsEditing(false)
+      })
+      .catch((err) => {
+        setIsEditing(true)
+        setModalMessage(err.response.data.message);
+        setShowModal(true);
+      })
+
   }
 
   return (
     <SafeAreaView style={styles.containerSafeArea}>
       <ScrollView
         style={styles.contentContainerStyle}
-        contentContainerStyle={{ paddingBottom: 50 }}
-      >
+        contentContainerStyle={{ paddingBottom: 50 }}>
         <View style={styles.imageContainer}>
           <Image source={profileImage} style={styles.profileImage} />
-          <Text style={styles.username}>{userProfile.username}</Text>
+          <Text style={styles.username}>{userProfile.name}</Text>
         </View>
 
         <Text style={styles.fieldTitle}>Username:</Text>
@@ -163,8 +205,14 @@ export default function AccountScreen() {
             />
           )
         }
-      </ScrollView >
-    </SafeAreaView >
+        <ErrorModal
+          visible={showModal}
+          title='Error'
+          message={modalMessage}
+          onClose={() => setShowModal(false)}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

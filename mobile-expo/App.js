@@ -3,8 +3,8 @@ import * as Font from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthProvider } from "./navigators/Authcontext";
 import TabStacks from "./navigators/TabStack";
-import { Provider } from 'react-redux'
-import store from "./store/reducers/rootReducer";
+import { Provider } from "react-redux";
+import store from "./store/index";
 // import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function App() {
@@ -38,25 +38,11 @@ export default function App() {
     return null;
   }
 
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     scopes: ['email'],
-  //     webClientId: '<YOUR_WEB_CLIENT_ID>',
-  //   });
-  // }, []);  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     scopes: ['email'],
-  //     webClientId: '<YOUR_WEB_CLIENT_ID>',
-  //   });
-  // }, []);
-
   return (
     <Provider store={store}>
-      <AuthProvider>
-        <NavigationContainer>
-          <TabStacks />
-        </NavigationContainer>
-      </AuthProvider>
+      <NavigationContainer>
+        <TabStacks />
+      </NavigationContainer>
     </Provider>
   );
 }

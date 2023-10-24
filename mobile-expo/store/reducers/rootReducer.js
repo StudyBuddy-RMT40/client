@@ -1,24 +1,13 @@
-import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import userReducer from './userReducer'
-import projectReducer from './projectReducer'
-import ratingReducer from './ratingReducer'
-import reviewReducer from './reviewReducer'
-import categoryReducer from './categoryReducer'
-import likeReducer from './likeReducer'
-import specialistReducer from './specialistReducer'
-import todoReducer from './todoReducer'
+import { combineReducers } from "redux";
+import authReducer from "./authReducer";
+import categoryReducer from "./categoryReducer";
+import locationReducer from "./locationReducer";
 
 const rootReducer = combineReducers({
-    userReducer,
-    projectReducer,
-    ratingReducer,
-    reviewReducer,
-    categoryReducer,
-    likeReducer,
-    specialistReducer,
-    todoReducer
+    auth: authReducer,
+    category: categoryReducer,
+    location: locationReducer
 })
 
-const store = createStore(rootReducer, applyMiddleware(thunk))
-export default store
+
+export default rootReducer

@@ -10,11 +10,8 @@ import {
 } from "react-native";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
+import HorizontalSlider from "../components/HorizontalSlider";
 import CustomHeader from "../components/CustomHeader";
-import ErrorModal from "../components/modal/ErrorModal";
-import BuddySlider from "../components/BuddySlider";
-import CheckBox from "react-native-check-box";
-import { ActivityIndicator } from "react-native";
 
 export default function ProjectForm() {
   const [projectName, setProjectName] = useState("");
@@ -25,33 +22,70 @@ export default function ProjectForm() {
   const [goals, setGoals] = useState("");
   const [location, setLocation] = useState("");
   const [displaySlider, setDisplaySlider] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [todoList, setTodoList] = useState([]);
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
+  //handle error
+  const [projectNameError, setProjectNameError] = useState(null);
+  const [projectDescriptionError, setProjectDescriptionError] = useState(null);
+  const [categoryError, setCategoryError] = useState(null);
+  const [startDateError, setStartDateError] = useState(null);
+  const [endDateError, setEndDateError] = useState(null);
+  const [goalsError, setGoalsError] = useState(null);
+  const [locationError, setLocationError] = useState(null);
 
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    let errorMessage = "";
+  setProjectNameError(null);
+  setProjectDescriptionError(null);
+  setCategoryError(null);
+  setStartDateError(null);
+  setEndDateError(null);
+  setGoalsError(null);
+  setLocationError(null);
 
-    if (!projectName) errorMessage += "Project Name must be filled. ";
-    if (!projectDescription)
-      errorMessage += "Project Description must be filled. ";
-    if (!category) errorMessage += "Category must be filled. ";
-    if (!startDate) errorMessage += "Start Date must be filled. ";
-    if (!endDate) errorMessage += "End Date must be filled. ";
-    if (!goals) errorMessage += "Goals must be filled. ";
-    if (!location) errorMessage += "Location must be filled. ";
+  let hasError = false;
 
-    if (errorMessage) {
-      setModalMessage(errorMessage);
-      setShowModal(true);
-      return;
-    }
+  if (!projectName) {
+    setProjectNameError("Project Name must be filled");
+    hasError = true;
+  }
 
-    navigation.push("Payment");
+  if (!projectDescription) {
+    setProjectDescriptionError("Project Description must be filled");
+    hasError = true;
+  }
+
+  if (!category) {
+    setCategoryError("Category must be filled");
+    hasError = true;
+  }
+
+  if (!startDate) {
+    setStartDateError("Start Date must be filled");
+    hasError = true;
+  }
+
+  if (!endDate) {
+    setEndDateError("End Date must be filled");
+    hasError = true;
+  }
+
+  if (!goals) {
+    setGoalsError("Goals must be filled");
+    hasError = true;
+  }
+
+  if (!location) {
+    setLocationError("Location must be filled");
+    hasError = true;
+  }
+
+  if (hasError) {
+    return;
+  }
+
+  // TODO:
+  
+  navigation.push("Payment");
   };
 
   const handleSearchBuddy = () => {
@@ -132,21 +166,6 @@ export default function ProjectForm() {
   const [filteredLocations, setFilteredLocations] = useState(locations);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
 
-  const generateToDoList = () => {
-    setIsLoading(true);
-
-    setTimeout(() => {
-      const generatedList = [
-        { tugas: `Ini tugas 1 untuk ${projectName}` },
-        { tugas: `Ini tugas 2 untuk ${projectName}` },
-        { tugas: `Ini tugas 3 untuk ${projectName}` },
-      ];
-
-      setTodoList(generatedList);
-      setIsLoading(false);
-    }, 1000);
-  };
-
   useEffect(() => {
     if (filterQuery) {
       const filtered = categories.filter((cat) =>
@@ -192,6 +211,7 @@ export default function ProjectForm() {
             }}
             onBlur={() => setTimeout(() => setShowCategoryDropdown(false), 150)}
           />
+          
 
           {showCategoryDropdown && filteredCategories.length > 0 && (
             <View style={styles.dropdownContainer}>
@@ -230,6 +250,7 @@ export default function ProjectForm() {
             }}
             onBlur={() => setTimeout(() => setShowLocationDropdown(false), 150)}
           />
+          
 
           {showLocationDropdown && filteredLocations.length > 0 && (
             <View style={[styles.dropdownContainer, { left: "52%" }]}>
@@ -253,6 +274,8 @@ export default function ProjectForm() {
             </View>
           )}
         </View>
+        <Text style={styles.errorText}>{categoryError}</Text>
+        <Text style={styles.errorText}>{locationError}</Text>
 
         <Button
           text="Search Buddy"
@@ -260,7 +283,7 @@ export default function ProjectForm() {
           style={styles.searchButton}
         />
 
-        {displaySlider && <BuddySlider />}
+        {displaySlider && <HorizontalSlider />}
 
         <Text style={styles.label}>Project Name</Text>
         <View style={styles.container}>
@@ -270,6 +293,7 @@ export default function ProjectForm() {
             placeholder="Enter project name"
           />
         </View>
+        <Text style={styles.errorText}>{projectNameError}</Text>
 
         <Text style={styles.label}>Project Description</Text>
         <View style={styles.containerBig}>
@@ -282,6 +306,7 @@ export default function ProjectForm() {
             textAlignVertical="top"
           />
         </View>
+        <Text style={styles.errorText}>{projectDescriptionError}</Text>
 
         <Text style={styles.label}>Goals</Text>
         <View style={styles.containerBig}>
@@ -294,37 +319,13 @@ export default function ProjectForm() {
             textAlignVertical="top"
           />
         </View>
-
-        <Button text="AI-Generated To Do List" onPress={generateToDoList} />
-
-        {isLoading && <ActivityIndicator size="large" color="#6b9ebf" />}
-
-        {todoList.map((item, index) => (
-          <CheckBox
-            key={index}
-            style={{ flex: 1, padding: 10 }}
-            onClick={() => {
-              const newTodoList = [...todoList];
-              newTodoList[index].checked = !item.checked;
-              setTodoList(newTodoList);
-            }}
-            isChecked={item.checked}
-            leftText={item.tugas}
-          />
-        ))}
+        <Text style={styles.errorText}>{goalsError}</Text>
 
         <View>
           <Button text="Submit" onPress={handleSubmit} />
         </View>
         <View style={{ marginBottom: 30 }}></View>
       </ScrollView>
-
-      <ErrorModal
-        visible={showModal}
-        title="Error"
-        message={modalMessage}
-        onClose={() => setShowModal(false)}
-      />
     </>
   );
 }
@@ -441,5 +442,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomColor: "#f0f0f0",
     borderBottomWidth: 1,
+  },
+  errorText: {
+    backgroundColor: '#FFCACA',
+    color: "red",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 10,
+    marginTop: 10
   },
 });
