@@ -10,24 +10,12 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../navigators/Authcontext";
 
-const ProjectCard = ({
-  title,
-  progress,
-  status,
-  description,
-  category,
-  goals,
-  feedback,
-  learningMaterials,
-}) => {
+const ProjectCard = ({ name, status, description, goals, feedback, todos }) => {
   const navigation = useNavigation();
   const { accessToken } = useAuth();
 
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     navigation.navigate("Login");
-  //   }
-  // }, [accessToken, navigation]);
+  let progress =
+    (todos.filter((todo) => todo.isFinished).length / todos.length) * 100;
 
   let progressBarColor;
   if (progress <= 25) progressBarColor = "red";
@@ -36,26 +24,27 @@ const ProjectCard = ({
   else progressBarColor = "green";
 
   let displayText;
-  if (status === "Submitted") displayText = "Waiting For Buddy Approval";
-  else if (status === "Accepted") displayText = "Waiting For Payment";
-  else if (status === "Paid") displayText = "0% Complete";
+  if (status === "submitted") displayText = "Waiting For Buddy Approval";
+  else if (status === "accepted") displayText = "Waiting For Payment";
+  else if (status === "paid") displayText = "0% Complete";
   else if (
-    status === "On Progress" ||
-    status === "Finished" ||
-    status === "To Review"
+    status === "onProgress" ||
+    status === "finished" ||
+    status === "toReview"
   )
     displayText = `${progress}% Complete`;
 
   let cardContent = (
     <View>
-      <Text style={styles.projectTitle}>{title}</Text>
+      <Text style={styles.projectTitle}>{name}</Text>
       <View style={styles.progressBarContainer}>
         <View
           style={{
             ...styles.progressBarFill,
             width: `${progress}%`,
             backgroundColor: progressBarColor,
-          }}></View>
+          }}
+        ></View>
       </View>
       <Text style={styles.progressLabel}>{displayText}</Text>
     </View>
@@ -66,19 +55,19 @@ const ProjectCard = ({
       onPress={() =>
         navigation.push("Detail", {
           project: {
-            title,
+            name,
             progress,
             status,
             description,
-            category,
             goals,
             feedback,
-            learningMaterials,
+            todos,
           },
         })
       }
-      underlayColor='#f0f0f0'
-      style={styles.projectCard}>
+      underlayColor="#f0f0f0"
+      style={styles.projectCard}
+    >
       {cardContent}
     </TouchableHighlight>
   );
@@ -90,24 +79,30 @@ const DashboardProject = ({ projectData }) => {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    // Function to filter the data based on the activeFilter
     const filterProjects = () => {
       if (!projectData) {
-        setFilteredData([]); // No data to filter, set filteredData to an empty array
+        setFilteredData([]);
         return;
       }
 
-      // Use Array.filter to filter the projects based on the activeFilter
       const filteredProjects = projectData.filter((project) => {
-        console.log(project);
+        if (activeFilter === "Proposed") {
+          return project.status === "submitted";
+        } else if (activeFilter === "On Progress") {
+          return project.status === "onProgress";
+        } else if (activeFilter === "To Review") {
+          return project.status === "toReview";
+        } else {
+          return project;
+        }
       });
 
       setFilteredData(filteredProjects);
     };
 
-    setLoading(true); // Set loading to true before filtering
+    setLoading(true);
     filterProjects();
-    setLoading(false); // Set loading to false after filtering
+    setLoading(false);
   }, [activeFilter, projectData]);
 
   return (
@@ -124,7 +119,8 @@ const DashboardProject = ({ projectData }) => {
           style={[
             styles.filterButton,
             activeFilter === "Proposed" && styles.activeFilter,
-          ]}>
+          ]}
+        >
           <Text style={styles.filterText}>Proposed</Text>
         </TouchableOpacity>
 
@@ -137,7 +133,8 @@ const DashboardProject = ({ projectData }) => {
           style={[
             styles.filterButton,
             activeFilter === "On Progress" && styles.activeFilter,
-          ]}>
+          ]}
+        >
           <Text style={styles.filterText}>On Progress</Text>
         </TouchableOpacity>
 
@@ -150,15 +147,16 @@ const DashboardProject = ({ projectData }) => {
           style={[
             styles.filterButton,
             activeFilter === "To Review" && styles.activeFilter,
-          ]}>
+          ]}
+        >
           <Text style={styles.filterText}>To Review</Text>
         </TouchableOpacity>
       </View>
 
       {loading ? (
         <ActivityIndicator
-          size='large'
-          color='#4781a5'
+          size="large"
+          color="#4781a5"
           style={{ marginTop: 20 }}
         />
       ) : (

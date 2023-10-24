@@ -15,7 +15,7 @@ import {
   TODOS_FETCH_SUCCESS,
 } from "./actionTypes";
 
-const BASE_URL = " https://abe7-182-0-144-39.ngrok-free.app";
+const BASE_URL = "https://abe7-182-0-144-39.ngrok-free.app";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 

@@ -30,7 +30,9 @@ export default function DashboardScreen() {
   const [showRoleModal, setShowRoleModal] = useState(false);
   // console.log("showRoleModal:", showRoleModal);
 
-  const studentProfile = useSelector((state) => state.userReducer.studentProfile);
+  const studentProfile = useSelector(
+    (state) => state.userReducer.studentProfile
+  );
 
   useEffect(() => {
     if (currentUser && !currentUser.role) {
@@ -41,12 +43,10 @@ export default function DashboardScreen() {
   }, [currentUser, dispatch]);
 
   useEffect(() => {
-    // Update the local state variables when studentProfile is available
     if (studentProfile) {
-      setLikes(studentProfile.Likes)
-      setRating(studentProfile.Ratings)
-      setProject(studentProfile.Projects)
-      // Update other state variables for other properties here
+      setLikes(studentProfile.Likes);
+      setRating(studentProfile.Ratings);
+      setProject(studentProfile.Projects);
     }
   }, [studentProfile]);
 
@@ -76,11 +76,11 @@ export default function DashboardScreen() {
   ];
   return (
     <>
-      <CustomHeader title='Dashboard' />
+      <CustomHeader title="Dashboard" />
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data={likes} isLike={true} title='Overview' />
+            <DashboardWidget data={likes} isLike={true} title="Overview" />
             <DashboardWidget data={rating} isReview={true} />
           </View>
           <ButtonGrid items={buttonItems} />
