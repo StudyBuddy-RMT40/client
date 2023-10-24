@@ -11,9 +11,12 @@ import DashboardProject from "../components/DashboardProject";
 import CustomHeader from "../components/CustomHeader";
 import RoleModal from "../components/modal/RoleModal";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjects } from "../store/actions/actionCreator";
+import { getProjects, getStudentProfile } from "../store/actions/actionCreator";
 
 export default function DashboardScreen() {
+  const [likes, setLikes] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [project, setProject] = useState([]);
   const { isLoggedIn, updateUserRoleAndSpec, currentUser } = useAuth();
   console.log("isLoggedIn:", isLoggedIn);
   console.log("currentUser:", currentUser);
@@ -22,17 +25,30 @@ export default function DashboardScreen() {
   const dispatch = useDispatch();
 
   const projectDataFromRedux = useSelector((state) => state.projects);
-  console.log("projectDataFromRedux:", projectDataFromRedux);
+  // console.log("projectDataFromRedux:", projectDataFromRedux);
 
   const [showRoleModal, setShowRoleModal] = useState(false);
-  console.log("showRoleModal:", showRoleModal);
+  // console.log("showRoleModal:", showRoleModal);
+
+  const studentProfile = useSelector((state) => state.userReducer.studentProfile);
 
   useEffect(() => {
     if (currentUser && !currentUser.role) {
       setShowRoleModal(true);
     }
     dispatch(getProjects());
+    dispatch(getStudentProfile());
   }, [currentUser, dispatch]);
+
+  useEffect(() => {
+    // Update the local state variables when studentProfile is available
+    if (studentProfile) {
+      setLikes(studentProfile.Likes)
+      setRating(studentProfile.Ratings)
+      setProject(studentProfile.Projects)
+      // Update other state variables for other properties here
+    }
+  }, [studentProfile]);
 
   const finishedProjects = projectDataFromRedux
     ? projectDataFromRedux.filter((project) => project.status === "Finished")
@@ -58,18 +74,17 @@ export default function DashboardScreen() {
       onPress: () => navigation.navigate("Wallet"),
     },
   ];
-
   return (
     <>
-      <CustomHeader title="Dashboard" />
+      <CustomHeader title='Dashboard' />
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data="100" isLike={true} title="Overview" />
-            <DashboardWidget data="4.6" isReview={true} />
+            <DashboardWidget data={likes} isLike={true} title='Overview' />
+            <DashboardWidget data={rating} isReview={true} />
           </View>
           <ButtonGrid items={buttonItems} />
-          <DashboardProject projectData={projectDataFromRedux} />
+          <DashboardProject projectData={project} />
         </ScrollView>
 
         <RoleModal

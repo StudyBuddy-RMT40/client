@@ -53,8 +53,7 @@ const ProjectCard = ({
             ...styles.progressBarFill,
             width: `${progress}%`,
             backgroundColor: progressBarColor,
-          }}
-        ></View>
+          }}></View>
       </View>
       <Text style={styles.progressLabel}>{displayText}</Text>
     </View>
@@ -76,46 +75,38 @@ const ProjectCard = ({
           },
         })
       }
-      underlayColor="#f0f0f0"
-      style={styles.projectCard}
-    >
+      underlayColor='#f0f0f0'
+      style={styles.projectCard}>
       {cardContent}
     </TouchableHighlight>
   );
 };
 
-const DashboardProject = ({ projectData = [] }) => {
+const DashboardProject = ({ projectData }) => {
   const [activeFilter, setActiveFilter] = useState("On Progress");
   const [loading, setLoading] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
 
-  // if (!projectData) {
-  //   return <Text style={styles.noProjectText}>No projects available.</Text>;
-  // }
+  useEffect(() => {
+    // Function to filter the data based on the activeFilter
+    const filterProjects = () => {
+      if (!projectData) {
+        setFilteredData([]); // No data to filter, set filteredData to an empty array
+        return;
+      }
 
-  let filteredData = [];
-  if (projectData && projectData.length > 0) {
-    switch (activeFilter) {
-      case "Proposed":
-        filteredData = projectData.filter(
-          (project) =>
-            project.status === "Submitted" || project.status === "Accepted"
-        );
-        break;
-      case "On Progress":
-        filteredData = projectData.filter(
-          (project) =>
-            project.status === "Paid" || project.status === "On Progress"
-        );
-        break;
-      case "To Review":
-        filteredData = projectData.filter(
-          (project) => project.status === "To Review"
-        );
-        break;
-      default:
-        break;
-    }
-  }
+      // Use Array.filter to filter the projects based on the activeFilter
+      const filteredProjects = projectData.filter((project) => {
+        console.log(project);
+      });
+
+      setFilteredData(filteredProjects);
+    };
+
+    setLoading(true); // Set loading to true before filtering
+    filterProjects();
+    setLoading(false); // Set loading to false after filtering
+  }, [activeFilter, projectData]);
 
   return (
     <View>
@@ -131,8 +122,7 @@ const DashboardProject = ({ projectData = [] }) => {
           style={[
             styles.filterButton,
             activeFilter === "Proposed" && styles.activeFilter,
-          ]}
-        >
+          ]}>
           <Text style={styles.filterText}>Proposed</Text>
         </TouchableOpacity>
 
@@ -145,8 +135,7 @@ const DashboardProject = ({ projectData = [] }) => {
           style={[
             styles.filterButton,
             activeFilter === "On Progress" && styles.activeFilter,
-          ]}
-        >
+          ]}>
           <Text style={styles.filterText}>On Progress</Text>
         </TouchableOpacity>
 
@@ -159,16 +148,15 @@ const DashboardProject = ({ projectData = [] }) => {
           style={[
             styles.filterButton,
             activeFilter === "To Review" && styles.activeFilter,
-          ]}
-        >
+          ]}>
           <Text style={styles.filterText}>To Review</Text>
         </TouchableOpacity>
       </View>
 
       {loading ? (
         <ActivityIndicator
-          size="large"
-          color="#4781a5"
+          size='large'
+          color='#4781a5'
           style={{ marginTop: 20 }}
         />
       ) : (

@@ -19,23 +19,29 @@ import browseLocation from "../assets/location.png";
 import topProject from "../assets/top-projects.png";
 import topBuddy from "../assets/top-teacher.png";
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
+import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "../store/actions/actionCreator";
-import { useNavigation } from "@react-navigation/native";
 
 export default function LandingPageScreen() {
+  const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
-  const dispatch = useDispatch()
-  const { projects } = useSelector((state) => state.projectReducer)
-  useEffect(() => {
-    dispatch(getProjects())
-  }, [])
-
   const insets = useSafeAreaInsets();
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
-    { icon: allProject, label: "All Projects", size: 60, onPress: () => navigation.navigate("Project") },
-    { icon: highschool, label: "School Projects", size: 60, onPress: () => navigation.navigate("Project") },
+    {
+      icon: allProject,
+      label: "All Projects",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
+    {
+      icon: highschool,
+      label: "School Projects",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
     {
       icon: university,
       label: "University Projects",
@@ -48,83 +54,37 @@ export default function LandingPageScreen() {
       size: 60,
       onPress: () => navigation.navigate("Project"),
     },
-    { icon: topProject, label: "Top Projects", size: 60, onPress: () => navigation.navigate("Project") },
-    { icon: topBuddy, label: "Top Buddy", size: 60, onPress: () => navigation.navigate("Project") },
+    {
+      icon: topProject,
+      label: "Top Projects",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
+    {
+      icon: topBuddy,
+      label: "Top Buddy",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
   ];
 
-  const [data, setData] = useState([
-    {
-      _id: "653532cff2b47d804e0ac5fc",
-      name: "bikin candi",
-      image: heroDummy,
-      studentId: "653523e987023b83cd76a60f",
-      teacherId: "653523aa87023b83cd76a60e",
-      startDate: "2023-10-22T14:33:51.702Z",
-      endDate: null,
-      status: "submitted",
-      likes: 0,
-      description: "buat candi dalam waktu 3 hari",
-      published: false,
-      goals: "jadi legenda di nusantara",
-      feedback: null,
-      Category: {
-        _id: "65353253f2b47d804e0ac5f9",
-        name: "Matematika",
-      },
-      Teacher: {
-        _id: "653523aa87023b83cd76a60e",
-        username: "buddy",
-        email: "buddy@buddy.com",
-        phoneNumber: "0808080808",
-        role: "buddy",
-        address: "jakarta",
-      },
-      Student: {
-        _id: "653523e987023b83cd76a60f",
-        username: "student",
-        email: "student@student.com",
-        phoneNumber: "0808080808",
-        role: "student",
-        address: "jakarta",
-      },
-    },
-  ]);
+  const filterDataByCategory = (category) => {
+    const filteredData = projectReducer.filter(
+      (item) => item.Category.name === category
+    );
+    return filteredData;
+  };
 
-  // Filter top teacher
-  const topTeachers = data
-    .slice()
-    .sort((a, b) => {
-      return a.Teacher.likes - b.Teacher.likes;
-    })
-    .reverse()
-    .slice(0, 5);
+  
+  const projectReducer = useSelector((state) => state.projectReducer.projects);
 
-  // Filter top students
-  const topStudents = data
-    .slice()
-    .sort((a, b) => {
-      return a.Student.likes - b.Student.likes;
-    })
-    .reverse()
-    .slice(0, 5);
+  const topTeachers = filterDataByCategory("Top Teachers");
+  const topStudents = filterDataByCategory("Top Students");
+  const topProjects = filterDataByCategory("Top Projects");
 
-  // Filter top ratings
-  const topRatings = data
-    .slice()
-    .sort((a, b) => { })
-    .reverse()
-    .slice(0, 5);
-
-  // Filter top lokasi terdekat
-  const userLocation = "lokasi_user";
-  const topLocations = data
-    .slice()
-    .sort((a, b) => {
-      const distanceA = calculateDistance(a.Teacher.address, userLocation);
-      const distanceB = calculateDistance(b.Teacher.address, userLocation);
-      return distanceA - distanceB;
-    })
-    .slice(0, 5);
+  useEffect(() => {
+    dispatch(getProjects());
+  }, [dispatch]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -134,6 +94,8 @@ export default function LandingPageScreen() {
         <TextInput
           style={styles.searchBar}
           placeholder="Looking for your next project?"
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
         />
       </View>
       <ScrollView
@@ -144,10 +106,22 @@ export default function LandingPageScreen() {
           <HeroCarousel />
         </View>
         <ButtonGrid items={buttonItems} />
-        <HorizontalSlider data={topTeachers} title="Top Teachers" />
-        <HorizontalSlider data={topStudents} title="Top Students" />
-        <HorizontalSlider data={topRatings} title="Top Ratings" />
-        <HorizontalSlider data={topLocations} title="Top Locations" />
+        <HorizontalSlider
+          title="Top Teachers"
+          dataFilter={topTeachers}
+          searchQuery={searchQuery}
+        />
+        <HorizontalSlider
+          title="Top Students"
+          dataFilter={topStudents}
+          searchQuery={searchQuery}
+        />
+        <HorizontalSlider
+          title="Top Projects"
+          dataFilter={topProjects}
+          searchQuery={searchQuery}
+        />
+
         {/* <VerticalSlider /> */}
       </ScrollView>
     </SafeAreaView>
