@@ -1,4 +1,12 @@
-import { FETCH_CATEGORIES_SUCCESS, FETCH_LOCATIONS_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./actionTypes";
+import {
+  FETCH_CATEGORIES_SUCCESS,
+  FETCH_LOCATIONS_SUCCESS,
+  LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
+  FETCH_PROJECTS,
+  FETCH_PROJECTS_BY_ID,
+} from "./actionTypes";
+
 import axios from "axios";
 const baseUrl =
   "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
@@ -16,8 +24,22 @@ export const Logout = () => {
   };
 };
 
+export const fetchProjects = (data) => {
+  return {
+    type: FETCH_PROJECTS,
+    payload: data,
+  };
+};
+
+export const fetchProjectById = (data) => {
+  return {
+    type: FETCH_PROJECTS_BY_ID,
+    payload: data,
+  };
+};
+
 export const registerUser = (registerForm) => {
-  console.log(registerForm)
+  // console.log(registerForm);
   return async () => {
     try {
       const { data } = await axios({
@@ -54,47 +76,60 @@ export const loginUser = (loginForm) => {
   };
 };
 
-export const logoutUser = () => {
+export function getProjects() {
   return async (dispatch) => {
     try {
-      dispatch(Logout());
-      console.log("bye bye");
+      const { data } = await axios(baseUrl + "pub/projects");
+      // console.log("ACTION CREATOR>>>>>>>>>>", data);
+      dispatch(fetchProjects(data));
     } catch (error) {
-      console.log(error.response.data);
+      return { success: false, error: error.response.data };
     }
   };
-};
+}
+
+export function getProjectById(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios(baseUrl + "pub/projects/" + id);
+      // console.log("ACTION CREATOR PROJECT ID>>>>>", data);
+      dispatch(fetchProjectById(data));
+    } catch (error) {
+      return { success: false, error: error.response.data };
+    }
+  };
+}
 
 export const fetchLocations = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios({
         method: "get",
-        url: baseUrl + "pub/location",
+        url: baseUrl + "pub/locations",
       })
       dispatch({
         type: FETCH_LOCATIONS_SUCCESS,
-        payload: data
-      })
+        payload: data,
+      });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
-}
+  };
+};
 
 export const fetchCategories = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios({
         method: "get",
-        url: baseUrl + "pub/categories"
-      })
+        url: baseUrl + "pub/categories",
+      });
       dispatch({
         type: FETCH_CATEGORIES_SUCCESS,
-        payload: data
-      })
+        payload: data,
+      });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
-}
+  };
+};
