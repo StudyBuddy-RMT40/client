@@ -34,22 +34,22 @@ export default function DetailScreen({ route }) {
     setProject({ ...project, status: "Finished" });
   };
 
-  const handleUpdateLearningMaterial = (text, index) => {
-    const updatedMaterials = [...project.learningMaterials];
-    updatedMaterials[index].text = text;
-    setProject({ ...project, learningMaterials: updatedMaterials });
+  const handleUpdateTodo = (text, index) => {
+    const updatedTodos = [...project.todos];
+    updatedTodos[index].name = text;
+    setProject({ ...project, todos: updatedTodos });
   };
 
-  const handleRemoveMaterial = (index) => {
-    const newMaterials = [...project.learningMaterials];
-    newMaterials.splice(index, 1);
-    setProject({ ...project, learningMaterials: newMaterials });
+  const handleRemoveTodo = (index) => {
+    const newTodos = [...project.todos];
+    newTodos.splice(index, 1);
+    setProject({ ...project, todos: newTodos });
   };
 
-  const handleToggleMaterialChecked = (index) => {
-    const updatedMaterials = [...project.learningMaterials];
-    updatedMaterials[index].checked = !updatedMaterials[index].checked;
-    setProject({ ...project, learningMaterials: updatedMaterials });
+  const handleToggleTodoChecked = (index) => {
+    const updatedTodos = [...project.todos];
+    updatedTodos[index].isFinished = !updatedTodos[index].isFinished;
+    setProject({ ...project, todos: updatedTodos });
   };
 
   const handleRatingChange = (newRating) => {
@@ -63,7 +63,7 @@ export default function DetailScreen({ route }) {
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Project Name</Text>
         <View style={styles.container}>
-          <Text>{project.title}</Text>
+          <Text>{project.name}</Text>
         </View>
 
         <Text style={styles.label}>Project Description</Text>
@@ -81,7 +81,7 @@ export default function DetailScreen({ route }) {
           <Text>{project.goals}</Text>
         </View>
 
-        {userRole === "buddy" && project.status === "Submitted" && (
+        {userRole === "buddy" && project.status === "submitted" && (
           <>
             <Text style={styles.label}>Proposal Price</Text>
             <TextInput
@@ -99,40 +99,36 @@ export default function DetailScreen({ route }) {
           </>
         )}
 
-        {project.status === "Accepted" && userRole === "student" && (
+        {project.status === "accepted" && userRole === "student" && (
           <TouchableOpacity onPress={handlePayProject} style={styles.payButton}>
             <Text style={styles.buttonText}>Proceed Payment</Text>
           </TouchableOpacity>
         )}
 
-        {(project.status === "Paid" || project.status === "On Progress") && (
+        {(project.status === "paid" || project.status === "onProgress") && (
           <>
             <Text style={styles.label}>To-Do List</Text>
-            {project.learningMaterials.map((material, index) => (
+            {project.todos.map((todo, index) => (
               <View key={index} style={styles.todoItem}>
                 <CheckBox
-                  isChecked={material.checked}
-                  onClick={() => handleToggleMaterialChecked(index)}
-                  disabled={userRole === "buddy"} // buddy ga bisa ceklis, hanya Student
+                  isChecked={todo.isFinished}
+                  onClick={() => handleToggleTodoChecked(index)}
+                  disabled={userRole === "buddy"}
                 />
                 <TextInput
                   style={styles.editableTodoText}
-                  value={material.text}
-                  onChangeText={(text) =>
-                    handleUpdateLearningMaterial(text, index)
-                  }
+                  value={todo.name}
+                  onChangeText={(text) => handleUpdateTodo(text, index)}
                   editable={
                     userRole === "buddy" &&
-                    (project.status === "Paid" ||
-                      project.status === "On Progress")
-                  } // Hanya buddy yang bisa edit
+                    (project.status === "paid" ||
+                      project.status === "onProgress")
+                  }
                 />
                 {userRole === "buddy" &&
-                  (project.status === "Paid" ||
-                    project.status === "On Progress") && (
-                    <TouchableOpacity
-                      onPress={() => handleRemoveMaterial(index)}
-                    >
+                  (project.status === "paid" ||
+                    project.status === "onProgress") && (
+                    <TouchableOpacity onPress={() => handleRemoveTodo(index)}>
                       <Text style={styles.removeText}>Remove</Text>
                     </TouchableOpacity>
                   )}
@@ -141,7 +137,7 @@ export default function DetailScreen({ route }) {
           </>
         )}
 
-        {project.status === "To Review" && (
+        {project.status === "toReview" && (
           <>
             {userRole === "student" && (
               <>

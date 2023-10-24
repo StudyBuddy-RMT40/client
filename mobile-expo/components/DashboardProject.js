@@ -10,24 +10,12 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../navigators/Authcontext";
 
-const ProjectCard = ({
-  title,
-  progress,
-  status,
-  description,
-  category,
-  goals,
-  feedback,
-  learningMaterials,
-}) => {
+const ProjectCard = ({ name, status, description, goals, feedback, todos }) => {
   const navigation = useNavigation();
   const { accessToken } = useAuth();
 
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     navigation.navigate("Login");
-  //   }
-  // }, [accessToken, navigation]);
+  let progress =
+    (todos.filter((todo) => todo.isFinished).length / todos.length) * 100;
 
   let progressBarColor;
   if (progress <= 25) progressBarColor = "red";
@@ -48,7 +36,7 @@ const ProjectCard = ({
 
   let cardContent = (
     <View>
-      <Text style={styles.projectTitle}>{title}</Text>
+      <Text style={styles.projectTitle}>{name}</Text>
       <View style={styles.progressBarContainer}>
         <View
           style={{
@@ -67,14 +55,13 @@ const ProjectCard = ({
       onPress={() =>
         navigation.push("Detail", {
           project: {
-            title,
+            name,
             progress,
             status,
             description,
-            category,
             goals,
             feedback,
-            learningMaterials,
+            todos,
           },
         })
       }
@@ -92,24 +79,30 @@ const DashboardProject = ({ projectData }) => {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    // Function to filter the data based on the activeFilter
     const filterProjects = () => {
       if (!projectData) {
-        setFilteredData([]); // No data to filter, set filteredData to an empty array
+        setFilteredData([]);
         return;
       }
 
-      // Use Array.filter to filter the projects based on the activeFilter
       const filteredProjects = projectData.filter((project) => {
-        console.log(project);
+        if (activeFilter === "Proposed") {
+          return project.status === "submitted";
+        } else if (activeFilter === "On Progress") {
+          return project.status === "onProgress";
+        } else if (activeFilter === "To Review") {
+          return project.status === "toReview";
+        } else {
+          return project;
+        }
       });
 
       setFilteredData(filteredProjects);
     };
 
-    setLoading(true); // Set loading to true before filtering
+    setLoading(true);
     filterProjects();
-    setLoading(false); // Set loading to false after filtering
+    setLoading(false);
   }, [activeFilter, projectData]);
 
   return (
