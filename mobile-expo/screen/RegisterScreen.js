@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,9 +11,10 @@ import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
-import { useDispatch } from "react-redux";
-import { registerUser } from "../store/actions/actionCreators";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLocations, registerUser } from "../store/actions/actionCreators";
 import ErrorModal from "../components/modal/ErrorModal";
+import { SelectList } from 'react-native-dropdown-select-list'
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -29,6 +30,13 @@ export default function RegisterScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const dispatch = useDispatch();
+  const { locations } = useSelector((state) => state.location)
+
+  console.log(locations)
+
+  useEffect(() => {
+    dispatch(fetchLocations())
+  }, [])
 
   // const isValidEmail = (email) => {
   //   return /\S+@\S+\.\S+/.test(email);
@@ -143,12 +151,20 @@ export default function RegisterScreen() {
         onChangeText={(text) => setPhoneNumber(text)}
       />
       {/* {phoneError && <Text style={styles.errorText}>{phoneError}</Text>} */}
-      <TextInput
-        style={styles.input}
-        placeholder='Address'
-        value={address}
-        onChangeText={(text) => setAddress(text)}
-      />
+      <View>
+        <TextInput
+          style={styles.input}
+          placeholder='Address'
+          value={address}
+          onChangeText={(text) => setAddress(text)}
+        />
+        <SelectList
+          setSelected={(val) => setAddress(val)}
+          data={locations}
+          save="value"
+        />
+      </View>
+
       {/* {addressError && <Text style={styles.errorText}>{addressError}</Text>} */}
       <View style={{ width: "100%" }}>
         <TouchableOpacity onPress={handleRegister}>
