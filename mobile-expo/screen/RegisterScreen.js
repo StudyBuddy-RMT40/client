@@ -30,56 +30,56 @@ export default function RegisterScreen() {
   const [modalMessage, setModalMessage] = useState("");
   const dispatch = useDispatch();
 
-  const isValidEmail = (email) => {
-    return /\S+@\S+\.\S+/.test(email);
-  };
+  // const isValidEmail = (email) => {
+  //   return /\S+@\S+\.\S+/.test(email);
+  // };
 
-  const isEmailAlreadyTaken = (email) => {
-    // return false;
-  };
+  // const isEmailAlreadyTaken = (email) => {
+  //   // return false;
+  // };
 
   const navigation = useNavigation();
 
   const handleRegister = () => {
-    setUsernameError(null);
-    setEmailError(null);
-    setPasswordError(null);
-    setPhoneError(null);
-    setAddressError(null);
+    // setUsernameError(null);
+    // setEmailError(null);
+    // setPasswordError(null);
+    // setPhoneError(null);
+    // setAddressError(null);
 
-    let hasError = false;
+    // let hasError = false;
 
-    if (!username) {
-      setUsernameError("Username must be filled");
-      hasError = true;
-    }
+    // if (!username) {
+    //   setUsernameError("Username must be filled");
+    //   hasError = true;
+    // }
 
-    if (!email) {
-      setEmailError("Email must be filled");
-      hasError = true;
-    } else if (!isValidEmail(email)) {
-      setEmailError("Format Email is not valid");
-      hasError = true;
-    }
+    // if (!email) {
+    //   setEmailError("Email must be filled");
+    //   hasError = true;
+    // } else if (!isValidEmail(email)) {
+    //   setEmailError("Format Email is not valid");
+    //   hasError = true;
+    // }
 
-    if (!password) {
-      setPasswordError("Password must be filled");
-      hasError = true;
-    }
+    // if (!password) {
+    //   setPasswordError("Password must be filled");
+    //   hasError = true;
+    // }
 
-    if (!phoneNumber) {
-      setPhoneError("Phone Number must be filled");
-      hasError = true;
-    }
+    // if (!phoneNumber) {
+    //   setPhoneError("Phone Number must be filled");
+    //   hasError = true;
+    // }
 
-    if (!address) {
-      setAddressError("Address must be filled");
-      hasError = true;
-    }
+    // if (!address) {
+    //   setAddressError("Address must be filled");
+    //   hasError = true;
+    // }
 
-    if (hasError) {
-      return;
-    }
+    // if (hasError) {
+    //   return;
+    // }
 
     dispatch(registerUser({ username, email, password, phoneNumber, address }))
       .then((response) => {

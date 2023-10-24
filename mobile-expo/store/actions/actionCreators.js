@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./actionTypes";
+import { FETCH_CATEGORIES_SUCCESS, FETCH_LOCATIONS_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./actionTypes";
 import axios from "axios";
 const baseUrl =
   "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
@@ -17,7 +17,7 @@ export const Logout = () => {
 };
 
 export const registerUser = (registerForm) => {
-    console.log(registerForm)
+  console.log(registerForm)
   return async () => {
     try {
       const { data } = await axios({
@@ -28,7 +28,7 @@ export const registerUser = (registerForm) => {
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
       console.log(error.response.data);
-        return { success: false, error: error.response.data };
+      return { success: false, error: error.response.data };
     }
   };
 };
@@ -64,3 +64,37 @@ export const logoutUser = () => {
     }
   };
 };
+
+export const fetchLocations = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + "pub/location",
+      })
+      dispatch({
+        type: FETCH_LOCATIONS_SUCCESS,
+        payload: data
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+export const fetchCategories = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + "pub/categories"
+      })
+      dispatch({
+        type: FETCH_CATEGORIES_SUCCESS,
+        payload: data
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
