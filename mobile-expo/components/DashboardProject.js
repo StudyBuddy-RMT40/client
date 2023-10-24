@@ -14,14 +14,8 @@ const ProjectCard = ({ name, status, description, goals, feedback, todos }) => {
   const navigation = useNavigation();
   const { isLoggedIn } = useAuth();
 
-<<<<<<< HEAD
-  if (!isLoggedIn) {
-    navigation.navigate("Login")
-  }
-=======
   let progress =
     (todos.filter((todo) => todo.isFinished).length / todos.length) * 100;
->>>>>>> 8ef0119c79c6d70ad9a9145e5aa56427c181f474
 
   let progressBarColor;
   if (progress <= 25) progressBarColor = "red";
