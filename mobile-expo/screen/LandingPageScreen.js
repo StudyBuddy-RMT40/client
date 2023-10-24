@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -19,18 +19,10 @@ import browseLocation from "../assets/location.png";
 import topProject from "../assets/top-projects.png";
 import topBuddy from "../assets/top-teacher.png";
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
-import { useDispatch, useSelector } from "react-redux";
-import { getProjects } from "../store/actions/actionCreator";
 import { useNavigation } from "@react-navigation/native";
 
 export default function LandingPageScreen() {
   const navigation = useNavigation();
-  const dispatch = useDispatch()
-  const { projects } = useSelector((state) => state.projectReducer)
-  useEffect(() => {
-    dispatch(getProjects())
-  }, [])
-
   const insets = useSafeAreaInsets();
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
@@ -52,79 +44,18 @@ export default function LandingPageScreen() {
     { icon: topBuddy, label: "Top Buddy", size: 60, onPress: () => navigation.navigate("Project") },
   ];
 
-  const [data, setData] = useState([
-    {
-      _id: "653532cff2b47d804e0ac5fc",
-      name: "bikin candi",
-      image: heroDummy,
-      studentId: "653523e987023b83cd76a60f",
-      teacherId: "653523aa87023b83cd76a60e",
-      startDate: "2023-10-22T14:33:51.702Z",
-      endDate: null,
-      status: "submitted",
-      likes: 0,
-      description: "buat candi dalam waktu 3 hari",
-      published: false,
-      goals: "jadi legenda di nusantara",
-      feedback: null,
-      Category: {
-        _id: "65353253f2b47d804e0ac5f9",
-        name: "Matematika",
-      },
-      Teacher: {
-        _id: "653523aa87023b83cd76a60e",
-        username: "buddy",
-        email: "buddy@buddy.com",
-        phoneNumber: "0808080808",
-        role: "buddy",
-        address: "jakarta",
-      },
-      Student: {
-        _id: "653523e987023b83cd76a60f",
-        username: "student",
-        email: "student@student.com",
-        phoneNumber: "0808080808",
-        role: "student",
-        address: "jakarta",
-      },
-    },
-  ]);
+  
 
-  // Filter top teacher
-  const topTeachers = data
-    .slice()
-    .sort((a, b) => {
-      return a.Teacher.likes - b.Teacher.likes;
-    })
-    .reverse()
-    .slice(0, 5);
+  // const filterDataByCategory = (category) => {
+  //   const filteredData = dataFilter.filter(item => data.Category.name === category);
+  //   return filteredData;
+  // }
 
-  // Filter top students
-  const topStudents = data
-    .slice()
-    .sort((a, b) => {
-      return a.Student.likes - b.Student.likes;
-    })
-    .reverse()
-    .slice(0, 5);
+    
+  //   const topTeachers = filterDataByCategory("Top Teachers");
+  //   const topStudents = filterDataByCategory("Top Students");
+  //   const topProjects = filterDataByCategory("Top Projects");
 
-  // Filter top ratings
-  const topRatings = data
-    .slice()
-    .sort((a, b) => { })
-    .reverse()
-    .slice(0, 5);
-
-  // Filter top lokasi terdekat
-  const userLocation = "lokasi_user";
-  const topLocations = data
-    .slice()
-    .sort((a, b) => {
-      const distanceA = calculateDistance(a.Teacher.address, userLocation);
-      const distanceB = calculateDistance(b.Teacher.address, userLocation);
-      return distanceA - distanceB;
-    })
-    .slice(0, 5);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -144,10 +75,9 @@ export default function LandingPageScreen() {
           <HeroCarousel />
         </View>
         <ButtonGrid items={buttonItems} />
-        <HorizontalSlider data={topTeachers} title="Top Teachers" />
-        <HorizontalSlider data={topStudents} title="Top Students" />
-        <HorizontalSlider data={topRatings} title="Top Ratings" />
-        <HorizontalSlider data={topLocations} title="Top Locations" />
+      <HorizontalSlider title="Top Teachers" />
+      <HorizontalSlider title="Top Students" />
+      <HorizontalSlider title="Top Projects" />
         {/* <VerticalSlider /> */}
       </ScrollView>
     </SafeAreaView>
