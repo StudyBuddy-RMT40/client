@@ -12,7 +12,7 @@ import { useAuth } from "../navigators/Authcontext";
 
 const ProjectCard = ({ name, status, description, goals, feedback, todos }) => {
   const navigation = useNavigation();
-  const { accessToken } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   let progress =
     (todos.filter((todo) => todo.isFinished).length / todos.length) * 100;

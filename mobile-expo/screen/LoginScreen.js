@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Button as Btn
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
@@ -23,6 +24,7 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
+    console.log("a")
     // if (!username || !password) {
     //   setModalMessage("Email and Password required!");
     //   setShowModal(true);
@@ -67,6 +69,10 @@ export default function LoginScreen() {
             <Text style={styles.registerButton}>Register here</Text>
           </TouchableOpacity>
         </View>
+        {/* <Btn
+          title="Google Sign in"
+          onPress={() => navigation.navigate("GoogleLogin")}
+        /> */}
       </View>
       <ErrorModal
         visible={showModal}
