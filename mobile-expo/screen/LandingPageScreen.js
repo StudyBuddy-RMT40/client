@@ -24,29 +24,50 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "../store/actions/actionCreators";
 
 export default function LandingPageScreen() {
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
-    {
-      icon: allProject,
-      label: "All Projects",
-      size: 60,
-      onPress: () => navigation.push("Project"),
-    },
+      {
+        icon: allProject,
+        label: "All Projects",
+        size: 60,
+        onPress: (category) => {
+          const filteredProjects = category === "All Projects"
+            ? projectReducer
+            : filterDataByCategory(category);
+    
+         
+          navigation.navigate('Project', { filteredProjects });
+        },
+      },
+      {
+        icon: highschool,
+        label: "School Projects",
+        size: 60,
+        onPress: (category) => {
+          const filteredProjects = category === "School Projects"
+            ? projectReducer
+            : filterDataByCategory(category);
+    
+         
+          navigation.navigate('Project', { filteredProjects });
+        },
+      },
     {
       icon: highschool,
-      label: "School Projects",
-      size: 60,
-      onPress: () => navigation.push("Project"),
-    },
-    {
-      icon: university,
       label: "University Projects",
       size: 60,
-      onPress: () => navigation.push("Project"),
+      onPress: (category) => {
+        const filteredProjects = category === "University Projects"
+          ? projectReducer
+          : filterDataByCategory(category);
+  
+          navigation.navigate('Project', { filteredProjects });
+      },
     },
     {
       icon: browseLocation,
@@ -70,10 +91,12 @@ export default function LandingPageScreen() {
 
   const filterDataByCategory = (category) => {
     const filteredData = projectReducer.filter(
-      (item) => item.Category.name === category
+      (item) => item.Category.groupBy === category
     );
     return filteredData;
   };
+  
+
 
   
   const projectReducer = useSelector((state) => state.projectReducer.projects);
@@ -83,10 +106,19 @@ export default function LandingPageScreen() {
   const topTeachers = filterDataByCategory("Top Teachers");
   const topStudents = filterDataByCategory("Top Students");
  
+  const handleCategorySelect = (category) => {
+    setSearchQuery(""); 
+    setSelectedCategory(category);
+  };
+  
 
   useEffect(() => {
     dispatch(getProjects());
-  }, [dispatch]);
+    if (selectedCategory) {
+      const filteredProjects = filterDataByCategory(selectedCategory);
+      // Handle filtered projects
+    }
+  }, [dispatch, selectedCategory]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -107,7 +139,7 @@ export default function LandingPageScreen() {
         <View style={styles.carouselContainer}>
           <HeroCarousel />
         </View>
-        <ButtonGrid items={buttonItems} />
+        <ButtonGrid items={buttonItems} onSelectCategory={handleCategorySelect} />
         <HorizontalSlider
           title="Top Projects"
           dataFilter={topProjects}
