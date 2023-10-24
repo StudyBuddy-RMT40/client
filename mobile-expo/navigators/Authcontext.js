@@ -1,6 +1,6 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { useDispatch } from "react-redux"
-import { handleLogin, handleRegister } from "../store/actions/actionCreator";
+import { handleLogin, handleLogout, handleRegister, removeStorage } from "../store/actions/actionCreator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = createContext();
@@ -12,16 +12,10 @@ export const AuthProvider = ({ children }) => {
   const dispatch = useDispatch()
 
   const login = async (email, password) => {
+    console.log("a")
     return dispatch(handleLogin({ email, password }))
       .then(() => {
-        const access_token = AsyncStorage.getItem("access_token")
-        return access_token
-      })
-      .then((access_token) => {
-        if (access_token) {
-          console.log(access_token)
-          setIsLoggedIn(true)
-        }
+        setIsLoggedIn(true)
       })
       .catch((err) => {
         throw err
@@ -42,8 +36,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem("access_token")
-    setIsLoggedIn(false)
+    // dispatch(handleLogout())
+    //   .then(() => {
+    //     setIsLoggedIn(false)
+    //   })
+    try {
+      dispatch(handleLogout())
+      setIsLoggedIn(false)
+    } catch (err) {
+
+    }
   };
 
   return (

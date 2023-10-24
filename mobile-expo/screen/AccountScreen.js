@@ -18,6 +18,7 @@ import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../store/actions/actionCreator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AccountScreen() {
   const { studentProfile } = useSelector((state) => state.userReducer)
@@ -33,14 +34,14 @@ export default function AccountScreen() {
   });
 
   useEffect(() => {
-    if (studentProfile.username) {
+    if (studentProfile) {
       setUserProfile(studentProfile)
     }
   }, [studentProfile])
 
-  const handleLogout = async () => {
-    await logout();
-    navigation.navigate("Login");
+  const handleLogout = () => {
+    console.log("aadlsjdhakjdaasjkd")
+    logout();
   };
 
   const handleChange = (field, value) => {

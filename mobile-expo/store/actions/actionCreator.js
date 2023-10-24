@@ -13,17 +13,35 @@ import {
     SPECIALIST_BY_ID_FETCH_SUCCESS,
     LIKES_FETCH_SUCCESS,
     TODOS_FETCH_SUCCESS,
+    USER_LOGOUT,
 } from "./actionTypes";
 
 const BASE_URL = 'https://1268-182-0-140-235.ngrok-free.app'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 
+export function handleLogout() {
+    console.log("logout creator")
+    return async (dispatch) => {
+        try {
+            await AsyncStorage.removeItem("access_token")
+            dispatch({
+                type: USER_LOGOUT
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
+
 export function handleLogin(form) {
     return async () => {
         try {
             const { data } = await axios.post(`${BASE_URL}/login`, form);
-            await AsyncStorage.setItem("access_token", data.access_token);
+            await AsyncStorage.setItem("access_token", data.access_token)
+            const access_token = await AsyncStorage.getItem("access_token")
+            console.log(access_token, "ini di creator")
+            console.log(data)
         } catch (err) {
             throw err;
         }
@@ -120,6 +138,7 @@ export function getStudentProfile() {
     return async (dispatch) => {
         try {
             const access_token = await AsyncStorage.getItem("access_token");
+            console.log(access_token, "ini di getStudent Profule")
             const { data } = await axios(`${BASE_URL}/student_profile`, {
                 headers: {
                     access_token,
