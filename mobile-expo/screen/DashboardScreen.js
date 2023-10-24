@@ -2,7 +2,6 @@ import { useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 // import { useAuth } from "../navigators/Authcontext";
 import ButtonGrid from "../components/ButtonGrid";
-
 import allProject from "../assets/public.png";
 import { useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";

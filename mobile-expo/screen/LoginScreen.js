@@ -21,40 +21,33 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const {access_token, role} = useSelector( (state) => {
-    return state.auth
-  })
-
-  useEffect(() => {
-    console.log(access_token) 
-  }, [])
-
+  const { login, accessToken } = useAuth();
   const navigation = useNavigation();
-  const dispatch = useDispatch()
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!username || !password) {
       setModalMessage("Email and Password required!");
       setShowModal(true);
       return;
     }
-  
-    dispatch(loginUser({username, password}))
-      .then(() => {
-        if (access_token) {
-          SecureStore.setItemAsync('access_token', access_token);
-          navigation.navigate('Dashboard');
-        } else {
-          setModalMessage("Access token not received. Please try again.");
-          setShowModal(true);
-        }
-      })
-      .catch(error => {
-        setModalMessage("An error occurred during login.");
+
+    if (username === "riska@gmail.com" && password === "asdasd") {
+      try {
+        await login(username, password);
+        navigation.navigate("Dashboard");
+      } catch (error) {
+        setModalMessage("Something went wrong. Try again later!");
         setShowModal(true);
-      });
+      }
+    } else {
+      setModalMessage("Invalid email or password");
+      setShowModal(true);
+    }
   };
-  
+
+  useEffect(() => {
+    console.log("Current access token:", accessToken);
+  }, [accessToken]);
 
   const handleRegister = () => {
     navigation.push("Register");
@@ -66,19 +59,21 @@ export default function LoginScreen() {
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder='Email'
         value={username}
         onChangeText={(text) => setUsername(text)}
+        editable={true}
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder='Password'
         secureTextEntry={true}
         value={password}
         onChangeText={(text) => setPassword(text)}
+        editable={true}
       />
       <View style={{ width: "100%" }}>
-        <Button onPress={handleLogin} text="Login" style={styles.buttonSize} />
+        <Button onPress={handleLogin} text='Login' style={styles.buttonSize} />
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>Don't have an account yet?</Text>
           <TouchableOpacity onPress={handleRegister}>
@@ -88,7 +83,7 @@ export default function LoginScreen() {
       </View>
       <ErrorModal
         visible={showModal}
-        title="Error"
+        title='Error'
         message={modalMessage}
         onClose={() => setShowModal(false)}
       />

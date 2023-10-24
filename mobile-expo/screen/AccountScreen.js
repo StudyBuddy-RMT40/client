@@ -10,15 +10,16 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-// import { useAuth } from "../navigators/Authcontext";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
 import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../store/actions/actionCreators";
 
 export default function AccountScreen() {
-  // const { logout } = useAuth();
+  const { logout } = useAuth();
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
   const [userProfile, setUserProfile] = useState({
@@ -39,12 +40,13 @@ export default function AccountScreen() {
       },
     ],
   });
-
+  const { access_token } = useSelector((state) => {
+    return state.auth;
+  });
   const handleLogout = () => {
-    logout();
-    navigation.navigate("Login");
+    dispatch(logoutUser());
+    navigation.navigate("Home");
   };
-
   const handleChange = (field, value) => {
     setUserProfile({
       ...userProfile,
@@ -104,8 +106,7 @@ export default function AccountScreen() {
     <SafeAreaView style={styles.containerSafeArea}>
       <ScrollView
         style={styles.contentContainerStyle}
-        contentContainerStyle={{ paddingBottom: 50 }}
-      >
+        contentContainerStyle={{ paddingBottom: 50 }}>
         <View style={styles.imageContainer}>
           <Image source={profileImage} style={styles.profileImage} />
           <Text style={styles.username}>{userProfile.name}</Text>
@@ -170,7 +171,7 @@ export default function AccountScreen() {
               <View key={index} style={styles.documentInputGroup}>
                 <View style={styles.documentInputContainer}>
                   <TextInput
-                    placeholder="Document Title"
+                    placeholder='Document Title'
                     value={doc.title}
                     style={[styles.input, styles.documentInput]}
                     onChangeText={(text) => {
@@ -180,7 +181,7 @@ export default function AccountScreen() {
                     }}
                   />
                   <TextInput
-                    placeholder="Document URL"
+                    placeholder='Document URL'
                     value={doc.file_url}
                     style={[styles.input, styles.documentInput]}
                     onChangeText={(text) => {
@@ -192,15 +193,14 @@ export default function AccountScreen() {
                 </View>
                 <TouchableOpacity
                   onPress={() => removeDocument(index)}
-                  style={styles.roundRemoveButton}
-                >
+                  style={styles.roundRemoveButton}>
                   <Text style={styles.removeButtonText}>X</Text>
                   {/* Kalau sempet ganti Icon */}
                 </TouchableOpacity>
               </View>
             ))}
             <Button
-              text="Add More Documents"
+              text='Add More Documents'
               onPress={addNewDocument}
               style={styles.addButton}
             />
@@ -210,8 +210,7 @@ export default function AccountScreen() {
             <TouchableOpacity
               key={index}
               style={styles.documentContainer}
-              onPress={() => Linking.openURL(doc.file_url)}
-            >
+              onPress={() => Linking.openURL(doc.file_url)}>
               <Image
                 source={renderDocumentIcon(doc.file_url)}
                 style={styles.documentIcon}
@@ -228,7 +227,7 @@ export default function AccountScreen() {
         />
         {!isEditing && (
           <Button
-            text="Logout"
+            text='Logout'
             onPress={handleLogout}
             style={styles.logoutButton}
           />
