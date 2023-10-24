@@ -19,30 +19,24 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { login, accessToken, isLoggedIn } = useAuth();
+  const { login, isLoggedIn } = useAuth();
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    if (!username || !password) {
-      setModalMessage("Email and Password required!");
-      setShowModal(true);
-      return;
-    }
+    // if (!username || !password) {
+    //   setModalMessage("Email and Password required!");
+    //   setShowModal(true);
+    //   return;
+    // }
 
     try {
       await login(username, password);
-      if (isLoggedIn) {
-        navigation.navigate("Dashboard");
-      }
+      navigation.navigate("Dashboard");
     } catch (error) {
-      setModalMessage("Something went wrong. Try again later!");
+      setModalMessage(error.response.data.message);
       setShowModal(true);
     }
   };
-
-  useEffect(() => {
-    console.log("Current access token:", accessToken);
-  }, [accessToken]);
 
   const handleRegister = () => {
     navigation.push("Register");
