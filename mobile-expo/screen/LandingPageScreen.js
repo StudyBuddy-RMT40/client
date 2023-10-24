@@ -78,9 +78,10 @@ export default function LandingPageScreen() {
   
   const projectReducer = useSelector((state) => state.projectReducer.projects);
 
+  const topProjects = filterDataByCategory("Top Projects");
   const topTeachers = filterDataByCategory("Top Teachers");
   const topStudents = filterDataByCategory("Top Students");
-  const topProjects = filterDataByCategory("Top Projects");
+ 
 
   useEffect(() => {
     dispatch(getProjects());
@@ -107,6 +108,11 @@ export default function LandingPageScreen() {
         </View>
         <ButtonGrid items={buttonItems} />
         <HorizontalSlider
+          title="Top Projects"
+          dataFilter={topProjects}
+          searchQuery={searchQuery}
+        />
+        <HorizontalSlider
           title="Top Teachers"
           dataFilter={topTeachers}
           searchQuery={searchQuery}
@@ -116,12 +122,6 @@ export default function LandingPageScreen() {
           dataFilter={topStudents}
           searchQuery={searchQuery}
         />
-        <HorizontalSlider
-          title="Top Projects"
-          dataFilter={topProjects}
-          searchQuery={searchQuery}
-        />
-
         {/* <VerticalSlider /> */}
       </ScrollView>
     </SafeAreaView>
