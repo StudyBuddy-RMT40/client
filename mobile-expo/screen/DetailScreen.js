@@ -20,7 +20,7 @@ export default function DetailScreen({ route }) {
   const [studentFeedback, setStudentFeedback] = useState("");
   const [buddyFeedback, setBuddyFeedback] = useState("");
   const [rating, setRating] = useState(0);
-  const userRole = "buddy";
+  const userRole = "student";
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });

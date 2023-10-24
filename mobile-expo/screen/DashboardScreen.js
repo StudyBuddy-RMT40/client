@@ -20,6 +20,7 @@ export default function DashboardScreen() {
   const { isLoggedIn, updateUserRoleAndSpec, currentUser } = useAuth();
   console.log("isLoggedIn:", isLoggedIn);
   console.log("currentUser:", currentUser);
+  console.log("projects:", project);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
