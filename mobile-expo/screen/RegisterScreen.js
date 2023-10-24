@@ -21,11 +21,11 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [usernameError, setUsernameError] = useState(null);
-  const [emailError, setEmailError] = useState(null);
-  const [passwordError, setPasswordError] = useState(null);
-  const [phoneError, setPhoneError] = useState(null);
-  const [addressError, setAddressError] = useState(null);
+  // const [usernameError, setUsernameError] = useState(null);
+  // const [emailError, setEmailError] = useState(null);
+  // const [passwordError, setPasswordError] = useState(null);
+  // const [phoneError, setPhoneError] = useState(null);
+  // const [addressError, setAddressError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const dispatch = useDispatch();
@@ -118,7 +118,7 @@ export default function RegisterScreen() {
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
-      {usernameError && <Text style={styles.errorText}>{usernameError}</Text>}
+      {/* {usernameError && <Text style={styles.errorText}>{usernameError}</Text>} */}
       <TextInput
         style={styles.input}
         placeholder='Email'
@@ -126,7 +126,7 @@ export default function RegisterScreen() {
         value={email}
         onChangeText={(text) => setEmail(text)}
       />
-      {emailError && <Text style={styles.errorText}>{emailError}</Text>}
+      {/* {emailError && <Text style={styles.errorText}>{emailError}</Text>} */}
       <TextInput
         style={styles.input}
         placeholder='Password'
@@ -134,7 +134,7 @@ export default function RegisterScreen() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-      {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
+      {/* {passwordError && <Text style={styles.errorText}>{passwordError}</Text>} */}
       <TextInput
         style={styles.input}
         placeholder='Phone Number'
@@ -142,14 +142,14 @@ export default function RegisterScreen() {
         value={phoneNumber}
         onChangeText={(text) => setPhoneNumber(text)}
       />
-      {phoneError && <Text style={styles.errorText}>{phoneError}</Text>}
+      {/* {phoneError && <Text style={styles.errorText}>{phoneError}</Text>} */}
       <TextInput
         style={styles.input}
         placeholder='Address'
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
-      {addressError && <Text style={styles.errorText}>{addressError}</Text>}
+      {/* {addressError && <Text style={styles.errorText}>{addressError}</Text>} */}
       <View style={{ width: "100%" }}>
         <TouchableOpacity onPress={handleRegister}>
           <Button
