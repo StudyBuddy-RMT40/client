@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -20,14 +20,28 @@ import topProject from "../assets/top-projects.png";
 import topBuddy from "../assets/top-teacher.png";
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { getProjects } from "../store/actions/actionCreator";
 
 export default function LandingPageScreen() {
+  const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
-    { icon: allProject, label: "All Projects", size: 60, onPress: () => navigation.navigate("Project") },
-    { icon: highschool, label: "School Projects", size: 60, onPress: () => navigation.navigate("Project") },
+    {
+      icon: allProject,
+      label: "All Projects",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
+    {
+      icon: highschool,
+      label: "School Projects",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
     {
       icon: university,
       label: "University Projects",
@@ -40,22 +54,37 @@ export default function LandingPageScreen() {
       size: 60,
       onPress: () => navigation.navigate("Project"),
     },
-    { icon: topProject, label: "Top Projects", size: 60, onPress: () => navigation.navigate("Project") },
-    { icon: topBuddy, label: "Top Buddy", size: 60, onPress: () => navigation.navigate("Project") },
+    {
+      icon: topProject,
+      label: "Top Projects",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
+    {
+      icon: topBuddy,
+      label: "Top Buddy",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
   ];
 
+  const filterDataByCategory = (category) => {
+    const filteredData = projectReducer.filter(
+      (item) => item.Category.name === category
+    );
+    return filteredData;
+  };
+
   
+  const projectReducer = useSelector((state) => state.projectReducer.projects);
 
-  // const filterDataByCategory = (category) => {
-  //   const filteredData = dataFilter.filter(item => data.Category.name === category);
-  //   return filteredData;
-  // }
+  const topTeachers = filterDataByCategory("Top Teachers");
+  const topStudents = filterDataByCategory("Top Students");
+  const topProjects = filterDataByCategory("Top Projects");
 
-    
-  //   const topTeachers = filterDataByCategory("Top Teachers");
-  //   const topStudents = filterDataByCategory("Top Students");
-  //   const topProjects = filterDataByCategory("Top Projects");
-
+  useEffect(() => {
+    dispatch(getProjects());
+  }, [dispatch]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -65,6 +94,8 @@ export default function LandingPageScreen() {
         <TextInput
           style={styles.searchBar}
           placeholder="Looking for your next project?"
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
         />
       </View>
       <ScrollView
@@ -75,9 +106,22 @@ export default function LandingPageScreen() {
           <HeroCarousel />
         </View>
         <ButtonGrid items={buttonItems} />
-      <HorizontalSlider title="Top Teachers" />
-      <HorizontalSlider title="Top Students" />
-      <HorizontalSlider title="Top Projects" />
+        <HorizontalSlider
+          title="Top Teachers"
+          dataFilter={topTeachers}
+          searchQuery={searchQuery}
+        />
+        <HorizontalSlider
+          title="Top Students"
+          dataFilter={topStudents}
+          searchQuery={searchQuery}
+        />
+        <HorizontalSlider
+          title="Top Projects"
+          dataFilter={topProjects}
+          searchQuery={searchQuery}
+        />
+
         {/* <VerticalSlider /> */}
       </ScrollView>
     </SafeAreaView>

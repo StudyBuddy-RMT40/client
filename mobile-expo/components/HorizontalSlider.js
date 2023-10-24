@@ -39,7 +39,7 @@ const LocationSVG = () => (
 );
 
 export default function HorizontalSlider(props) {
-  const { title } = props;
+  const { data, title, searchQuery } = props;
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const image = require('../assets/dummy/hero-dummy.jpg')
@@ -50,6 +50,12 @@ export default function HorizontalSlider(props) {
   const projectReducer = useSelector(function (state) {
     return state.projectReducer.projects;
   });
+
+  const filteredData = projectReducer.filter(data =>
+    data && data.Category && data.Category.name &&
+    data.Category.name.includes(data.Category.name) &&
+    data.name && data.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     dispatch(getProjects());
@@ -63,7 +69,7 @@ export default function HorizontalSlider(props) {
         showsHorizontalScrollIndicator={false}
         style={styles.carousel}
       >
-        {projectReducer.map(data => (
+        {filteredData.map(data => (
           <TouchableOpacity
             key={data._id}
             onPress={handleDetail}
