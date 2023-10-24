@@ -1,9 +1,15 @@
-import { FETCH_CATEGORIES_SUCCESS, FETCH_LOCATIONS_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS, FETCH_PROJECTS,
-  FETCH_PROJECTS_BY_ID, } from "./actionTypes";
+import {
+  FETCH_CATEGORIES_SUCCESS,
+  FETCH_LOCATIONS_SUCCESS,
+  LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
+  FETCH_PROJECTS,
+  FETCH_PROJECTS_BY_ID,
+} from "./actionTypes";
 
 import axios from "axios";
 const baseUrl =
-  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app";
+  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
 
 export const Login = (data, role) => {
   return {
@@ -38,7 +44,7 @@ export const registerUser = (registerForm) => {
     try {
       const { data } = await axios({
         method: "post",
-        url: baseUrl + "/register",
+        url: baseUrl + "register",
         data: registerForm,
       });
       return { success: true, data }; // Return a success flag and data
@@ -56,7 +62,7 @@ export const loginUser = (loginForm) => {
     try {
       const { data } = await axios({
         method: "post",
-        url: baseUrl + "/login",
+        url: baseUrl + "login",
         data: { email: username, password: password },
       });
 
@@ -73,36 +79,26 @@ export const loginUser = (loginForm) => {
 export function getProjects() {
   return async (dispatch) => {
     try {
-      const { data } = await axios(baseUrl + "/pub/projects", {
-        headers: {
-          access_token,
-        },
-      });
-      console.log("Data dari API projects:", data)
-      dispatch(fetchProjects(data.access_token));
+      const { data } = await axios(baseUrl + "pub/projects");
+      // console.log("ACTION CREATOR>>>>>>>>>>", data);
+      dispatch(fetchProjects(data));
     } catch (error) {
       return { success: false, error: error.response.data };
     }
   };
-
 }
 
 export function getProjectById(id) {
   return async (dispatch) => {
     try {
-      const { data } = await axios(baseUrl + "/pub/projects/" + id, {
-        headers: {
-          access_token,
-        },
-      });
-      dispatch(fetchProjectById(data.access_token));
+      const { data } = await axios(baseUrl + "pub/projects/" + id);
+      // console.log("ACTION CREATOR PROJECT ID>>>>>", data);
+      dispatch(fetchProjectById(data));
     } catch (error) {
       return { success: false, error: error.response.data };
     }
   };
 }
-
-
 
 export const fetchLocations = () => {
   return async (dispatch) => {
@@ -110,30 +106,30 @@ export const fetchLocations = () => {
       const { data } = await axios({
         method: "get",
         url: baseUrl + "pub/location",
-      })
+      });
       dispatch({
         type: FETCH_LOCATIONS_SUCCESS,
-        payload: data
-      })
+        payload: data,
+      });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
-}
+  };
+};
 
 export const fetchCategories = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios({
         method: "get",
-        url: baseUrl + "pub/categories"
-      })
+        url: baseUrl + "pub/categories",
+      });
       dispatch({
         type: FETCH_CATEGORIES_SUCCESS,
-        payload: data
-      })
+        payload: data,
+      });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
-}
+  };
+};

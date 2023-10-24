@@ -59,8 +59,8 @@ export default function HorizontalSlider(props) {
       project.Category.name &&
       project.Category.name.includes(project.Category.name) &&
       project.name &&
-      project.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      project.status === "finished" && project.published === true
+      project.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+      // && project.status === "finished" && project.published === true  <--- common aja kalo dibutuhkan
   );
   
 
