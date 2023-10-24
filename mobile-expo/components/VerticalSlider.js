@@ -43,19 +43,19 @@ export default function VerticalSlider(props) {
     image: item.image,
     description: item.description,
     // rating:
-    goals: item.goals,
-    category: item.Category.name,
-    address: item.Teacher.address,
+    // goals: item.goals,
+    // category: item.Category.name,
+    // address: item.Teacher.address,
   }));
 
   return (
     <View style={styles.verticalCardContainer}>
       <ScrollView vertical showsVerticalScrollIndicator={false}>
-        {data.map((item, idx) => (
-          <TouchableOpacity key={idx} onPress={() => onItemClick(item)}>
+        {carouselItems.map((item, idx) => (
+          <TouchableOpacity key={idx} onPress={() => item}>
             <View style={styles.verticalCard}>
               <Image style={styles.verticalCardImage} source={item.image} />
-              <Text style={styles.verticalCardText}>{item.name}</Text>
+              <Text style={styles.verticalCardText}>{item.title}</Text>
               <View style={styles.locationContainer}>
                 <LocationSVG />
                 <Text style={styles.courseLocation}>{item.address}</Text>
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     textAlign: "center",
     fontFamily: "Lato-Regular",
+    width: screenWidth * 0.9,
   },
   ratingContainer: {
     flexDirection: "row",
