@@ -76,7 +76,7 @@ export default function LandingPageScreen() {
   };
 
   
-  const projectReducer = useSelector((state) => state.projectReducer.project);
+  const projectReducer = useSelector((state) => state.projectReducer.projects);
   // console.log(state, '<<<<<<< ini di landing page')
 
   const topProjects = filterDataByCategory("Top Projects");

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -17,32 +17,68 @@ import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/actions/actionCreators";
+import axios from "axios";
+import ErrorModal from "../components/modal/ErrorModal";
+
+const baseUrl =
+  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
 
 export default function AccountScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const [userProfile, setUserProfile] = useState({
-    name: "Riska",
-    email: "riska@gmail.com",
-    role: "student",
-    phone: "10239123012",
-    address: "Jalan jalan jalan",
-    documents: [
-      {
-        title: "Curicullum Vitae Riska",
-        file_url:
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      },
-      {
-        title: "Curicullum Vitae Riska 2",
-        file_url: "https://dummyimage.com/600x400/000/fff.jpeg",
-      },
-    ],
+    email: "",
+    name: "",
+    email: "",
+    role: "",
+    phoneNumber: "",
+    address: "",
   });
-  const { access_token } = useSelector((state) => {
+  const { access_token, role } = useSelector((state) => {
     return state.auth;
   });
+
+  const fetchProfile = async () => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + role + "_profile",
+        headers: {
+          access_token
+        }
+      });
+      setUserProfile(data)
+    } catch (err) {
+      console.log(err.response.data)
+      setModalMessage(err.response.data.message);
+      setShowModal(true);
+    }
+  }
+
+  const editProfile = async () => {
+    try {
+      const { data } = await axios({
+        method: "put",
+        url: baseUrl + "users",
+        data: userProfile,
+        headers: {
+          access_token
+        }
+      })
+      console.log(data)
+    } catch (err) {
+      console.log(err.response.data)
+      throw err
+    }
+  }
+
+  useEffect(() => {
+    fetchProfile()
+  }, [])
+
   const handleLogout = () => {
     dispatch(logoutUser());
     navigation.navigate("Home");
@@ -54,53 +90,22 @@ export default function AccountScreen() {
     });
   };
 
-  const renderDocumentIcon = (url) => {
-    if (url.endsWith(".pdf")) {
-      return pdfIcon;
-    } else if (
-      url.endsWith(".jpeg") ||
-      url.endsWith(".jpg") ||
-      url.endsWith(".png")
-    ) {
-      return imageIcon;
-    }
-    return null;
+  const handleEditProfile = () => {
+    setIsEditing(true);
   };
 
-  const [documentCount, setDocumentCount] = useState(
-    userProfile.documents.length
-  );
+  const handleSaveProfile = () => {
+    editProfile()
+      .then(() => {
+        setIsEditing(false)
+      })
+      .catch((err) => {
+        setIsEditing(true)
+        setModalMessage(err.response.data.message);
+        setShowModal(true);
+      })
 
-  const addNewDocument = () => {
-    setUserProfile((prevState) => ({
-      ...prevState,
-      documents: [...prevState.documents, { title: "", file_url: "" }],
-    }));
-  };
-
-  const removeDocument = (indexToRemove) => {
-    setUserProfile((prevState) => ({
-      ...prevState,
-      documents: prevState.documents.filter(
-        (_, index) => index !== indexToRemove
-      ),
-    }));
-  };
-
-  const handleEditSaveProfile = () => {
-    const areDocumentsValid = userProfile.documents.every(
-      (doc) => doc.title && doc.file_url
-    );
-
-    if (!areDocumentsValid) {
-      alert(
-        "Please fill out all document fields or remove empty ones before saving."
-      );
-      return;
-    }
-
-    setIsEditing(!isEditing);
-  };
+  }
 
   return (
     <SafeAreaView style={styles.containerSafeArea}>
@@ -112,13 +117,24 @@ export default function AccountScreen() {
           <Text style={styles.username}>{userProfile.name}</Text>
         </View>
 
-        <Text style={styles.fieldTitle}>Email:</Text>
+        <Text style={styles.fieldTitle}>Username:</Text>
         {isEditing ? (
           <TextInput
             style={styles.input}
-            value={userProfile.email}
-            onChangeText={(text) => handleChange("email", text)}
+            value={userProfile.username}
+            onChangeText={(text) => handleChange("username", text)}
           />
+        ) : (
+          <View style={styles.container}>
+            <Text>{userProfile.username}</Text>
+          </View>
+        )}
+
+        <Text style={styles.fieldTitle}>Email:</Text>
+        {isEditing ? (
+          <View style={styles.container}>
+            <Text>{userProfile.email}</Text>
+          </View>
         ) : (
           <View style={styles.container}>
             <Text>{userProfile.email}</Text>
@@ -127,11 +143,9 @@ export default function AccountScreen() {
 
         <Text style={styles.fieldTitle}>Role:</Text>
         {isEditing ? (
-          <TextInput
-            style={styles.input}
-            value={userProfile.role}
-            onChangeText={(text) => handleChange("role", text)}
-          />
+          <View style={styles.container}>
+            <Text>{userProfile.role}</Text>
+          </View>
         ) : (
           <View style={styles.container}>
             <Text>{userProfile.role}</Text>
@@ -142,12 +156,12 @@ export default function AccountScreen() {
         {isEditing ? (
           <TextInput
             style={styles.input}
-            value={userProfile.phone}
-            onChangeText={(text) => handleChange("phone", text)}
+            value={userProfile.phoneNumber}
+            onChangeText={(text) => handleChange("phoneNumber", text)}
           />
         ) : (
           <View style={styles.container}>
-            <Text>{userProfile.phone}</Text>
+            <Text>{userProfile.phoneNumber}</Text>
           </View>
         )}
 
@@ -164,74 +178,39 @@ export default function AccountScreen() {
           </View>
         )}
 
-        <Text style={styles.fieldTitle}>Documents:</Text>
-        {isEditing ? (
-          <>
-            {userProfile.documents.map((doc, index) => (
-              <View key={index} style={styles.documentInputGroup}>
-                <View style={styles.documentInputContainer}>
-                  <TextInput
-                    placeholder='Document Title'
-                    value={doc.title}
-                    style={[styles.input, styles.documentInput]}
-                    onChangeText={(text) => {
-                      const newDocs = [...userProfile.documents];
-                      newDocs[index].title = text;
-                      setUserProfile({ ...userProfile, documents: newDocs });
-                    }}
-                  />
-                  <TextInput
-                    placeholder='Document URL'
-                    value={doc.file_url}
-                    style={[styles.input, styles.documentInput]}
-                    onChangeText={(text) => {
-                      const newDocs = [...userProfile.documents];
-                      newDocs[index].file_url = text;
-                      setUserProfile({ ...userProfile, documents: newDocs });
-                    }}
-                  />
-                </View>
-                <TouchableOpacity
-                  onPress={() => removeDocument(index)}
-                  style={styles.roundRemoveButton}>
-                  <Text style={styles.removeButtonText}>X</Text>
-                  {/* Kalau sempet ganti Icon */}
-                </TouchableOpacity>
-              </View>
-            ))}
-            <Button
-              text='Add More Documents'
-              onPress={addNewDocument}
-              style={styles.addButton}
-            />
-          </>
-        ) : (
-          userProfile.documents.map((doc, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.documentContainer}
-              onPress={() => Linking.openURL(doc.file_url)}>
-              <Image
-                source={renderDocumentIcon(doc.file_url)}
-                style={styles.documentIcon}
-              />
-              <Text>{doc.title}</Text>
-            </TouchableOpacity>
-          ))
-        )}
-
-        <Button
+        {/* <Button
           text={isEditing ? "Save" : "Edit Profile"}
           onPress={handleEditSaveProfile}
           style={isEditing ? styles.saveButton : styles.editButton}
-        />
-        {!isEditing && (
+        /> */}
+        {!isEditing ? (
           <Button
-            text='Logout'
-            onPress={handleLogout}
-            style={styles.logoutButton}
+            text={"Edit Profile"}
+            onPress={handleEditProfile}
+            style={styles.editButton}
+          />
+        ) : (
+          <Button
+            text={"Save"}
+            onPress={handleSaveProfile}
+            style={styles.saveButton}
           />
         )}
+        {
+          !isEditing && (
+            <Button
+              text="Logout"
+              onPress={handleLogout}
+              style={styles.logoutButton}
+            />
+          )
+        }
+        <ErrorModal
+          visible={showModal}
+          title='Error'
+          message={modalMessage}
+          onClose={() => setShowModal(false)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

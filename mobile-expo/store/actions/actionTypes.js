@@ -22,3 +22,5 @@ export const LOGIN_SUCCESS = "login/success";
 export const LOGOUT_SUCCESS = "logout/success";
 export const FETCH_PROJECTS = "projects/success"
 export const FETCH_PROJECTS_BY_ID = "projectsById/success"
+export const FETCH_LOCATIONS_SUCCESS = "locations/fetchSuccess"
+export const FETCH_CATEGORIES_SUCCESS = "categories/fetchSuccess"

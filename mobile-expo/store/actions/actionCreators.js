@@ -1,9 +1,6 @@
-import {
-  FETCH_PROJECTS,
-  FETCH_PROJECTS_BY_ID,
-  LOGIN_SUCCESS,
-  LOGOUT_SUCCESS,
-} from "./actionTypes";
+import { FETCH_CATEGORIES_SUCCESS, FETCH_LOCATIONS_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS, FETCH_PROJECTS,
+  FETCH_PROJECTS_BY_ID, } from "./actionTypes";
+
 import axios from "axios";
 const baseUrl =
   "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app";
@@ -76,24 +73,24 @@ export const loginUser = (loginForm) => {
 export function getProjects() {
   return async (dispatch) => {
     try {
-      const access_token = await AsyncStorage.getItem("access_token");
-      const { data } = await axios(`${baseUrl}/pub/projects`, {
+      const { data } = await axios(baseUrl + "/pub/projects", {
         headers: {
           access_token,
         },
       });
+      console.log("Data dari API projects:", data)
       dispatch(fetchProjects(data.access_token));
     } catch (error) {
       return { success: false, error: error.response.data };
     }
   };
+
 }
 
 export function getProjectById(id) {
   return async (dispatch) => {
     try {
-      const access_token = await AsyncStorage.getItem("access_token");
-      const { data } = await axios(`${baseUrl}/pub/projects/${id}`, {
+      const { data } = await axios(baseUrl + "/pub/projects/" + id, {
         headers: {
           access_token,
         },
@@ -105,3 +102,38 @@ export function getProjectById(id) {
   };
 }
 
+
+
+export const fetchLocations = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + "pub/location",
+      })
+      dispatch({
+        type: FETCH_LOCATIONS_SUCCESS,
+        payload: data
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+export const fetchCategories = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + "pub/categories"
+      })
+      dispatch({
+        type: FETCH_CATEGORIES_SUCCESS,
+        payload: data
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
