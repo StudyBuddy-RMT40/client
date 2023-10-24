@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { SecureStore } from 'expo';
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
@@ -21,33 +20,33 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { login, accessToken } = useAuth();
-  const navigation = useNavigation();
-
-  const handleLogin = async () => {
-    if (!username || !password) {
-      setModalMessage("Email and Password required!");
-      setShowModal(true);
-      return;
-    }
-
-    if (username === "riska@gmail.com" && password === "asdasd") {
-      try {
-        await login(username, password);
-        navigation.navigate("Dashboard");
-      } catch (error) {
-        setModalMessage("Something went wrong. Try again later!");
-        setShowModal(true);
-      }
-    } else {
-      setModalMessage("Invalid email or password");
-      setShowModal(true);
-    }
-  };
+  const { access_token, role } = useSelector((state) => {
+    return state.auth;
+  });
 
   useEffect(() => {
-    console.log("Current access token:", accessToken);
-  }, [accessToken]);
+    console.log(access_token);
+  }, []);
+
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handleLogin = () => {
+    dispatch(loginUser({ username, password }))
+      .then((response) => {
+        if (response.success) {
+          navigation.navigate("Dashboard");
+        } else {
+          setModalMessage(
+            "An error occurred during login: " + response.error.message
+          );
+          setShowModal(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleRegister = () => {
     navigation.push("Register");

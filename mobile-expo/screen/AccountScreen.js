@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/actions/actionCreators";
 
 export default function AccountScreen() {
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
   const [userProfile, setUserProfile] = useState({

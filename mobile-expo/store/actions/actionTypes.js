@@ -20,3 +20,5 @@
 // export const ACTIVITY_FETCH_AUTHOR = 'activity/fetchAuthor/success'
 export const LOGIN_SUCCESS = "login/success";
 export const LOGOUT_SUCCESS = "logout/success";
+export const FETCH_PROJECTS = "projects/success"
+export const FETCH_PROJECTS_BY_ID = "projectsById/success"

@@ -11,6 +11,7 @@ export default function ProjectScreen() {
   const [location, setLocation] = useState("");
 
   const projectReducer = useSelector(function (state) {
+    // console.log(state, '<<<<<<< ini di project screen')
     return state.projectReducer.projects;
   });
 
