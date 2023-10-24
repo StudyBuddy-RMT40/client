@@ -23,6 +23,7 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
+    console.log("a")
     // if (!username || !password) {
     //   setModalMessage("Email and Password required!");
     //   setShowModal(true);

@@ -15,7 +15,7 @@ import {
     TODOS_FETCH_SUCCESS,
 } from "./actionTypes";
 
-const BASE_URL = 'http://localhost:3000'
+const BASE_URL = 'https://abe7-182-0-144-39.ngrok-free.app'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 
@@ -100,6 +100,7 @@ export function getUserById(id) {
 }
 
 export function updateUser(form) {
+    console.log(form, "<<<<<<<<<<<<<")
     return async () => {
         try {
             const access_token = await AsyncStorage.getItem("access_token");

@@ -9,8 +9,8 @@ import { useNavigation } from "@react-navigation/native";
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabStacks() {
-  // const { isLoggedIn } = useAuth()
-  // const navigation = useNavigation()
+  const { isLoggedIn } = useAuth()
+  const navigation = useNavigation()
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -36,6 +36,14 @@ export default function TabStacks() {
       <Tab.Screen
         name="Dashboard"
         component={DashboardStack}
+        listeners={{
+          tabPress: e => {
+            e.preventDefault()
+            if (isLoggedIn) {
+              navigation.navigate("Dashboard")
+            }
+          }
+        }}
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Icon
