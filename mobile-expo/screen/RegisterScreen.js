@@ -154,14 +154,17 @@ export default function RegisterScreen() {
       <View>
         <TextInput
           style={styles.input}
-          placeholder='Address'
+          placeholder='Location'
           value={address}
           onChangeText={(text) => setAddress(text)}
         />
+
         <SelectList
           setSelected={(val) => setAddress(val)}
           data={locations}
-          save="value"
+          save="name"
+          search={false}
+          placeholder="Select Location"
         />
       </View>
 
