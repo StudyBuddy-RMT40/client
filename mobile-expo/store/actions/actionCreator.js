@@ -118,7 +118,6 @@ export function getUserById(id) {
 }
 
 export function updateUser(form) {
-    console.log(form, "<<<<<<<<<<<<<")
     return async () => {
         try {
             const access_token = await AsyncStorage.getItem("access_token");
