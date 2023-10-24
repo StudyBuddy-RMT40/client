@@ -1,17 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Modal, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addSpecialization,
+  updateStatusRole,
+} from "../../store/actions/actionCreators";
+import ErrorModal from "./ErrorModal";
+import { useFocusEffect } from "@react-navigation/core";
 
 const RoleModal = ({ isVisible, onClose, onSave }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const [selectedRole, setSelectedRole] = useState(null);
   const [specialization, setSpecialization] = useState([]);
-  const dummySpecializations = ["Math", "Science", "Literature"];
+  const dispatch = useDispatch();
+  let { categories } = useSelector((state) => {
+    return state.categories;
+  });
+  // ini butuh styling ya mba, tinggal uncomment
+  // let dummySpecializations;
+  // dummySpecializations = categories.map((e) => ({
+  //   id: e._id,
+  //   name: e.name,
+  // }));
+  const dummySpecializations = [
+    { id: "653823f95c2c03c354f7685a", name: "Math" },
+    { id: "653823f95c2c03c354f7685b", name: "Ipa" },
+  ]; // nanti ini dicomment aja
 
   const handleSelectRole = (role) => {
-    console.log("Selected role:", role);
     setSelectedRole(role);
     if (role === "student") {
-      onSave(role, []);
-      onClose();
+      // update student
+      dispatch(updateStatusRole("student"))
+        .then((response) => {
+          if (response.success) {
+            onSave(role, []);
+            onClose();
+          } else {
+            setModalMessage(
+              "An error occurred during login: " + response.error.message
+            );
+            setShowModal(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error, "erorr ini bukan ?");
+        });
     }
   };
 
@@ -24,14 +59,41 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   };
 
   const handleDone = () => {
-    if (selectedRole === "Buddy") {
-      onSave(selectedRole, specialization);
-      onClose();
+    if (selectedRole === "buddy") {
+      dispatch(updateStatusRole("buddy"))
+        .then((response) => {
+          if (response.success) {
+            dispatch(addSpecialization(specialization))
+              .then((response) => {
+                if (response.success) {
+                  onSave(selectedRole, specialization);
+                  onClose();
+                } else {
+                  setModalMessage(
+                    "An error occurred during specialization addition: " +
+                      response.error.message
+                  );
+                  setShowModal(true);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            setModalMessage(
+              "An error occurred during login: " + response.error.message
+            );
+            setShowModal(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
   return (
-    <Modal animationType="slide" transparent={true} visible={isVisible}>
+    <Modal animationType='slide' transparent={true} visible={isVisible}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.title}>Select your role</Text>
@@ -40,30 +102,27 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
             <>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSelectRole("student")}
-              >
+                onPress={() => handleSelectRole("student")}>
                 <Text>Student</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSelectRole("buddy")}
-              >
+                onPress={() => handleSelectRole("buddy")}>
                 <Text>Buddy</Text>
               </TouchableOpacity>
             </>
           )}
 
           {selectedRole === "buddy" &&
-            dummySpecializations.map((spec, index) => (
+            dummySpecializations.map((spec) => (
               <TouchableOpacity
-                key={index}
+                key={spec.id}
                 style={[
                   styles.button,
-                  specialization.includes(spec) && styles.selectedButton,
+                  specialization.includes(spec.name) && styles.selectedButton,
                 ]}
-                onPress={() => toggleSpecialist(spec)}
-              >
-                <Text>{spec}</Text>
+                onPress={() => toggleSpecialist(spec.id)}>
+                <Text>{spec.name}</Text>
               </TouchableOpacity>
             ))}
 
@@ -74,6 +133,14 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
           )}
         </View>
       </View>
+      <ErrorModal
+        visible={showModal}
+        title='Role Validation'
+        message={modalMessage}
+        onClose={() => {
+          setShowModal(false);
+        }}
+      />
     </Modal>
   );
 };

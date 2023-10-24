@@ -9,7 +9,9 @@ import {
 
 import axios from "axios";
 const baseUrl =
-  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
+  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app";
+
+let access_token;
 
 export const Login = (data, role) => {
   return {
@@ -39,7 +41,7 @@ export const fetchProjectById = (data) => {
 };
 
 export const registerUser = (registerForm) => {
-  // console.log(registerForm);
+  // console.log(registerForm);;
   return async () => {
     try {
       const { data } = await axios({
@@ -66,6 +68,7 @@ export const loginUser = (loginForm) => {
         data: { email: username, password: password },
       });
 
+      access_token = data.access_token;
       dispatch(Login(data.access_token, data.role));
 
       return { success: true, data }; // Return a success flag and data
@@ -106,7 +109,7 @@ export const fetchLocations = () => {
       const { data } = await axios({
         method: "get",
         url: baseUrl + "pub/locations",
-      })
+      });
       dispatch({
         type: FETCH_LOCATIONS_SUCCESS,
         payload: data,
@@ -130,6 +133,50 @@ export const fetchCategories = () => {
       });
     } catch (err) {
       console.log(err);
+    }
+  };
+};
+
+export const updateStatusRole = (role) => {
+  return async () => {
+    try {
+      const { data } = await axios({
+        method: "patch",
+        url: baseUrl + "users",
+        data: { role },
+        headers: {
+          access_token: access_token,
+        },
+      });
+      console.log(data);
+      return { success: true, data }; // Return a success flag and data
+    } catch (error) {
+      console.log(error.response.data);
+      return { success: false, error: error.response.data };
+    }
+  };
+};
+
+export const addSpecialization = (data) => {
+  let specialist = [];
+  data.map((e) => {
+    specialist.push({ categoryId: e });
+  });
+  return async () => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        url: baseUrl + "specialist",
+        data: { specialist },
+        headers: {
+          access_token: access_token,
+        },
+      });
+      console.log(data);
+      return { success: true, data };
+    } catch (error) {
+      console.log(error.response.data);
+      return { success: false, error: error.response.data };
     }
   };
 };
