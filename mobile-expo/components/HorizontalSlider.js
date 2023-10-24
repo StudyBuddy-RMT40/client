@@ -48,7 +48,7 @@ export default function HorizontalSlider(props) {
     navigation.push("Finish", { project: projectData });
   };
   const projectReducer = useSelector(function (state) {
-    console.log(state, '<<<<<<< ini di horizontal slider')
+    // console.log(state, '<<<<<<< ini di horizontal slider')
     return state.projectReducer.projects;
   });
 
@@ -59,10 +59,9 @@ export default function HorizontalSlider(props) {
       project.Category.name &&
       project.Category.name.includes(project.Category.name) &&
       project.name &&
-      project.name.toLowerCase().includes(searchQuery.toLowerCase()) 
-      // && project.status === "finished" && project.published === true  <--- common aja kalo dibutuhkan
+      project.name.toLowerCase().includes(searchQuery.toLowerCase())
+    // && project.status === "finished" && project.published === true  <--- common aja kalo dibutuhkan
   );
-  
 
   useEffect(() => {
     dispatch(getProjects());

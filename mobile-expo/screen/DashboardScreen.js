@@ -21,77 +21,142 @@ export default function DashboardScreen() {
     },
   ];
 
-  const [projectData, setProjectData] = useState([
-    {
-      id: 1,
-      title: "Design Thinking Intro",
-      progress: 0,
-      status: "Submitted",
-      description:
-        "An introductory course to Design Thinking methodology. This course provides a foundational understanding of the principles and techniques used in Design Thinking.",
-      category: "Design",
-      goals:
-        "The goals of this course are to help participants grasp the basics of design thinking, understand its problem-solving approach, and apply it to real-world challenges.",
-      feedback: null,
-      learningMaterials: null,
-    },
-    {
-      id: 2,
-      title: "Design Thinking Advanced",
-      progress: 0,
-      status: "Accepted",
-      description:
-        "An advanced-level course in Design Thinking, building on the concepts introduced in the introductory course. This course dives deeper into the methodology and its applications.",
-      category: "Design",
-      goals:
-        "In this advanced course, participants will delve deeper into design thinking concepts, explore advanced techniques for problem-solving and innovation, and gain practical experience.",
-      feedback: null,
-      learningMaterials: null,
-    },
-    {
-      id: 3,
-      title: "Design Thinking Masterclass",
-      progress: 0,
-      status: "Paid",
-      description:
-        "A comprehensive Design Thinking Masterclass designed for individuals seeking to master all aspects of the methodology. This course covers advanced topics and practical applications.",
-      category: "Design",
-      goals:
-        "The masterclass aims to equip participants with a deep understanding of design thinking, allowing them to lead innovation initiatives and solve complex challenges effectively.",
-      feedback: null,
-      learningMaterials: null,
-    },
-    {
-      id: 4,
-      title: "Design Thinking Intermediate",
-      progress: 50,
-      status: "On Progress",
-      description:
-        "An intermediate-level course that bridges the gap between foundational and advanced Design Thinking. Participants apply their knowledge to real-world projects.",
-      category: "Design",
-      goals:
-        "This intermediate course covers a range of design thinking techniques and tools, allowing participants to tackle complex problems with confidence.",
-      feedback:
-        "Great progress so far! Keep up the good work. You're halfway through the course and making excellent strides in your understanding of Design Thinking.",
-      learningMaterials:
-        "Access a comprehensive set of learning materials, including video tutorials, case studies, and practical exercises, to support your learning journey.",
-    },
-    {
-      id: 5,
-      title: "Design Thinking Final",
-      progress: 100,
-      status: "Finished",
-      description:
-        "The final installment in the Design Thinking series, where participants demonstrate their mastery of the methodology through a capstone project.",
-      category: "Design",
-      goals:
-        "Conclude your Design Thinking journey by successfully completing a capstone project that applies all your acquired knowledge and skills.",
-      feedback:
-        "Congratulations on completing the Design Thinking Final course! You've successfully demonstrated your expertise in this innovative problem-solving approach.",
-      learningMaterials:
-        "Access a complete set of learning materials, including recorded lectures, project templates, and additional resources, to help you excel in your capstone project.",
-    },
-  ]);
+  const [projectData, setProjectData] = useState({
+    _id: "6537cc89ac774a9de2544ef2",
+    username: "budi",
+    email: "budi@mail.com",
+    phoneNumber: "088812341234",
+    role: "student",
+    address: "Jawa Barat",
+    Projects: [
+      {
+        _id: "65381df59b16a27e018c9f9b",
+        name: "project 1",
+        studentId: "6537cc89ac774a9de2544ef2",
+        teacherId: "6537cc89ac774a9de2544ef3",
+        startDate: "2023-10-24",
+        endDate: "2023-10-25",
+        status: "submitted",
+        description: "ini adalah project 1",
+        categoryId: "65373a0854dbe6c5e38c19bb",
+        published: false,
+        goals: "menyelesaikan matematika",
+        feedback: "matematika cukup menyenangkan",
+        todos: [
+          {
+            _id: "653821ca355353d775eaec32",
+            name: "belajar matematika 1",
+            learningUrl: "https://www.hackerrank.com/",
+            projectId: "65381df59b16a27e018c9f9b",
+            isFinished: false,
+          },
+          {
+            _id: "653821ca355353d775eaec33",
+            name: "belajar matematika 2",
+            learningUrl: "https://www.hackerrank.com/",
+            projectId: "65381df59b16a27e018c9f9b",
+            isFinished: false,
+          },
+        ],
+        totalFinished: 0,
+      },
+      {
+        _id: "65381df59b16a27e018c9f9f",
+        name: "project 5",
+        studentId: "6537cc89ac774a9de2544ef2",
+        teacherId: "6537cc89ac774a9de2544ef3",
+        startDate: "2023-10-24",
+        endDate: "2023-10-26",
+        status: "submitted",
+        description: "ini adalah project 1",
+        categoryId: "65373a0854dbe6c5e38c19bf",
+        published: false,
+        goals: "menyelesaikan bahasa inggris",
+        feedback: "bahasa inggris cukup menyenangkan",
+        todos: [
+          {
+            _id: "653821ca355353d775eaec3a",
+            name: "belajar bahasa inggris 1",
+            learningUrl: "https://www.hackerrank.com/",
+            projectId: "65381df59b16a27e018c9f9f",
+            isFinished: false,
+          },
+          {
+            _id: "653821ca355353d775eaec3b",
+            name: "belajar bahasa inggris 2",
+            learningUrl: "https://www.hackerrank.com/",
+            projectId: "65381df59b16a27e018c9f9f",
+            isFinished: false,
+          },
+        ],
+        totalFinished: 0,
+      },
+      {
+        _id: "65381df59b16a27e018c9fa1",
+        name: "project 7",
+        studentId: "6537cc89ac774a9de2544ef2",
+        teacherId: "6537cc89ac774a9de2544ef3",
+        startDate: "2023-10-24",
+        endDate: "2023-10-25",
+        status: "submitted",
+        description: "ini adalah project 1",
+        categoryId: "65373a0854dbe6c5e38c19c1",
+        published: false,
+        goals: "menyelesaikan sejarah",
+        feedback: "sejarah cukup menyenangkan",
+        todos: [
+          {
+            _id: "653821ca355353d775eaec3e",
+            name: "belajar sejarah 1",
+            learningUrl: "https://www.hackerrank.com/",
+            projectId: "65381df59b16a27e018c9fa1",
+            isFinished: false,
+          },
+          {
+            _id: "653821ca355353d775eaec3f",
+            name: "belajar sejarah 2",
+            learningUrl: "https://www.hackerrank.com/",
+            projectId: "65381df59b16a27e018c9fa1",
+            isFinished: false,
+          },
+        ],
+        totalFinished: 0,
+      },
+      {
+        _id: "65381df59b16a27e018c9fa3",
+        name: "project 9",
+        studentId: "6537cc89ac774a9de2544ef2",
+        teacherId: "6537cc89ac774a9de2544ef3",
+        startDate: "2023-10-24",
+        endDate: "2023-10-27",
+        status: "submitted",
+        description: "ini adalah project 9",
+        categoryId: "65373a0854dbe6c5e38c19c2",
+        published: false,
+        goals: "menyelesaikan ekonomi",
+        feedback: "ekonomi cukup menyenangkan",
+        todos: [
+          {
+            _id: "653821ca355353d775eaec42",
+            name: "belajar ekonomi 1",
+            learningUrl: "https://www.hackerrank.com/",
+            projectId: "65381df59b16a27e018c9fa3",
+            isFinished: false,
+          },
+          {
+            _id: "653821ca355353d775eaec43",
+            name: "belajar ekonomi 2",
+            learningUrl: "https://www.hackerrank.com/",
+            projectId: "65381df59b16a27e018c9fa3",
+            isFinished: false,
+          },
+        ],
+        totalFinished: 0,
+      },
+    ],
+    Likes: 1000,
+    Ratings: 4.6,
+  });
 
   return (
     <>
@@ -100,11 +165,17 @@ export default function DashboardScreen() {
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data="100" isLike={true} title="Overview" />
-            <DashboardWidget data="4.6" isReview={true} />
+            <DashboardWidget
+              data={projectData.Likes.toString()}
+              isLike={true}
+            />
+            <DashboardWidget
+              data={projectData.Ratings.toString()}
+              isReview={true}
+            />
           </View>
           <ButtonGrid items={buttonItems} />
-          <DashboardProject projectData={projectData} />
+          <DashboardProject projects={projectData.Projects} />
         </ScrollView>
       </View>
     </>

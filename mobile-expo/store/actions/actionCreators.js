@@ -106,7 +106,7 @@ export const fetchLocations = () => {
       const { data } = await axios({
         method: "get",
         url: baseUrl + "pub/locations",
-      })
+      });
       dispatch({
         type: FETCH_LOCATIONS_SUCCESS,
         payload: data,
@@ -130,6 +130,25 @@ export const fetchCategories = () => {
       });
     } catch (err) {
       console.log(err);
+    }
+  };
+};
+
+export const fetchDataStudent = () => {
+  return async (dispatch, getState) => {
+    try {
+      const { access_token } = getState().auth;
+      // console.log(access_token);
+
+      const { data } = await axios.get(baseUrl + "student_profile", {
+        headers: {
+          access_token,
+        },
+      });
+      console.log(data);
+      dispatch({ type: STUDENT_PROFILE_FETCH_SUCCESS, payload: data });
+    } catch (error) {
+      console.log(error.response.data);
     }
   };
 };
