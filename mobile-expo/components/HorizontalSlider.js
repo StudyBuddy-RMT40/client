@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -7,9 +7,11 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import { useDispatch, useSelector } from "react-redux";
+import { getProjects } from "../store/actions/actionCreator";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -37,19 +39,21 @@ const LocationSVG = () => (
 );
 
 export default function HorizontalSlider(props) {
-  const { data, title } = props;
+  const { title } = props;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const image = require('../assets/dummy/hero-dummy.jpg')
 
-  const carouselItems = data.map((item, idx) => ({
-    name: item.name,
-    image: item.image,
-    description: item.description,
-    // rating:
-    goals: item.goals,
-    category: item.Category.name,
-    address: item.Teacher.address,
+  const handleDetail = () => {
+    navigation.push("Detail");
+  };
+  const projectReducer = useSelector(function (state) {
+    return state.projectReducer.projects;
+  });
 
-  }));
+  useEffect(() => {
+    dispatch(getProjects());
+  }, [dispatch]);
 
   return (
     <View style={styles.container}>
@@ -59,20 +63,15 @@ export default function HorizontalSlider(props) {
         showsHorizontalScrollIndicator={false}
         style={styles.carousel}
       >
-        {carouselItems.map((item, idx) => (
-       <TouchableOpacity onPress={() =>
-        navigation.push("Detail", {
-          project: {
-            name: item.name, 
-            description: item.description,
-            category: item.category,
-            goals: item.goals
-          },
-        })
-      } style={styles.card}>
-            <Image style={styles.image} source={item.image} />
+        {projectReducer.map(data => (
+          <TouchableOpacity
+            key={data._id}
+            onPress={handleDetail}
+            style={styles.card}
+          >
+            <Image style={styles.image} source={image} />
             <View style={styles.courseInfo}>
-              <Text style={styles.courseTitle}>{item.name}</Text>
+              <Text style={styles.courseTitle}>{data.name}</Text>
               <View style={styles.ratingContainer}>
                 <StarSVG />
                 <Text style={styles.courseRating}>4.5</Text>
@@ -80,9 +79,9 @@ export default function HorizontalSlider(props) {
             </View>
             <View style={styles.locationContainer}>
               <LocationSVG />
-              <Text style={styles.courseLocation}>{item.address}</Text>
+              <Text style={styles.courseLocation}>{data.Teacher.address}</Text>
             </View>
-            </TouchableOpacity>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>
@@ -117,6 +116,7 @@ const styles = StyleSheet.create({
   courseInfo: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center", 
     marginTop: 10,
     paddingHorizontal: 10,
   },
@@ -154,4 +154,5 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontFamily: "Lato-Light",
   },
+
 });
