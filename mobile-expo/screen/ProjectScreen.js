@@ -142,7 +142,7 @@ export default function ProjectScreen() {
             </View>
           )}
         </View>
-        <VerticalSlider data={data}/>
+        <VerticalSlider data={data} />
       </ScrollView>
     </>
   );
