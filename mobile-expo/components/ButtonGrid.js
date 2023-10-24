@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import { View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
 
 export default function ButtonGrid({ items }) {

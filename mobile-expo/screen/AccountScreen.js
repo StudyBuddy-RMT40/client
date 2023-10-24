@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,39 +10,43 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import { useAuth } from "../navigators/Authcontext";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
 import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../store/actions/actionCreator";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../store/actions/actionCreators";
 
 export default function AccountScreen() {
-  const { studentProfile } = useSelector((state) => state.userReducer)
-  const dispatch = useDispatch()
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isEditing, setIsEditing] = useState(false);
   const [userProfile, setUserProfile] = useState({
-    username: "",
-    email: "",
-    phoneNumber: "",
-    address: "",
+    name: "Riska",
+    email: "riska@gmail.com",
+    role: "student",
+    phone: "10239123012",
+    address: "Jalan jalan jalan",
+    documents: [
+      {
+        title: "Curicullum Vitae Riska",
+        file_url:
+          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      },
+      {
+        title: "Curicullum Vitae Riska 2",
+        file_url: "https://dummyimage.com/600x400/000/fff.jpeg",
+      },
+    ],
   });
-
-  useEffect(() => {
-    if (studentProfile.username) {
-      setUserProfile(studentProfile)
-    }
-  }, [studentProfile])
-
+  const { access_token } = useSelector((state) => {
+    return state.auth;
+  });
   const handleLogout = () => {
-    logout();
-    navigation.navigate("Login");
+    dispatch(logoutUser());
+    navigation.navigate("Home");
   };
-
   const handleChange = (field, value) => {
     setUserProfile({
       ...userProfile,
@@ -50,49 +54,71 @@ export default function AccountScreen() {
     });
   };
 
-  const handleSaveProfile = () => {
-    dispatch(updateUser({
-      username: userProfile.username,
-      email: userProfile.email,
-      phoneNumber: userProfile.phoneNumber,
-      address: userProfile.address
-    }))
-    setIsEditing(false);
+  const renderDocumentIcon = (url) => {
+    if (url.endsWith(".pdf")) {
+      return pdfIcon;
+    } else if (
+      url.endsWith(".jpeg") ||
+      url.endsWith(".jpg") ||
+      url.endsWith(".png")
+    ) {
+      return imageIcon;
+    }
+    return null;
   };
 
-  const handleEditProfile = () => {
-    setIsEditing(true)
-  }
+  const [documentCount, setDocumentCount] = useState(
+    userProfile.documents.length
+  );
+
+  const addNewDocument = () => {
+    setUserProfile((prevState) => ({
+      ...prevState,
+      documents: [...prevState.documents, { title: "", file_url: "" }],
+    }));
+  };
+
+  const removeDocument = (indexToRemove) => {
+    setUserProfile((prevState) => ({
+      ...prevState,
+      documents: prevState.documents.filter(
+        (_, index) => index !== indexToRemove
+      ),
+    }));
+  };
+
+  const handleEditSaveProfile = () => {
+    const areDocumentsValid = userProfile.documents.every(
+      (doc) => doc.title && doc.file_url
+    );
+
+    if (!areDocumentsValid) {
+      alert(
+        "Please fill out all document fields or remove empty ones before saving."
+      );
+      return;
+    }
+
+    setIsEditing(!isEditing);
+  };
 
   return (
     <SafeAreaView style={styles.containerSafeArea}>
       <ScrollView
         style={styles.contentContainerStyle}
-        contentContainerStyle={{ paddingBottom: 50 }}
-      >
+        contentContainerStyle={{ paddingBottom: 50 }}>
         <View style={styles.imageContainer}>
           <Image source={profileImage} style={styles.profileImage} />
-          <Text style={styles.username}>{userProfile.username}</Text>
+          <Text style={styles.username}>{userProfile.name}</Text>
         </View>
-
-        <Text style={styles.fieldTitle}>Username:</Text>
-        {isEditing ? (
-          <TextInput
-            style={styles.input}
-            value={userProfile.username}
-            onChangeText={(text) => handleChange("username", text)}
-          />
-        ) : (
-          <View style={styles.container}>
-            <Text>{userProfile.username}</Text>
-          </View>
-        )}
 
         <Text style={styles.fieldTitle}>Email:</Text>
         {isEditing ? (
-          <View style={styles.container}>
-            <Text>{userProfile.email}</Text>
-          </View>
+          <TextInput
+            style={styles.input}
+            value={userProfile.email}
+            onChangeText={(text) => handleChange("email", text)}
+          />
         ) : (
           <View style={styles.container}>
             <Text>{userProfile.email}</Text>
@@ -101,9 +127,11 @@ export default function AccountScreen() {
 
         <Text style={styles.fieldTitle}>Role:</Text>
         {isEditing ? (
-          <View style={styles.container}>
-            <Text>{userProfile.role}</Text>
-          </View>
+          <TextInput
+            style={styles.input}
+            value={userProfile.role}
+            onChangeText={(text) => handleChange("role", text)}
+          />
         ) : (
           <View style={styles.container}>
             <Text>{userProfile.role}</Text>
@@ -114,12 +142,12 @@ export default function AccountScreen() {
         {isEditing ? (
           <TextInput
             style={styles.input}
-            value={userProfile.phoneNumber}
-            onChangeText={(text) => handleChange("phoneNumber", text)}
+            value={userProfile.phone}
+            onChangeText={(text) => handleChange("phone", text)}
           />
         ) : (
           <View style={styles.container}>
-            <Text>{userProfile.phoneNumber}</Text>
+            <Text>{userProfile.phone}</Text>
           </View>
         )}
 
@@ -136,35 +164,76 @@ export default function AccountScreen() {
           </View>
         )}
 
-        {/* <Button
+        <Text style={styles.fieldTitle}>Documents:</Text>
+        {isEditing ? (
+          <>
+            {userProfile.documents.map((doc, index) => (
+              <View key={index} style={styles.documentInputGroup}>
+                <View style={styles.documentInputContainer}>
+                  <TextInput
+                    placeholder='Document Title'
+                    value={doc.title}
+                    style={[styles.input, styles.documentInput]}
+                    onChangeText={(text) => {
+                      const newDocs = [...userProfile.documents];
+                      newDocs[index].title = text;
+                      setUserProfile({ ...userProfile, documents: newDocs });
+                    }}
+                  />
+                  <TextInput
+                    placeholder='Document URL'
+                    value={doc.file_url}
+                    style={[styles.input, styles.documentInput]}
+                    onChangeText={(text) => {
+                      const newDocs = [...userProfile.documents];
+                      newDocs[index].file_url = text;
+                      setUserProfile({ ...userProfile, documents: newDocs });
+                    }}
+                  />
+                </View>
+                <TouchableOpacity
+                  onPress={() => removeDocument(index)}
+                  style={styles.roundRemoveButton}>
+                  <Text style={styles.removeButtonText}>X</Text>
+                  {/* Kalau sempet ganti Icon */}
+                </TouchableOpacity>
+              </View>
+            ))}
+            <Button
+              text='Add More Documents'
+              onPress={addNewDocument}
+              style={styles.addButton}
+            />
+          </>
+        ) : (
+          userProfile.documents.map((doc, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.documentContainer}
+              onPress={() => Linking.openURL(doc.file_url)}>
+              <Image
+                source={renderDocumentIcon(doc.file_url)}
+                style={styles.documentIcon}
+              />
+              <Text>{doc.title}</Text>
+            </TouchableOpacity>
+          ))
+        )}
+
+        <Button
           text={isEditing ? "Save" : "Edit Profile"}
           onPress={handleEditSaveProfile}
           style={isEditing ? styles.saveButton : styles.editButton}
-        /> */}
-        {!isEditing ? (
+        />
+        {!isEditing && (
           <Button
-            text={"Edit Profile"}
-            onPress={handleEditProfile}
-            style={styles.editButton}
-          />
-        ) : (
-          <Button
-            text={"Save"}
-            onPress={handleSaveProfile}
-            style={styles.saveButton}
+            text='Logout'
+            onPress={handleLogout}
+            style={styles.logoutButton}
           />
         )}
-        {
-          !isEditing && (
-            <Button
-              text="Logout"
-              onPress={handleLogout}
-              style={styles.logoutButton}
-            />
-          )
-        }
-      </ScrollView >
-    </SafeAreaView >
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

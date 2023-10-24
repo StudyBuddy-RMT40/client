@@ -1,56 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Linking,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import CustomHeader from "../components/CustomHeader";
-import getPaymentGatewayUrl from "../config/midtrans";
 
 export default function PaymentScreen() {
-  const [redirectUrl, setRedirectUrl] = useState(null);
-
   const navigation = useNavigation();
 
   const handleCancel = () => {
     navigation.goBack();
   };
 
-  const handleContinuePayment = async () => {
-    try {
-      const parameter = {
-        transaction_details: {
-          order_id:
-            "TRANSACTION_" +
-            Math.floor(10000000 + Math.random() * 9000000) +
-            "_" +
-            1,
-          gross_amount: totalAmount,
-        },
-        credit_card: {
-          secure: true,
-        },
-        customer_details: {
-          email: "tester@mail.com",
-          name: "tester",
-        },
-      };
-  
-      const redirectUrl = await getPaymentGatewayUrl(parameter, orderDetails);
-  
-      setRedirectUrl(redirectUrl);
-    } catch (error) {
-      console.error("Error creating Snap Token:", error);
-    }
-  };
+  const handleContinuePayment = () => {
+    const paymentGatewayURL = "https://www.midtrans.com/";
 
-useEffect(() => {
-  if (redirectUrl) {
-    navigation.push("Midtrans", { paymentGatewayURL: redirectUrl.redirect_url });
-  }
-}, [redirectUrl, navigation]);
+    Linking.openURL(paymentGatewayURL).catch((err) =>
+      console.error("An error occurred: ", err)
+    );
+  };
 
   const orderDetails = [
     { label: "Lesson - Ternak Padi", price: 1000000 },
-    { label: "Study - Bisnis Peternakan", price: 2500000 },
-    { label: "Intimidate - Publication Ternak", price: 3500000 },
+    { label: "Study - Bisnis Peternakan", price: 1500000 },
+    { label: "Intimidate - Publication Ternak", price: 2500000 },
   ];
 
   const totalAmount = orderDetails.reduce(
@@ -93,7 +70,6 @@ useEffect(() => {
         >
           <Text style={styles.buttonText}>Continue Payment</Text>
         </TouchableOpacity>
-
         <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
           <Text style={styles.buttonText}>Cancel</Text>
         </TouchableOpacity>
