@@ -36,13 +36,13 @@ const ProjectCard = ({
   else progressBarColor = "green";
 
   let displayText;
-  if (status === "Submitted") displayText = "Waiting For Buddy Approval";
-  else if (status === "Accepted") displayText = "Waiting For Payment";
-  else if (status === "Paid") displayText = "0% Complete";
+  if (status === "submitted") displayText = "Waiting For Buddy Approval";
+  else if (status === "accepted") displayText = "Waiting For Payment";
+  else if (status === "paid") displayText = "0% Complete";
   else if (
-    status === "On Progress" ||
-    status === "Finished" ||
-    status === "To Review"
+    status === "onProgress" ||
+    status === "finished" ||
+    status === "toReview"
   )
     displayText = `${progress}% Complete`;
 
@@ -100,18 +100,18 @@ const DashboardProject = ({ projectData = [] }) => {
       case "Proposed":
         filteredData = projectData.filter(
           (project) =>
-            project.status === "Submitted" || project.status === "Accepted"
+            project.status === "submitted" || project.status === "Accepted"
         );
         break;
       case "On Progress":
         filteredData = projectData.filter(
           (project) =>
-            project.status === "Paid" || project.status === "On Progress"
+            project.status === "paid" || project.status === "On Progress"
         );
         break;
       case "To Review":
         filteredData = projectData.filter(
-          (project) => project.status === "To Review"
+          (project) => project.status === "toReview"
         );
         break;
       default:
