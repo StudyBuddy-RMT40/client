@@ -21,13 +21,11 @@ const ProjectCard = ({
   learningMaterials,
 }) => {
   const navigation = useNavigation();
-  const { accessToken } = useAuth();
+  const { isLoggedIn } = useAuth();
 
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     navigation.navigate("Login");
-  //   }
-  // }, [accessToken, navigation]);
+  if (!isLoggedIn) {
+    navigation.navigate("Login")
+  }
 
   let progressBarColor;
   if (progress <= 25) progressBarColor = "red";

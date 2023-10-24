@@ -3,10 +3,14 @@ import LandingPageStack from "./MainStack";
 import AccountStack from "./AccountStack";
 import DashboardStack from "./DashboardStack";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useAuth } from "./Authcontext";
+import { useNavigation } from "@react-navigation/native";
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabStacks() {
+  // const { isLoggedIn } = useAuth()
+  // const navigation = useNavigation()
   return (
     <Tab.Navigator
       initialRouteName="Home"

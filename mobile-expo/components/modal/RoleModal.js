@@ -9,7 +9,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   const handleSelectRole = (role) => {
     console.log("Selected role:", role);
     setSelectedRole(role);
-    if (role === "Student") {
+    if (role === "student") {
       onSave(role, []);
       onClose();
     }
@@ -40,20 +40,20 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
             <>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSelectRole("Student")}
+                onPress={() => handleSelectRole("student")}
               >
                 <Text>Student</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSelectRole("Buddy")}
+                onPress={() => handleSelectRole("buddy")}
               >
                 <Text>Buddy</Text>
               </TouchableOpacity>
             </>
           )}
 
-          {selectedRole === "Buddy" &&
+          {selectedRole === "buddy" &&
             dummySpecializations.map((spec, index) => (
               <TouchableOpacity
                 key={index}
@@ -67,7 +67,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
               </TouchableOpacity>
             ))}
 
-          {selectedRole === "Buddy" && specialization.length > 0 && (
+          {selectedRole === "buddy" && specialization.length > 0 && (
             <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
               <Text>Done</Text>
             </TouchableOpacity>

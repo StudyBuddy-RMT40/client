@@ -1,6 +1,6 @@
 import { STUDENT_PROFILE_FETCH_SUCCESS, BUDDY_PROFILE_FETCH_SUCCESS, PROJECTS_FETCH_SUCCESS, PROJECT_FETCH_SUCCESS, RATINGS_FETCH_SUCCESS, USERS_FETCH_SUCCESS, USER_FETCH_SUCCESS, REVIEWS_FETCH_SUCCESS, CATEGORIES_FETCH_SUCCESS, CATEGORIES_BY_NAME_FETCH_SUCCESS, SPECIALIST_FETCH_SUCCESS, SPECIALIST_BY_ID_FETCH_SUCCESS, LIKES_FETCH_SUCCESS, TODOS_FETCH_SUCCESS } from './actionTypes';
 
-const BASE_URL = 'https://09f5-182-0-147-255.ngrok-free.app'
+const BASE_URL = 'http://localhost:3000'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 
@@ -10,6 +10,7 @@ export function handleLogin(form) {
             const { data } = await axios.post(`${BASE_URL}/login`, form)
             await AsyncStorage.setItem('access_token', data.access_token)
         } catch (err) {
+            console.log(err)
             throw err
         }
     }
