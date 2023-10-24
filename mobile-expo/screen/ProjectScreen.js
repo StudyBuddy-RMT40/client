@@ -4,15 +4,26 @@ import CustomHeader from "../components/CustomHeader";
 import VerticalSlider from "../components/VerticalSlider";
 import { useSelector } from "react-redux";
 
-export default function ProjectScreen() {
+export default function ProjectScreen({route}) {
+  const { category } = route.params;
   const [nameQuery, setNameQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
 
   const projectReducer = useSelector(function (state) {
+    // console.log(state, '<<<<<<< ini di project screen')
     return state.projectReducer.projects;
   });
+
+  const filterDataByCategory = (category) => {
+    const filteredData = projectReducer.filter(
+      (item) => item.Category.groupBy === category
+    );
+    return filteredData;
+  };
+
+  const filteredProjects = filterDataByCategory(category);
 
   const filteredNames = projectReducer
     .filter((project) =>

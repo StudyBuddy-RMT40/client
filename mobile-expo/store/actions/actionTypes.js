@@ -1,5 +1,7 @@
 export const LOGIN_SUCCESS = "login/success";
 export const LOGOUT_SUCCESS = "logout/success";
+export const FETCH_PROJECTS = "projects/success"
+export const FETCH_PROJECTS_BY_ID = "projectsById/success"
 
 export const ADD_PROJECT_SUCCESS = "add/success";
 export const UPDATE_ROLE_SUCCESS = "role/success";
