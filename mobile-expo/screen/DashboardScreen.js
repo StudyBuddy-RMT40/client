@@ -1,16 +1,40 @@
 import { useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
-// import { useAuth } from "../navigators/Authcontext";
 import ButtonGrid from "../components/ButtonGrid";
 import allProject from "../assets/public.png";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";
 import DashboardProject from "../components/DashboardProject";
 import CustomHeader from "../components/CustomHeader";
+import { useSelector } from "react-redux";
+import ErrorModal from "../components/modal/ErrorModal";
+import RoleModal from "../components/modal/RoleModal";
 
 export default function DashboardScreen() {
-  // const { isLoggedIn } = useAuth();
   const navigation = useNavigation();
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const { role } = useSelector((state) => {
+    return state.auth;
+  });
+
+  const [hasRunEffect, setHasRunEffect] = useState(false);
+
+  useFocusEffect(() => {
+    if (!hasRunEffect) {
+      if (!role) {
+        setModalMessage("What role do you prefer?");
+        setShowModal(true);
+      } else if (role === "buddy") {
+        console.log("yooo buddy");
+      } else if (role === "student") {
+        console.log("yooo student");
+      }
+
+      setHasRunEffect(true); // Mark the effect as run
+    }
+  }, [hasRunEffect]);
 
   const buttonItems = [
     {
@@ -95,18 +119,33 @@ export default function DashboardScreen() {
 
   return (
     <>
-      <CustomHeader title="Dashboard" />
+      <CustomHeader title='Dashboard' />
 
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data="100" isLike={true} title="Overview" />
-            <DashboardWidget data="4.6" isReview={true} />
+            <DashboardWidget data='100' isLike={true} title='Overview' />
+            <DashboardWidget data='4.6' isReview={true} />
           </View>
           <ButtonGrid items={buttonItems} />
           <DashboardProject projectData={projectData} />
         </ScrollView>
       </View>
+      <ErrorModal
+        visible={showModal}
+        title='Role Validation'
+        message={modalMessage}
+        onClose={() => {
+          setShowModal(false), setShowRoleModal(true);
+        }}
+      />
+      <RoleModal
+        isVisible={showRoleModal}
+        onClose={() => setShowRoleModal(false)}
+        onSave={() => {
+          setShowRoleModal(false);
+        }}
+      />
     </>
   );
 }

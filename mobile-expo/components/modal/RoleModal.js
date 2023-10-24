@@ -1,17 +1,39 @@
 import React, { useState } from "react";
 import { View, Modal, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
+import { updateStatusRole } from "../../store/actions/actionCreators";
+import ErrorModal from "./ErrorModal";
 
 const RoleModal = ({ isVisible, onClose, onSave }) => {
+  // invisible show modal
+  // onclose close modal
+  // onsave lanjutin ke specialist
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const [selectedRole, setSelectedRole] = useState(null);
   const [specialization, setSpecialization] = useState([]);
-  const dummySpecializations = ["Math", "Science", "Literature"];
+  const dummySpecializations = ["Math", "Science", "Literature"]; // ntr dari fetch category
+  const dispatch = useDispatch();
 
   const handleSelectRole = (role) => {
-    console.log("Selected role:", role);
     setSelectedRole(role);
     if (role === "student") {
-      onSave(role, []);
-      onClose();
+      // update student
+      dispatch(updateStatusRole("student"))
+        .then((response) => {
+          if (response.success) {
+            onSave(role, []);
+            onClose();
+          } else {
+            setModalMessage(
+              "An error occurred during login: " + response.error.message
+            );
+            setShowModal(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -31,7 +53,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   };
 
   return (
-    <Modal animationType="slide" transparent={true} visible={isVisible}>
+    <Modal animationType='slide' transparent={true} visible={isVisible}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.title}>Select your role</Text>
@@ -40,14 +62,12 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
             <>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSelectRole("student")}
-              >
+                onPress={() => handleSelectRole("student")}>
                 <Text>Student</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSelectRole("buddy")}
-              >
+                onPress={() => handleSelectRole("buddy")}>
                 <Text>Buddy</Text>
               </TouchableOpacity>
             </>
@@ -61,8 +81,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
                   styles.button,
                   specialization.includes(spec) && styles.selectedButton,
                 ]}
-                onPress={() => toggleSpecialist(spec)}
-              >
+                onPress={() => toggleSpecialist(spec)}>
                 <Text>{spec}</Text>
               </TouchableOpacity>
             ))}
@@ -74,6 +93,14 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
           )}
         </View>
       </View>
+      <ErrorModal
+        visible={showModal}
+        title='Role Validation'
+        message={modalMessage}
+        onClose={() => {
+          setShowModal(false);
+        }}
+      />
     </Modal>
   );
 };

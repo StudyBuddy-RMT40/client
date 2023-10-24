@@ -1,4 +1,8 @@
-import { LOGIN_SUCCESS, LOGOUT_SUCCESS } from "../actions/actionTypes";
+import {
+  LOGIN_SUCCESS,
+  LOGOUT_SUCCESS,
+  UPDATE_ROLE_SUCCESS,
+} from "../actions/actionTypes";
 
 const initialState = {
   role: "",
@@ -11,14 +15,19 @@ export default function authReducer(state = initialState, action) {
       return {
         ...state,
         role: action.payload.role,
-        access_token: action.payload.data
+        access_token: action.payload.data,
       };
-      case LOGOUT_SUCCESS:
-        return {
-          ...state,
-          role: "",
-          access_token: "",
-        };
+    case LOGOUT_SUCCESS:
+      return {
+        ...state,
+        role: "",
+        access_token: "",
+      };
+    case UPDATE_ROLE_SUCCESS:
+      return {
+        ...state,
+        role: action.payload,
+      };
     default:
       return state;
   }
