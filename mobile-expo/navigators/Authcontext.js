@@ -1,68 +1,61 @@
-import React, { createContext, useState, useContext } from "react";
-import { useDispatch } from "react-redux"
-import { handleLogin, handleLogout, handleRegister } from "../store/actions/actionCreator";
+// import React, { createContext, useState, useContext, useEffect } from "react";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const AuthContext = createContext();
+// const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
-  const dispatch = useDispatch()
+// export const AuthProvider = ({ children }) => {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//   const [accessToken, setAccessToken] = useState(null);
 
-  const login = async (email, password) => {
-    console.log("a")
-    return dispatch(handleLogin({ email, password }))
-      .then(() => {
-        setIsLoggedIn(true)
-      })
-      .catch((err) => {
-        throw err
-      })
-  };
+//   useEffect(() => {
+//     const storeAccessToken = async () => {
+//       try {
+//         if (accessToken) {
+//           await AsyncStorage.setItem("accessToken", accessToken);
+//         } else {
+//           await AsyncStorage.removeItem("accessToken");
+//         }
+//       } catch (error) {
+//         console.log("Error saving access token:", error);
+//       }
+//     };
 
-  const register = (username, email, password, phoneNumber, address) => {
-    return dispatch(handleRegister({ username, email, password, phoneNumber, address }))
-      .catch((err) => {
-        throw err
-      })
-  };
+//     storeAccessToken();
+//   }, [accessToken]);
 
-  const updateUserRoleAndSpec = (role, specs) => {
-    if (currentUser) {
-      setCurrentUser((prev) => ({ ...prev, role, specializations: specs }));
-    }
-  };
+//   useEffect(() => {
+//     const fetchAccessToken = async () => {
+//       try {
+//         const storedAccessToken = await AsyncStorage.getItem("accessToken");
+//         if (storedAccessToken) {
+//           setAccessToken(storedAccessToken);
+//         }
+//       } catch (error) {
+//         console.log("Error fetch access token:", error);
+//       }
+//     };
 
-  const logout = async () => {
-    // dispatch(handleLogout())
-    //   .then(() => {
-    //     setIsLoggedIn(false)
-    //   })
-    try {
-      dispatch(handleLogout())
-      setIsLoggedIn(false)
-    } catch (err) {
+//     fetchAccessToken();
+//   }, []);
 
-    }
-  };
+//   const login = () => {
+//     setIsLoggedIn(true);
+//     setAccessToken("123123");
+//     console.log("Logging in...");
+//   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn,
-        login,
-        logout,
-        register,
-        currentUser,
-        updateUserRoleAndSpec,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
+//   const logout = () => {
+//     setIsLoggedIn(false);
+//     setAccessToken(null);
+//   };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+//   return (
+//     <AuthContext.Provider value={{ isLoggedIn, login, logout, accessToken }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => {
+//   return useContext(AuthContext);
+// };

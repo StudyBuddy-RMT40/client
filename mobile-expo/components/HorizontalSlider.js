@@ -1,5 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   View,
   ScrollView,
@@ -7,11 +6,12 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  TouchableOpacity,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { useDispatch, useSelector } from "react-redux";
-import { getProjects } from "../store/actions/actionCreator";
+import heroDummy from "../assets/dummy/hero-dummy.jpg";
+import dummy1 from "../assets/dummy/dummy1.png";
+import dummy2 from "../assets/dummy/dummy2.png";
+import dummy3 from "../assets/dummy/dummy3.png";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -38,46 +38,27 @@ const LocationSVG = () => (
   </Svg>
 );
 
-export default function HorizontalSlider(props) {
-  const { data, title, searchQuery } = props;
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const image = require('../assets/dummy/hero-dummy.jpg')
-
-  const handleDetail = () => {
-    navigation.push("Detail");
-  };
-  const projectReducer = useSelector(function (state) {
-    return state.projectReducer.projects;
-  });
-
-  const filteredData = projectReducer.filter(data =>
-    data && data.Category && data.Category.name &&
-    data.Category.name.includes(data.Category.name) &&
-    data.name && data.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  useEffect(() => {
-    dispatch(getProjects());
-  }, [dispatch]);
+export default function HorizontalSlider() {
+  const carouselItems = [
+    { text: "Ini Nama Project 1", image: heroDummy },
+    { text: "Ini Nama Project 2", image: dummy1 },
+    { text: "Ini Nama Project 3", image: dummy2 },
+    { text: "Ini Nama Project 4", image: dummy3 },
+  ];
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>Ini Judul</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.carousel}
       >
-        {filteredData.map(data => (
-          <TouchableOpacity
-            key={data._id}
-            onPress={handleDetail}
-            style={styles.card}
-          >
-            <Image style={styles.image} source={image} />
+        {carouselItems.map((item, idx) => (
+          <View key={idx} style={styles.card}>
+            <Image style={styles.image} source={item.image} />
             <View style={styles.courseInfo}>
-              <Text style={styles.courseTitle}>{data.name}</Text>
+              <Text style={styles.courseTitle}>{item.text}</Text>
               <View style={styles.ratingContainer}>
                 <StarSVG />
                 <Text style={styles.courseRating}>4.5</Text>
@@ -85,9 +66,9 @@ export default function HorizontalSlider(props) {
             </View>
             <View style={styles.locationContainer}>
               <LocationSVG />
-              <Text style={styles.courseLocation}>{data.Teacher.address}</Text>
+              <Text style={styles.courseLocation}>Location</Text>
             </View>
-          </TouchableOpacity>
+          </View>
         ))}
       </ScrollView>
     </View>
@@ -122,7 +103,6 @@ const styles = StyleSheet.create({
   courseInfo: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center", 
     marginTop: 10,
     paddingHorizontal: 10,
   },
@@ -160,5 +140,4 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontFamily: "Lato-Light",
   },
-
 });

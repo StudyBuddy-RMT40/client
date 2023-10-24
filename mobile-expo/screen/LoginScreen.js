@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Button as Btn
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
-import { useAuth } from "../navigators/Authcontext";
 import ErrorModal from "../components/modal/ErrorModal";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/actions/actionCreators";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
@@ -20,17 +20,32 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { login, isLoggedIn } = useAuth();
-  const navigation = useNavigation();
+  const { access_token, role } = useSelector((state) => {
+    return state.auth;
+  });
 
-  const handleLogin = async () => {
-    try {
-      await login(username, password);
-      navigation.navigate("Dashboard");
-    } catch (error) {
-      setModalMessage(error.response.data.message);
-      setShowModal(true);
-    }
+  useEffect(() => {
+    console.log(access_token);
+  }, []);
+
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handleLogin = () => {
+    dispatch(loginUser({ username, password }))
+      .then((response) => {
+        if (response.success) {
+          navigation.navigate("Dashboard");
+        } else {
+          setModalMessage(
+            "An error occurred during login: " + response.error.message
+          );
+          setShowModal(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleRegister = () => {
@@ -43,19 +58,21 @@ export default function LoginScreen() {
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder='Email'
         value={username}
         onChangeText={(text) => setUsername(text)}
+        editable={true}
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder='Password'
         secureTextEntry={true}
         value={password}
         onChangeText={(text) => setPassword(text)}
+        editable={true}
       />
       <View style={{ width: "100%" }}>
-        <Button onPress={handleLogin} text="Login" style={styles.buttonSize} />
+        <Button onPress={handleLogin} text='Login' style={styles.buttonSize} />
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>Don't have an account yet?</Text>
           <TouchableOpacity onPress={handleRegister}>
@@ -65,7 +82,7 @@ export default function LoginScreen() {
       </View>
       <ErrorModal
         visible={showModal}
-        title="Error"
+        title='Error'
         message={modalMessage}
         onClose={() => setShowModal(false)}
       />

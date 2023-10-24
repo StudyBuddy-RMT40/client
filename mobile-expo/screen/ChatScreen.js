@@ -4,7 +4,7 @@ import { View, StyleSheet } from "react-native";
 import * as TalkRn from "@talkjs/expo";
 import CustomHeader from "../components/CustomHeader";
 
-export default function ChatScreen(dataUser,otherUser) {
+export default function ChatScreen(props) {
   const me = {
     id: "123456789",
     name: "Alice",
@@ -32,9 +32,9 @@ export default function ChatScreen(dataUser,otherUser) {
 
   return (
     <>
-      <CustomHeader title='Chat With Buddy' />
+      <CustomHeader title="Chat With Buddy" />
       <View style={styles.container}>
-        <TalkRn.Session appId='t8orPdLy' me={me}>
+        <TalkRn.Session appId="t8orPdLy" me={me}>
           <View style={styles.chatboxContainer}>
             <TalkRn.Chatbox conversationBuilder={conversationBuilder} />
           </View>

@@ -11,7 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
-import { useAuth } from "../navigators/Authcontext";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../store/actions/actionCreators";
 import ErrorModal from "../components/modal/ErrorModal";
 
 export default function RegisterScreen() {
@@ -20,24 +21,82 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [usernameError, setUsernameError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [phoneError, setPhoneError] = useState(null);
+  const [addressError, setAddressError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const dispatch = useDispatch();
 
-  // const isValidEmail = (email) => {
-  //   return /\S+@\S+\.\S+/.test(email);
-  // };
+  const isValidEmail = (email) => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
+
+  const isEmailAlreadyTaken = (email) => {
+    // return false;
+  };
 
   const navigation = useNavigation();
-  const { register } = useAuth();
 
-  const handleRegister = async () => {
-    try {
-      await register(username, email, password, phoneNumber, address);
-      navigation.navigate("Dashboard");
-    } catch (err) {
-      setModalMessage(err.response.data.message);
-      setShowModal(true);
+  const handleRegister = () => {
+    setUsernameError(null);
+    setEmailError(null);
+    setPasswordError(null);
+    setPhoneError(null);
+    setAddressError(null);
+
+    let hasError = false;
+
+    if (!username) {
+      setUsernameError("Username must be filled");
+      hasError = true;
     }
+
+    if (!email) {
+      setEmailError("Email must be filled");
+      hasError = true;
+    } else if (!isValidEmail(email)) {
+      setEmailError("Format Email is not valid");
+      hasError = true;
+    }
+
+    if (!password) {
+      setPasswordError("Password must be filled");
+      hasError = true;
+    }
+
+    if (!phoneNumber) {
+      setPhoneError("Phone Number must be filled");
+      hasError = true;
+    }
+
+    if (!address) {
+      setAddressError("Address must be filled");
+      hasError = true;
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    dispatch(registerUser({ username, email, password, phoneNumber, address }))
+      .then((response) => {
+        if (response.success) {
+          navigation.navigate("Login");
+        } else {
+          setModalMessage(
+            "An error occurred during register: " + response.error.message
+          );
+          setShowModal(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // TODO:
   };
 
   const handleLogin = () => {
@@ -48,50 +107,54 @@ export default function RegisterScreen() {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        style={styles.backButton}
-      >
-        <Ionicons name="arrow-back" size={24} color="white" />
+        style={styles.backButton}>
+        <Ionicons name='arrow-back' size={24} color='white' />
       </TouchableOpacity>
       <Image source={Logo} style={styles.logo} />
       <Text style={styles.title}>Register</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder='Username'
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
+      {usernameError && <Text style={styles.errorText}>{usernameError}</Text>}
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
+        placeholder='Email'
+        keyboardType='email-address'
         value={email}
         onChangeText={(text) => setEmail(text)}
       />
+      {emailError && <Text style={styles.errorText}>{emailError}</Text>}
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder='Password'
         secureTextEntry={true}
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
+      {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
       <TextInput
         style={styles.input}
-        placeholder="Phone Number"
-        keyboardType="phone-pad"
+        placeholder='Phone Number'
+        keyboardType='phone-pad'
         value={phoneNumber}
         onChangeText={(text) => setPhoneNumber(text)}
       />
+      {phoneError && <Text style={styles.errorText}>{phoneError}</Text>}
       <TextInput
         style={styles.input}
-        placeholder="Address"
+        placeholder='Address'
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
+      {addressError && <Text style={styles.errorText}>{addressError}</Text>}
       <View style={{ width: "100%" }}>
         <TouchableOpacity onPress={handleRegister}>
           <Button
             onPress={handleRegister}
-            text="Register"
+            text='Register'
             style={styles.buttonSize}
           />
         </TouchableOpacity>
@@ -104,7 +167,7 @@ export default function RegisterScreen() {
       </View>
       <ErrorModal
         visible={showModal}
-        title="Registration Error"
+        title='Error'
         message={modalMessage}
         onClose={() => setShowModal(false)}
       />
