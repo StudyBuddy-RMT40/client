@@ -1,7 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LandingPageScreen from "../screen/LandingPageScreen";
-import DetailScreen from "../screen/DetailScreen";
 import ProjectScreen from "../screen/ProjectScreen";
+import DetailScreen from "../screen/DetailScreen";
+import FinishScreen from "../screen/FinishScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -14,8 +15,8 @@ export default function LandingPageStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Detail"
-        component={DetailScreen}
+        name="Finish"
+        component={FinishScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
