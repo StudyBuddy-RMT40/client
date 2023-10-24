@@ -17,7 +17,7 @@ import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
 import { useSelector, useDispatch } from "react-redux";
-import { getStudentProfile } from "../store/actions/actionCreator";
+import { updateUser } from "../store/actions/actionCreator";
 
 export default function AccountScreen() {
   const { studentProfile } = useSelector((state) => state.userReducer)
@@ -28,17 +28,15 @@ export default function AccountScreen() {
   const [userProfile, setUserProfile] = useState({
     username: "",
     email: "",
-    role: "",
     phoneNumber: "",
     address: "",
   });
 
   useEffect(() => {
-    dispatch(getStudentProfile())
-      .then(() => {
-        setUserProfile(studentProfile)
-      })
-  }, [])
+    if (studentProfile.username) {
+      setUserProfile(studentProfile)
+    }
+  }, [studentProfile])
 
   const handleLogout = () => {
     logout();
@@ -52,9 +50,19 @@ export default function AccountScreen() {
     });
   };
 
-  const handleEditSaveProfile = () => {
-    setIsEditing(!isEditing);
+  const handleSaveProfile = () => {
+    dispatch(updateUser({
+      username: userProfile.username,
+      email: userProfile.email,
+      phoneNumber: userProfile.phoneNumber,
+      address: userProfile.address
+    }))
+    setIsEditing(false);
   };
+
+  const handleEditProfile = () => {
+    setIsEditing(true)
+  }
 
   return (
     <SafeAreaView style={styles.containerSafeArea}>
@@ -64,32 +72,41 @@ export default function AccountScreen() {
       >
         <View style={styles.imageContainer}>
           <Image source={profileImage} style={styles.profileImage} />
-          <Text style={styles.username}>{studentProfile.username}</Text>
+          <Text style={styles.username}>{userProfile.username}</Text>
         </View>
 
-        <Text style={styles.fieldTitle}>Email:</Text>
+        <Text style={styles.fieldTitle}>Username:</Text>
         {isEditing ? (
           <TextInput
             style={styles.input}
-            value={userProfile.email}
-            onChangeText={(text) => handleChange("email", text)}
+            value={userProfile.username}
+            onChangeText={(text) => handleChange("username", text)}
           />
         ) : (
           <View style={styles.container}>
-            <Text>{studentProfile.email}</Text>
+            <Text>{userProfile.username}</Text>
+          </View>
+        )}
+
+        <Text style={styles.fieldTitle}>Email:</Text>
+        {isEditing ? (
+          <View style={styles.container}>
+            <Text>{userProfile.email}</Text>
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <Text>{userProfile.email}</Text>
           </View>
         )}
 
         <Text style={styles.fieldTitle}>Role:</Text>
         {isEditing ? (
-          <TextInput
-            style={styles.input}
-            value={userProfile.role}
-            onChangeText={(text) => handleChange("role", text)}
-          />
+          <View style={styles.container}>
+            <Text>{userProfile.role}</Text>
+          </View>
         ) : (
           <View style={styles.container}>
-            <Text>{studentProfile.role}</Text>
+            <Text>{userProfile.role}</Text>
           </View>
         )}
 
@@ -98,11 +115,11 @@ export default function AccountScreen() {
           <TextInput
             style={styles.input}
             value={userProfile.phoneNumber}
-            onChangeText={(text) => handleChange("phone", text)}
+            onChangeText={(text) => handleChange("phoneNumber", text)}
           />
         ) : (
           <View style={styles.container}>
-            <Text>{studentProfile.phoneNumber}</Text>
+            <Text>{userProfile.phoneNumber}</Text>
           </View>
         )}
 
@@ -115,15 +132,28 @@ export default function AccountScreen() {
           />
         ) : (
           <View style={styles.container}>
-            <Text>{studentProfile.address}</Text>
+            <Text>{userProfile.address}</Text>
           </View>
         )}
 
-        <Button
+        {/* <Button
           text={isEditing ? "Save" : "Edit Profile"}
           onPress={handleEditSaveProfile}
           style={isEditing ? styles.saveButton : styles.editButton}
-        />
+        /> */}
+        {!isEditing ? (
+          <Button
+            text={"Edit Profile"}
+            onPress={handleEditProfile}
+            style={styles.editButton}
+          />
+        ) : (
+          <Button
+            text={"Save"}
+            onPress={handleSaveProfile}
+            style={styles.saveButton}
+          />
+        )}
         {
           !isEditing && (
             <Button

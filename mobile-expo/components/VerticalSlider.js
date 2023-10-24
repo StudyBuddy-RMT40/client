@@ -38,7 +38,7 @@ const LocationSVG = () => (
   </Svg>
 );
 
-export default function VerticalSlider() {
+export default function VerticalSlider({ name, location }) {
   const dispatch = useDispatch();
   const projectReducer = useSelector(function (state) {
     return state.projectReducer.projects
@@ -49,10 +49,17 @@ export default function VerticalSlider() {
     dispatch(getProjects());
   }, [dispatch]); 
 
+  const filteredProjects = projectReducer.filter(data => {
+    const projectName = data.name.toLowerCase();
+    const projectLocation = data.Teacher.address.toLowerCase();
+
+    return projectName.includes(name.toLowerCase()) && projectLocation.includes(location.toLowerCase());
+  });
+
   return (
     <View style={styles.verticalCardContainer}>
       <ScrollView vertical showsVerticalScrollIndicator={false}>
-        {projectReducer.map(data => (
+        {filteredProjects.map(data => (
            <TouchableOpacity key={data._id}>
             <View style={styles.verticalCard}>
               <Image style={styles.verticalCardImage} source={image} />
