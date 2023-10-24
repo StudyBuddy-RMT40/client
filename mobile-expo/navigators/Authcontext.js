@@ -41,12 +41,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    AsyncStorage.removeItem("access_token")
-      .then(() => {
-        setIsLoggedIn(false);
-      })
-    // setCurrentUser(null);
+  const logout = async () => {
+    await AsyncStorage.removeItem("access_token")
+    setIsLoggedIn(false)
   };
 
   return (

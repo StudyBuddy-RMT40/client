@@ -38,8 +38,8 @@ export default function AccountScreen() {
     }
   }, [studentProfile])
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigation.navigate("Login");
   };
 

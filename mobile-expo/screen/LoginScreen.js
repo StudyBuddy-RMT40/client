@@ -69,10 +69,6 @@ export default function LoginScreen() {
             <Text style={styles.registerButton}>Register here</Text>
           </TouchableOpacity>
         </View>
-        {/* <Btn
-          title="Google Sign in"
-          onPress={() => navigation.navigate("GoogleLogin")}
-        /> */}
       </View>
       <ErrorModal
         visible={showModal}

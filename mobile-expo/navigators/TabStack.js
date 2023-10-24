@@ -5,7 +5,6 @@ import DashboardStack from "./DashboardStack";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useAuth } from "./Authcontext";
 import { useNavigation } from "@react-navigation/native";
-import { Alert } from "react-native";
 
 const Tab = createMaterialBottomTabNavigator();
 
