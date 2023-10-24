@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -9,6 +9,9 @@ import {
   Dimensions,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import { useDispatch, useSelector } from 'react-redux';
+import { getProjects } from "../store/actions/actionCreator";
+
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -35,30 +38,28 @@ const LocationSVG = () => (
   </Svg>
 );
 
-export default function VerticalSlider(props) {
-  const { data } = props;
+export default function VerticalSlider() {
+  const dispatch = useDispatch();
+  const projectReducer = useSelector(function (state) {
+    return state.projectReducer.projects
+  });
+  const image = require('../assets/dummy/hero-dummy.jpg')
 
-  const carouselItems = data.map((item, idx) => ({
-    name: item.name,
-    image: item.image,
-    description: item.description,
-    // rating:
-    // goals: item.goals,
-    // category: item.Category.name,
-    // address: item.Teacher.address,
-  }));
+  useEffect(() => {
+    dispatch(getProjects());
+  }, [dispatch]); 
 
   return (
     <View style={styles.verticalCardContainer}>
       <ScrollView vertical showsVerticalScrollIndicator={false}>
-        {carouselItems.map((item, idx) => (
-          <TouchableOpacity key={idx} onPress={() => item}>
+        {projectReducer.map(data => (
+           <TouchableOpacity key={data._id}>
             <View style={styles.verticalCard}>
-              <Image style={styles.verticalCardImage} source={item.image} />
-              <Text style={styles.verticalCardText}>{item.title}</Text>
+              <Image style={styles.verticalCardImage} source={image} />
+              <Text style={styles.verticalCardText}>{data.name}</Text>
               <View style={styles.locationContainer}>
                 <LocationSVG />
-                <Text style={styles.courseLocation}>{item.address}</Text>
+                <Text style={styles.courseLocation}>{data.Teacher.address}</Text>
               </View>
               <View style={styles.ratingContainer}>
                 <StarSVG />
