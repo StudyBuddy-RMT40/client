@@ -42,19 +42,24 @@ export default function HorizontalSlider(props) {
   const { data, title, searchQuery } = props;
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const image = require('../assets/dummy/hero-dummy.jpg')
+  const image = require("../assets/dummy/hero-dummy.jpg");
 
-  const handleDetail = () => {
-    navigation.push("Detail");
+  const handleFinish = (projectData) => {
+    navigation.push("Finish", { project: projectData });
   };
   const projectReducer = useSelector(function (state) {
     return state.projectReducer.projects;
   });
 
-  const filteredData = projectReducer.filter(data =>
-    data && data.Category && data.Category.name &&
-    data.Category.name.includes(data.Category.name) &&
-    data.name && data.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = projectReducer.filter(
+    (data) =>
+      data &&
+      data.Category &&
+      data.Category.name &&
+      data.Category.name.includes(data.Category.name) &&
+      data.name &&
+      data.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      data.status === "finished" && data.published === true
   );
 
   useEffect(() => {
@@ -69,10 +74,10 @@ export default function HorizontalSlider(props) {
         showsHorizontalScrollIndicator={false}
         style={styles.carousel}
       >
-        {filteredData.map(data => (
+        {filteredData.map((data) => (
           <TouchableOpacity
             key={data._id}
-            onPress={handleDetail}
+            onPress={() => handleFinish(data)}
             style={styles.card}
           >
             <Image style={styles.image} source={image} />
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
   courseInfo: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center", 
+    alignItems: "center",
     marginTop: 10,
     paddingHorizontal: 10,
   },
@@ -160,5 +165,4 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontFamily: "Lato-Light",
   },
-
 });
