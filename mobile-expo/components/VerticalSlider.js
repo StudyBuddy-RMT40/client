@@ -43,6 +43,7 @@ export default function VerticalSlider() {
   const projectReducer = useSelector(function (state) {
     return state.projectReducer.projects
   });
+  const image = require('../assets/dummy/hero-dummy.jpg')
 
   useEffect(() => {
     dispatch(getProjects());
@@ -54,7 +55,7 @@ export default function VerticalSlider() {
         {projectReducer.map(data => (
            <TouchableOpacity key={data._id}>
             <View style={styles.verticalCard}>
-              <Image style={styles.verticalCardImage} source={data.image} />
+              <Image style={styles.verticalCardImage} source={image} />
               <Text style={styles.verticalCardText}>{data.name}</Text>
               <View style={styles.locationContainer}>
                 <LocationSVG />
