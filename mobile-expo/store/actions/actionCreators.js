@@ -1,4 +1,4 @@
-import { FETCH_LOCATIONS_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./actionTypes";
+import { FETCH_CATEGORIES_SUCCESS, FETCH_LOCATIONS_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./actionTypes";
 import axios from "axios";
 const baseUrl =
   "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
@@ -72,9 +72,25 @@ export const fetchLocations = () => {
         method: "get",
         url: baseUrl + "pub/location",
       })
-      console.log(data)
       dispatch({
         type: FETCH_LOCATIONS_SUCCESS,
+        payload: data
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+export const fetchCategories = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + "pub/categories"
+      })
+      dispatch({
+        type: FETCH_CATEGORIES_SUCCESS,
         payload: data
       })
     } catch (err) {
