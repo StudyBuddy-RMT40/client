@@ -100,6 +100,7 @@ export function getUserById(id) {
 }
 
 export function updateUser(form) {
+  console.log(form, "<<<<<<<<<<<<<");
   return async () => {
     try {
       const access_token = await AsyncStorage.getItem("access_token");
@@ -124,7 +125,7 @@ export function getStudentProfile() {
           access_token,
         },
       });
-      // console.log(data);
+      console.log(data);
       dispatch({
         type: STUDENT_PROFILE_FETCH_SUCCESS,
         payload: data,
