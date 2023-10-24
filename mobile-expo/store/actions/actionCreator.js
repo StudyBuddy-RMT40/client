@@ -124,7 +124,7 @@ export function getStudentProfile() {
           access_token,
         },
       });
-      console.log(data);
+      // console.log(data);
       dispatch({
         type: STUDENT_PROFILE_FETCH_SUCCESS,
         payload: data,

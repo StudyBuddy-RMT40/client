@@ -86,38 +86,31 @@ const ProjectCard = ({
   );
 };
 
-const DashboardProject = ({ projectData = [] }) => {
+const DashboardProject = ({ projectData }) => {
   const [activeFilter, setActiveFilter] = useState("On Progress");
   const [loading, setLoading] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
 
-  // if (!projectData) {
-  //   return <Text style={styles.noProjectText}>No projects available.</Text>;
-  // }
+  useEffect(() => {
+    // Function to filter the data based on the activeFilter
+    const filterProjects = () => {
+      if (!projectData) {
+        setFilteredData([]); // No data to filter, set filteredData to an empty array
+        return;
+      }
 
-  let filteredData = [];
-  if (projectData && projectData.length > 0) {
-    switch (activeFilter) {
-      case "Proposed":
-        filteredData = projectData.filter(
-          (project) =>
-            project.status === "submitted" || project.status === "Accepted"
-        );
-        break;
-      case "On Progress":
-        filteredData = projectData.filter(
-          (project) =>
-            project.status === "paid" || project.status === "On Progress"
-        );
-        break;
-      case "To Review":
-        filteredData = projectData.filter(
-          (project) => project.status === "toReview"
-        );
-        break;
-      default:
-        break;
-    }
-  }
+      // Use Array.filter to filter the projects based on the activeFilter
+      const filteredProjects = projectData.filter((project) => {
+        console.log(project);
+      });
+
+      setFilteredData(filteredProjects);
+    };
+
+    setLoading(true); // Set loading to true before filtering
+    filterProjects();
+    setLoading(false); // Set loading to false after filtering
+  }, [activeFilter, projectData]);
 
   return (
     <View>
