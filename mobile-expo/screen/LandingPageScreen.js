@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -18,28 +18,75 @@ import university from "../assets/university.png";
 import browseLocation from "../assets/location.png";
 import topProject from "../assets/top-projects.png";
 import topBuddy from "../assets/top-teacher.png";
+import heroDummy from "../assets/dummy/hero-dummy.jpg";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { getProjects } from "../store/actions/actionCreators";
 
 export default function LandingPageScreen() {
+  const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
-    { icon: allProject, label: "All Projects", size: 60, onPress: () => {} },
-    { icon: highschool, label: "School Projects", size: 60, onPress: () => {} },
+    {
+      icon: allProject,
+      label: "All Projects",
+      size: 60,
+      onPress: () => navigation.push("Project"),
+    },
+    {
+      icon: highschool,
+      label: "School Projects",
+      size: 60,
+      onPress: () => navigation.push("Project"),
+    },
     {
       icon: university,
       label: "University Projects",
       size: 60,
-      onPress: () => {},
+      onPress: () => navigation.push("Project"),
     },
     {
       icon: browseLocation,
       label: "Projects Near Me",
       size: 60,
-      onPress: () => {},
+      onPress: () => navigation.push("Project"),
     },
-    { icon: topProject, label: "Top Projects", size: 60, onPress: () => {} },
-    { icon: topBuddy, label: "Top Buddy", size: 60, onPress: () => {} },
+    {
+      icon: topProject,
+      label: "Top Projects",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
+    {
+      icon: topBuddy,
+      label: "Top Buddy",
+      size: 60,
+      onPress: () => navigation.navigate("Project"),
+    },
   ];
+
+  const filterDataByCategory = (category) => {
+    const filteredData = projectReducer.filter(
+      (item) => item.Category.name === category
+    );
+    return filteredData;
+  };
+
+  
+  const projectReducer = useSelector((state) => state.projectReducer.projects);
+  // console.log(state, '<<<<<<< ini di landing page')
+
+  const topProjects = filterDataByCategory("Top Projects");
+  const topTeachers = filterDataByCategory("Top Teachers");
+  const topStudents = filterDataByCategory("Top Students");
+ 
+
+  useEffect(() => {
+    dispatch(getProjects());
+  }, [dispatch]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -49,6 +96,8 @@ export default function LandingPageScreen() {
         <TextInput
           style={styles.searchBar}
           placeholder="Looking for your next project?"
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
         />
       </View>
       <ScrollView
@@ -59,10 +108,21 @@ export default function LandingPageScreen() {
           <HeroCarousel />
         </View>
         <ButtonGrid items={buttonItems} />
-        <HorizontalSlider />
-        <HorizontalSlider />
-        <HorizontalSlider />
-        <HorizontalSlider />
+        <HorizontalSlider
+          title="Top Projects"
+          dataFilter={topProjects}
+          searchQuery={searchQuery}
+        />
+        <HorizontalSlider
+          title="Top Teachers"
+          dataFilter={topTeachers}
+          searchQuery={searchQuery}
+        />
+        <HorizontalSlider
+          title="Top Students"
+          dataFilter={topStudents}
+          searchQuery={searchQuery}
+        />
         {/* <VerticalSlider /> */}
       </ScrollView>
     </SafeAreaView>
