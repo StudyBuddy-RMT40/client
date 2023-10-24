@@ -18,7 +18,6 @@ import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../store/actions/actionCreator";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AccountScreen() {
   const { studentProfile } = useSelector((state) => state.userReducer)

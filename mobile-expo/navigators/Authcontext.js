@@ -1,7 +1,6 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext } from "react";
 import { useDispatch } from "react-redux"
-import { handleLogin, handleLogout, handleRegister, removeStorage } from "../store/actions/actionCreator";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { handleLogin, handleLogout, handleRegister } from "../store/actions/actionCreator";
 
 const AuthContext = createContext();
 
