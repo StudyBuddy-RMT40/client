@@ -115,7 +115,7 @@ export default function AccountScreen() {
           <TextInput
             style={styles.input}
             value={userProfile.phoneNumber}
-            onChangeText={(text) => handleChange("phone", text)}
+            onChangeText={(text) => handleChange("phoneNumber", text)}
           />
         ) : (
           <View style={styles.container}>

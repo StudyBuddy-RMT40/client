@@ -60,7 +60,7 @@ export default function DashboardStack() {
         component={ReviewScreen}
         options={{ headerShown: false }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="Wallet"
         component={WalletScreen}
         options={{ headerShown: false }}
