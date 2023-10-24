@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Modal, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
-import { updateStatusRole } from "../../store/actions/actionCreators";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addSpecialization,
+  updateStatusRole,
+} from "../../store/actions/actionCreators";
 import ErrorModal from "./ErrorModal";
+import { useFocusEffect } from "@react-navigation/core";
 
 const RoleModal = ({ isVisible, onClose, onSave }) => {
-  // invisible show modal
-  // onclose close modal
-  // onsave lanjutin ke specialist
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [selectedRole, setSelectedRole] = useState(null);
   const [specialization, setSpecialization] = useState([]);
-  const dummySpecializations = ["Math", "Science", "Literature"]; // ntr dari fetch category
   const dispatch = useDispatch();
+  let { categories } = useSelector((state) => {
+    return state.categories;
+  });
+  // ini butuh styling ya mba, tinggal uncomment
+  // let dummySpecializations;
+  // dummySpecializations = categories.map((e) => ({
+  //   id: e._id,
+  //   name: e.name,
+  // }));
+  const dummySpecializations = [
+    { id: "653823f95c2c03c354f7685a", name: "Math" },
+    { id: "653823f95c2c03c354f7685b", name: "Ipa" },
+  ]; // nanti ini dicomment aja
 
   const handleSelectRole = (role) => {
     setSelectedRole(role);
@@ -32,7 +45,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error, "erorr ini bukan ?");
         });
     }
   };
@@ -46,9 +59,36 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   };
 
   const handleDone = () => {
-    if (selectedRole === "Buddy") {
-      onSave(selectedRole, specialization);
-      onClose();
+    if (selectedRole === "buddy") {
+      dispatch(updateStatusRole("buddy"))
+        .then((response) => {
+          if (response.success) {
+            dispatch(addSpecialization(specialization))
+              .then((response) => {
+                if (response.success) {
+                  onSave(selectedRole, specialization);
+                  onClose();
+                } else {
+                  setModalMessage(
+                    "An error occurred during specialization addition: " +
+                      response.error.message
+                  );
+                  setShowModal(true);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            setModalMessage(
+              "An error occurred during login: " + response.error.message
+            );
+            setShowModal(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -74,15 +114,15 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
           )}
 
           {selectedRole === "buddy" &&
-            dummySpecializations.map((spec, index) => (
+            dummySpecializations.map((spec) => (
               <TouchableOpacity
-                key={index}
+                key={spec.id}
                 style={[
                   styles.button,
-                  specialization.includes(spec) && styles.selectedButton,
+                  specialization.includes(spec.name) && styles.selectedButton,
                 ]}
-                onPress={() => toggleSpecialist(spec)}>
-                <Text>{spec}</Text>
+                onPress={() => toggleSpecialist(spec.id)}>
+                <Text>{spec.name}</Text>
               </TouchableOpacity>
             ))}
 

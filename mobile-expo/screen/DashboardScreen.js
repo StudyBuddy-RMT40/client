@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import ButtonGrid from "../components/ButtonGrid";
 import allProject from "../assets/public.png";
@@ -6,11 +6,13 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";
 import DashboardProject from "../components/DashboardProject";
 import CustomHeader from "../components/CustomHeader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorModal from "../components/modal/ErrorModal";
 import RoleModal from "../components/modal/RoleModal";
+import { fetchCategories } from "../store/actions/actionCreators";
 
 export default function DashboardScreen() {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -19,22 +21,17 @@ export default function DashboardScreen() {
     return state.auth;
   });
 
-  const [hasRunEffect, setHasRunEffect] = useState(false);
-
-  useFocusEffect(() => {
-    if (!hasRunEffect) {
-      if (!role) {
-        setModalMessage("What role do you prefer?");
-        setShowModal(true);
-      } else if (role === "buddy") {
-        console.log("yooo buddy");
-      } else if (role === "student") {
-        console.log("yooo student");
-      }
-
-      setHasRunEffect(true); // Mark the effect as run
+  useEffect(() => {
+    if (!role) {
+      setModalMessage("What role do you prefer?");
+      setShowModal(true);
+      dispatch(fetchCategories());
+    } else if (role === "buddy") {
+      console.log("yooo buddy");
+    } else if (role === "student") {
+      console.log("yooo student");
     }
-  }, [hasRunEffect]);
+  }, [dispatch]);
 
   const buttonItems = [
     {
