@@ -20,7 +20,7 @@ export default function DetailScreen({ route }) {
   const [studentFeedback, setStudentFeedback] = useState("");
   const [buddyFeedback, setBuddyFeedback] = useState("");
   const [rating, setRating] = useState(0);
-  const userRole = "Buddy";
+  const userRole = "buddy";
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
@@ -81,7 +81,7 @@ export default function DetailScreen({ route }) {
           <Text>{project.goals}</Text>
         </View>
 
-        {userRole === "Buddy" && project.status === "Submitted" && (
+        {userRole === "buddy" && project.status === "Submitted" && (
           <>
             <Text style={styles.label}>Proposal Price</Text>
             <TextInput
@@ -99,7 +99,7 @@ export default function DetailScreen({ route }) {
           </>
         )}
 
-        {project.status === "Accepted" && userRole === "Student" && (
+        {project.status === "Accepted" && userRole === "student" && (
           <TouchableOpacity onPress={handlePayProject} style={styles.payButton}>
             <Text style={styles.buttonText}>Proceed Payment</Text>
           </TouchableOpacity>
@@ -113,7 +113,7 @@ export default function DetailScreen({ route }) {
                 <CheckBox
                   isChecked={material.checked}
                   onClick={() => handleToggleMaterialChecked(index)}
-                  disabled={userRole === "Buddy"} // Buddy ga bisa ceklis, hanya Student
+                  disabled={userRole === "buddy"} // buddy ga bisa ceklis, hanya Student
                 />
                 <TextInput
                   style={styles.editableTodoText}
@@ -122,12 +122,12 @@ export default function DetailScreen({ route }) {
                     handleUpdateLearningMaterial(text, index)
                   }
                   editable={
-                    userRole === "Buddy" &&
+                    userRole === "buddy" &&
                     (project.status === "Paid" ||
                       project.status === "On Progress")
-                  } // Hanya Buddy yang bisa edit
+                  } // Hanya buddy yang bisa edit
                 />
-                {userRole === "Buddy" &&
+                {userRole === "buddy" &&
                   (project.status === "Paid" ||
                     project.status === "On Progress") && (
                     <TouchableOpacity
@@ -143,15 +143,8 @@ export default function DetailScreen({ route }) {
 
         {project.status === "To Review" && (
           <>
-            {userRole === "Student" && (
+            {userRole === "student" && (
               <>
-                <Text style={styles.label}>Student Feedback</Text>
-                <TextInput
-                  style={styles.editableContainer}
-                  placeholder="Enter feedback"
-                  value={studentFeedback}
-                  onChangeText={setStudentFeedback}
-                />
                 <Text style={styles.label}>Student Rating</Text>
                 <Rating
                   showRating
@@ -164,16 +157,16 @@ export default function DetailScreen({ route }) {
               </>
             )}
 
-            {userRole === "Buddy" && (
+            {userRole === "buddy" && (
               <>
-                <Text style={styles.label}>Buddy Feedback</Text>
+                <Text style={styles.label}>buddy Feedback</Text>
                 <TextInput
                   style={styles.editableContainer}
                   placeholder="Enter feedback"
                   value={buddyFeedback}
                   onChangeText={setBuddyFeedback}
                 />
-                <Text style={styles.label}>Buddy Rating</Text>
+                <Text style={styles.label}>buddy Rating</Text>
                 <Rating
                   showRating
                   onFinishRating={handleRatingChange}
