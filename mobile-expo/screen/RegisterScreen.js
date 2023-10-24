@@ -11,6 +11,9 @@ import { useNavigation } from "@react-navigation/native";
 import Logo from "../assets/StudyBuddy.png";
 import Button from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../store/actions/actionCreators";
+import ErrorModal from "../components/modal/ErrorModal";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -23,13 +26,16 @@ export default function RegisterScreen() {
   const [passwordError, setPasswordError] = useState(null);
   const [phoneError, setPhoneError] = useState(null);
   const [addressError, setAddressError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const dispatch = useDispatch();
 
   const isValidEmail = (email) => {
     return /\S+@\S+\.\S+/.test(email);
   };
 
   const isEmailAlreadyTaken = (email) => {
-    // return false; 
+    // return false;
   };
 
   const navigation = useNavigation();
@@ -75,10 +81,23 @@ export default function RegisterScreen() {
       return;
     }
 
-    // TODO: 
-  };
+    dispatch(registerUser({ username, email, password, phoneNumber, address }))
+      .then((response) => {
+        if (response.success) {
+          navigation.navigate("Login");
+        } else {
+          setModalMessage(
+            "An error occurred during register: " + response.error.message
+          );
+          setShowModal(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-  
+    // TODO:
+  };
 
   const handleLogin = () => {
     navigation.goBack();
@@ -88,30 +107,29 @@ export default function RegisterScreen() {
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        style={styles.backButton}
-      >
-        <Ionicons name="arrow-back" size={24} color="white" />
+        style={styles.backButton}>
+        <Ionicons name='arrow-back' size={24} color='white' />
       </TouchableOpacity>
       <Image source={Logo} style={styles.logo} />
       <Text style={styles.title}>Register</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder='Username'
         value={username}
         onChangeText={(text) => setUsername(text)}
       />
       {usernameError && <Text style={styles.errorText}>{usernameError}</Text>}
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
+        placeholder='Email'
+        keyboardType='email-address'
         value={email}
         onChangeText={(text) => setEmail(text)}
       />
-       {emailError && <Text style={styles.errorText}>{emailError}</Text>}
+      {emailError && <Text style={styles.errorText}>{emailError}</Text>}
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder='Password'
         secureTextEntry={true}
         value={password}
         onChangeText={(text) => setPassword(text)}
@@ -119,15 +137,15 @@ export default function RegisterScreen() {
       {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
       <TextInput
         style={styles.input}
-        placeholder="Phone Number"
-        keyboardType="phone-pad"
+        placeholder='Phone Number'
+        keyboardType='phone-pad'
         value={phoneNumber}
         onChangeText={(text) => setPhoneNumber(text)}
       />
-           {phoneError && <Text style={styles.errorText}>{phoneError}</Text>}
+      {phoneError && <Text style={styles.errorText}>{phoneError}</Text>}
       <TextInput
         style={styles.input}
-        placeholder="Address"
+        placeholder='Address'
         value={address}
         onChangeText={(text) => setAddress(text)}
       />
@@ -136,7 +154,7 @@ export default function RegisterScreen() {
         <TouchableOpacity onPress={handleRegister}>
           <Button
             onPress={handleRegister}
-            text="Register"
+            text='Register'
             style={styles.buttonSize}
           />
         </TouchableOpacity>
@@ -147,6 +165,12 @@ export default function RegisterScreen() {
           <Text style={styles.loginButton}>Login here</Text>
         </TouchableOpacity>
       </View>
+      <ErrorModal
+        visible={showModal}
+        title='Error'
+        message={modalMessage}
+        onClose={() => setShowModal(false)}
+      />
     </View>
   );
 }
@@ -214,7 +238,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   errorText: {
-    backgroundColor: '#FFCACA',
+    backgroundColor: "#FFCACA",
     color: "red",
     padding: 10,
     borderRadius: 8,

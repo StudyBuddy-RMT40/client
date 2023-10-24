@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useAuth } from "../navigators/Authcontext";
+// import { useAuth } from "../navigators/Authcontext";
 
 const ProjectCard = ({
   title,
@@ -21,13 +21,13 @@ const ProjectCard = ({
   learningMaterials,
 }) => {
   const navigation = useNavigation();
-  const { accessToken } = useAuth();
+  // const { accessToken } = useAuth();
 
-  useEffect(() => {
-    if (!accessToken) {
-      navigation.navigate("Login");
-    }
-  }, [accessToken, navigation]);
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     navigation.navigate("Login");
+  //   }
+  // }, [accessToken, navigation]);
 
   let progressBarColor;
   if (progress <= 25) progressBarColor = "red";
