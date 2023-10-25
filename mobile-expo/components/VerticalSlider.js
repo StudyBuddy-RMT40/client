@@ -52,7 +52,7 @@ export default function VerticalSlider({ name, location }) {
   const projectReducer = useSelector(function (state) {
     return state.projectReducer.projects;
   });
-  const image = require("../assets/dummy/hero-dummy.jpg");
+  const image = require("../assets/images/HiRes-17.jpg");
 
   useEffect(() => {
     dispatch(getProjects());
