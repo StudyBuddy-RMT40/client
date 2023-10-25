@@ -6,42 +6,13 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";
 import DashboardProject from "../components/DashboardProject";
 import CustomHeader from "../components/CustomHeader";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ErrorModal from "../components/modal/ErrorModal";
 import RoleModal from "../components/modal/RoleModal";
-import { fetchCategories } from "../store/actions/actionCreators";
 
 export default function DashboardScreen() {
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [showRoleModal, setShowRoleModal] = useState(false);
-  const { role } = useSelector((state) => {
-    return state.auth;
-  });
-
-  useEffect(() => {
-    if (!role) {
-      setModalMessage("What role do you prefer?");
-      setShowModal(true);
-      dispatch(fetchCategories());
-    } else if (role === "buddy") {
-      console.log("yooo buddy");
-    } else if (role === "student") {
-      console.log("yooo student");
-    }
-  }, [dispatch]);
-
-  const buttonItems = [
-    {
-      icon: allProject,
-      label: "Add Projects",
-      size: 60,
-      onPress: () => navigation.navigate("AddProject"),
-    },
-  ];
-
+  const { dataStudent, dataTeacher } = useSelector((state) => state.dashboard);
+  const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
   const [projectData, setProjectData] = useState([
     {
       id: 1,
@@ -113,7 +84,71 @@ export default function DashboardScreen() {
         "Access a complete set of learning materials, including recorded lectures, project templates, and additional resources, to help you excel in your capstone project.",
     },
   ]);
+  let temp = []
 
+  const buttonItems = [
+    {
+      icon: allProject,
+      label: "Add Projects",
+      size: 60,
+      onPress: () => navigation.navigate("AddProject"),
+    },
+  ];
+
+  const navigation = useNavigation();
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [isLikes, setLike] = useState(0);
+  const [isRatings, setReting] = useState(0);
+
+  useEffect(() => {
+    if (!role) {
+      setModalMessage("What role do you prefer?");
+      setShowModal(true);
+    } 
+  }, []);
+
+  useEffect(() => {
+    if (role === "buddy" && dataTeacher) {
+      // setProjectData(dataTeacher.Projects);
+      setLike(dataTeacher.Likes);
+      setReting(dataTeacher.Ratings);
+      dataTeacher.Projects.forEach((e) => {
+        console.log(e.status);
+        temp.push({
+          id: e._id,
+          title: e.name,
+          progress: e.totalFinished,
+          status: e.status,
+          description: e.description,
+          category: "Design",
+          goals: e.goals,
+          feedback: e.feedback,
+          learningMaterials: e.todos,
+        });
+      });
+      setProjectData(temp)
+    } else if (role === "student" && dataStudent) {
+      // setProjectData(dataStudent.Projects);
+      setLike(dataStudent.Likes);
+      setReting(dataStudent.Ratings);
+      dataStudent.Projects.forEach((e) => {
+        temp.push({
+          id: e._id,
+          title: e.name,
+          progress: e.totalFinished,
+          status: e.status,
+          description: e.description,
+          category: "Design",
+          goals: e.goals,
+          feedback: e.feedback,
+          learningMaterials: e.todos,
+        });
+      });
+      setProjectData(temp)
+    }
+  }, [dataTeacher, dataStudent]);
   return (
     <>
       <CustomHeader title='Dashboard' />
@@ -121,8 +156,8 @@ export default function DashboardScreen() {
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data='100' isLike={true} title='Overview' />
-            <DashboardWidget data='4.6' isReview={true} />
+            <DashboardWidget data={isLikes} isLike={true} title='Overview' />
+            <DashboardWidget data={isRatings} isReview={true} />
           </View>
           <ButtonGrid items={buttonItems} />
           <DashboardProject projectData={projectData} />
