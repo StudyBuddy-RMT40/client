@@ -19,7 +19,6 @@ export default function AccountStack() {
             component={AccountScreen}
             options={{ headerShown: true }}
           />
-          <Stack.Screen name="PDFScreen" component={PDFScreen} />
         </>
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} />

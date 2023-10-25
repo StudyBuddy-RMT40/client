@@ -59,7 +59,7 @@ export default function AccountScreen() {
   useEffect(() => {
     console.log(access_token)
     setUserProfile(profileUser)
-    console.log(access_token, "blablablabla")
+    // console.log(access_token, "blablablabla")
   }, [profileUser])
 
   useEffect(() => {
@@ -87,6 +87,7 @@ export default function AccountScreen() {
         setIsEditing(false)
       })
       .catch((err) => {
+        console.log(err.response.data.message,"di profile");
         setIsEditing(true)
         setModalMessage(err.response.data.message);
         setShowModal(true);
