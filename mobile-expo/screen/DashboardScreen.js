@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import ButtonGrid from "../components/ButtonGrid";
 import allProject from "../assets/public.png";
+import addProject from "../assets/tap.png";
+import History from "../assets/certificate.png";
+import Wallet from "../assets/money.png";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";
 import DashboardProject from "../components/DashboardProject";
@@ -84,14 +87,26 @@ export default function DashboardScreen() {
         "Access a complete set of learning materials, including recorded lectures, project templates, and additional resources, to help you excel in your capstone project.",
     },
   ]);
-  let temp = []
+  let temp = [];
 
   const buttonItems = [
     {
-      icon: allProject,
+      icon: addProject,
       label: "Add Projects",
       size: 60,
       onPress: () => navigation.navigate("AddProject"),
+    },
+    {
+      icon: History,
+      label: "Project History",
+      size: 60,
+      onPress: () => navigation.navigate("Archive", { data: finishedProjects }),
+    },
+    {
+      icon: Wallet,
+      label: "Wallet",
+      size: 60,
+      onPress: () => navigation.navigate("Wallet"),
     },
   ];
 
@@ -106,7 +121,7 @@ export default function DashboardScreen() {
     if (!role) {
       setModalMessage("What role do you prefer?");
       setShowModal(true);
-    } 
+    }
   }, []);
 
   useEffect(() => {
@@ -129,37 +144,37 @@ export default function DashboardScreen() {
           learningMaterials: e.todos,
         });
       });
-      setProjectData(temp)
+      setProjectData(temp);
     } else if (role === "student" && dataStudent) {
       // setProjectData(dataStudent.Projects);
       setLike(dataStudent.Likes);
       setReting(dataStudent.Ratings);
       dataStudent.Projects.forEach((e) => {
         console.log(e.status);
-        console.log(e.Categor.name);
+        // console.log(e.Category.name);
         temp.push({
           id: e._id,
           title: e.name,
           progress: e.totalFinished,
           status: e.status,
           description: e.description,
-          category: e.Categor.name,
+          // category: e.Category.name,
           goals: e.goals,
           feedback: e.feedback,
           learningMaterials: e.todos,
         });
       });
-      setProjectData(temp)
+      setProjectData(temp);
     }
   }, [dataTeacher, dataStudent]);
   return (
     <>
-      <CustomHeader title='Dashboard' />
+      <CustomHeader title="Dashboard" />
 
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data={isLikes} isLike={true} title='Overview' />
+            <DashboardWidget data={isLikes} isLike={true} title="Overview" />
             <DashboardWidget data={isRatings} isReview={true} />
           </View>
           <ButtonGrid items={buttonItems} />
@@ -168,7 +183,7 @@ export default function DashboardScreen() {
       </View>
       <ErrorModal
         visible={showModal}
-        title='Role Validation'
+        title="Role Validation"
         message={modalMessage}
         onClose={() => {
           setShowModal(false), setShowRoleModal(true);
