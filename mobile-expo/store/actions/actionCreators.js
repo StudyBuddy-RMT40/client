@@ -5,11 +5,29 @@ import {
   LOGOUT_SUCCESS,
   FETCH_PROJECTS,
   FETCH_PROJECTS_BY_ID,
+  FETCH_DASHBOARD_STUDENT,
+  FETCH_DASHBOARD_TEACHER,
 } from "./actionTypes";
 
 import axios from "axios";
 const baseUrl =
   "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
+
+let access_token;
+
+export const fetchDashboardStudent = (data) => {
+  return {
+    type: FETCH_DASHBOARD_STUDENT,
+    payload: data,
+  };
+};
+
+export const fetchDashboardTeacher = (data) => {
+  return {
+    type: FETCH_DASHBOARD_TEACHER,
+    payload: data,
+  };
+};
 
 export const Login = (data, role) => {
   return {
@@ -38,8 +56,9 @@ export const fetchProjectById = (data) => {
   };
 };
 
+// <><><><><><><><><>STUDDYBUDDDYYY><><><><><><><
 export const registerUser = (registerForm) => {
-  // console.log(registerForm);
+  // console.log(registerForm);;
   return async () => {
     try {
       const { data } = await axios({
@@ -55,19 +74,10 @@ export const registerUser = (registerForm) => {
   };
 };
 
-export const loginUser = (loginForm) => {
-  const { username, password } = loginForm;
-
+export const logoutUser = () => {
   return async (dispatch) => {
     try {
-      const { data } = await axios({
-        method: "post",
-        url: baseUrl + "login",
-        data: { email: username, password: password },
-      });
-
-      dispatch(Login(data.access_token, data.role));
-
+      dispatch(Logout());
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
       // Return an error flag and error data
@@ -128,27 +138,118 @@ export const fetchCategories = () => {
         type: FETCH_CATEGORIES_SUCCESS,
         payload: data,
       });
+      return data;
     } catch (err) {
       console.log(err);
     }
   };
 };
 
-export const fetchDataStudent = () => {
-  return async (dispatch, getState) => {
+export const updateStatusRole = (role) => {
+  return async () => {
     try {
-      const { access_token } = getState().auth;
-      // console.log(access_token);
-
-      const { data } = await axios.get(baseUrl + "student_profile", {
+      const { data } = await axios({
+        method: "patch",
+        url: baseUrl + "users",
+        data: { role },
         headers: {
-          access_token,
+          access_token: access_token,
         },
       });
-      console.log(data);
-      dispatch({ type: STUDENT_PROFILE_FETCH_SUCCESS, payload: data });
+      return { success: true, data }; // Return a success flag and data
     } catch (error) {
       console.log(error.response.data);
+      return { success: false, error: error.response.data };
+    }
+  };
+};
+
+export const addSpecialization = (data) => {
+  let specialist = [];
+  data.map((e) => {
+    specialist.push({ categoryId: e });
+  });
+  return async () => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        url: baseUrl + "specialist",
+        data: { specialist },
+        headers: {
+          access_token: access_token,
+        },
+      });
+      return { success: true, data };
+    } catch (error) {
+      console.log(error.response.data);
+      return { success: false, error: error.response.data };
+    }
+  };
+};
+
+export const fetchDashboardForStudent = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + "student_profile",
+        headers: {
+          access_token: access_token,
+        },
+      });
+      dispatch(fetchDashboardStudent(data));
+      return data;
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+};
+
+export const fetchDashboardForTeacher = () => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + "buddy_profile",
+        headers: {
+          access_token: access_token,
+        },
+      });
+      dispatch(fetchDashboardTeacher(data));
+      return data;
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+};
+
+export const loginUser = (loginForm) => {
+  return async (dispatch) => {
+    const { username, password } = loginForm;
+    try {
+      const { data } = await axios.post(baseUrl + "login", {
+        email: username,
+        password: password,
+      });
+
+      const role = data.role;
+      access_token = data.access_token;
+
+      dispatch(Login(data.access_token, role));
+
+      if (role === "buddy") {
+        console.log("yooo buddy");
+        await dispatch(fetchDashboardForTeacher());
+      } else if (role === "student") {
+        console.log("yooo student");
+        await dispatch(fetchDashboardForStudent());
+      }
+
+      await dispatch(fetchCategories());
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.response.data };
     }
   };
 };

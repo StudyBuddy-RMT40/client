@@ -32,8 +32,6 @@ export default function RegisterScreen() {
   const dispatch = useDispatch();
   const { locations } = useSelector((state) => state.location)
 
-  console.log(locations)
-
   useEffect(() => {
     dispatch(fetchLocations())
   }, [])
@@ -151,22 +149,24 @@ export default function RegisterScreen() {
         onChangeText={(text) => setPhoneNumber(text)}
       />
       {/* {phoneError && <Text style={styles.errorText}>{phoneError}</Text>} */}
-      <View>
-        <TextInput
-          style={styles.input}
-          placeholder='Address'
-          value={address}
-          onChangeText={(text) => setAddress(text)}
-        />
-        <SelectList
-          setSelected={(val) => setAddress(val)}
-          data={locations}
-          save="value"
-        />
-      </View>
+      {/* <TextInput
+        style={styles.input}
+        placeholder='Location'
+        value={address}
+        onChangeText={(text) => setAddress(text)}
+      /> */}
+
+      <SelectList
+        setSelected={(val) => setAddress(val)}
+        data={locations}
+        save="name"
+        search={false}
+        placeholder="Location"
+        boxStyles={{ width: 330, marginTop: 5, backgroundColor: 'white' }}
+      />
 
       {/* {addressError && <Text style={styles.errorText}>{addressError}</Text>} */}
-      <View style={{ width: "100%" }}>
+      <View>
         <TouchableOpacity onPress={handleRegister}>
           <Button
             onPress={handleRegister}

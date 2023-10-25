@@ -57,20 +57,21 @@ export default function HorizontalSlider(props) {
     navigation.push("Finish", { project: projectData });
   };
   const projectReducer = useSelector(function (state) {
-    // console.log(state, '<<<<<<< ini di horizontal slider')
     return state.projectReducer.projects;
   });
 
-  const filteredData = projectReducer.filter(
-    (project) =>
-      project &&
-      project.Category &&
-      project.Category.name &&
-      project.Category.name.includes(project.Category.name) &&
-      project.name &&
-      project.name.toLowerCase().includes(searchQuery.toLowerCase())
-    // && project.status === "finished" && project.published === true  <--- common aja kalo dibutuhkan
-  );
+  const filteredData = projectReducer.filter((project) => {
+    if (project && project.Category && project.Category.name && project.name) {
+      const categoryName = project.Category.name;
+      const projectName = project.name.toLowerCase();
+      return (
+        categoryName.includes(searchQuery.toLowerCase()) &&
+        projectName.includes(searchQuery.toLowerCase())
+        // Add other filters like project.status and project.published if needed
+      );
+    }
+    return false; // Filter out invalid projects
+  });
 
   useEffect(() => {
     dispatch(getProjects());

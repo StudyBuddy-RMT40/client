@@ -1,16 +1,16 @@
 import { combineReducers } from "redux";
 import authReducer from "./authReducer";
-import projectReducer from "./projectReducer";
 import categoryReducer from "./categoryReducer";
+import projectReducer from "./projectReducer";
 import locationReducer from "./locationReducer";
-import userReducer from "./userReducer";
+import dashboardReducer from "./dashboardReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   category: categoryReducer,
   location: locationReducer,
   projectReducer: projectReducer,
-  user: userReducer,
+  dashboard: dashboardReducer,
 });
 
 export default rootReducer;
