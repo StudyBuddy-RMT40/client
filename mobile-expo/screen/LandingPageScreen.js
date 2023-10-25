@@ -21,42 +21,46 @@ import topBuddy from "../assets/top-teacher.png";
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjects } from "../store/actions/actionCreators";
+import { fetchUserProfile, getProjects } from "../store/actions/actionCreators";
 
 export default function LandingPageScreen() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
+  const [username, setUsername] = useState("")
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const [isLogin, setIsLogin] = useState(false)
+  const { profileUser } = useSelector((state) => state.user)
+  const { access_token, role } = useSelector((state) => state.auth)
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
-      {
-        icon: allProject,
-        label: "All Projects",
-        size: 60,
-        onPress: (category) => {
-          const filteredProjects = category === "All Projects"
-            ? projectReducer
-            : filterDataByCategory(category);
-    
-         
-          navigation.navigate('Project', { filteredProjects });
-        },
+    {
+      icon: allProject,
+      label: "All Projects",
+      size: 60,
+      onPress: (category) => {
+        const filteredProjects = category === "All Projects"
+          ? projectReducer
+          : filterDataByCategory(category);
+
+
+        navigation.navigate('Project', { filteredProjects });
       },
-      {
-        icon: highschool,
-        label: "School Projects",
-        size: 60,
-        onPress: (category) => {
-          const filteredProjects = category === "School Projects"
-            ? projectReducer
-            : filterDataByCategory(category);
-    
-         
-          navigation.navigate('Project', { filteredProjects });
-        },
+    },
+    {
+      icon: highschool,
+      label: "School Projects",
+      size: 60,
+      onPress: (category) => {
+        const filteredProjects = category === "School Projects"
+          ? projectReducer
+          : filterDataByCategory(category);
+
+
+        navigation.navigate('Project', { filteredProjects });
       },
+    },
     {
       icon: highschool,
       label: "University Projects",
@@ -65,8 +69,8 @@ export default function LandingPageScreen() {
         const filteredProjects = category === "University Projects"
           ? projectReducer
           : filterDataByCategory(category);
-  
-          navigation.navigate('Project', { filteredProjects });
+
+        navigation.navigate('Project', { filteredProjects });
       },
     },
     {
@@ -95,22 +99,32 @@ export default function LandingPageScreen() {
     );
     return filteredData;
   };
-  
+
+  useEffect(() => {
+    if (access_token) {
+      setIsLogin(true)
+    } else {
+      setIsLogin(false)
+    }
+  }, [access_token])
+
+  // useEffect(() => {
+  //   dispatch(fetchUserProfile(access_token, role))
+  // }, [])
 
 
-  
   const projectReducer = useSelector((state) => state.projectReducer.projects);
   // console.log(state, '<<<<<<< ini di landing page')
 
   const topProjects = filterDataByCategory("Top Projects");
   const topTeachers = filterDataByCategory("Top Teachers");
   const topStudents = filterDataByCategory("Top Students");
- 
+
   const handleCategorySelect = (category) => {
-    setSearchQuery(""); 
+    setSearchQuery("");
     setSelectedCategory(category);
   };
-  
+
 
   useEffect(() => {
     dispatch(getProjects());
@@ -123,7 +137,12 @@ export default function LandingPageScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Hi, Riska 👋</Text>
+        {isLogin ? (
+          <Text style={styles.headerText}>Hi, {profileUser.username} 👋</Text>
+        ) : (
+          <Text style={styles.headerText}>Hi, Fellas👋</Text>
+        )}
+
         <Text style={styles.headerSubText}>Welcome to StudyBuddy!</Text>
         <TextInput
           style={styles.searchBar}
