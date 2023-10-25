@@ -4,15 +4,18 @@ import CustomHeader from "../components/CustomHeader";
 import VerticalSlider from "../components/VerticalSlider";
 import { useSelector } from "react-redux";
 
-export default function ProjectScreen({route}) {
-  const { category } = route.params;
+export default function ProjectScreen({ route }) {
+  const { category, name: initialName } = route.params;
   const [nameQuery, setNameQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(initialName || "");
   const [location, setLocation] = useState("");
 
   const projectReducer = useSelector(function (state) {
-    // console.log(state, '<<<<<<< ini di project screen')
+    console.log(
+      state.projectReducer.projects[0],
+      "<<<<<<< ini di project screen"
+    );
     return state.projectReducer.projects;
   });
 
@@ -41,12 +44,12 @@ export default function ProjectScreen({route}) {
     <>
       <CustomHeader title="Project" />
       <ScrollView style={styles.contentContainerStyle}>
-        <Text style={styles.label}>Search by Result</Text>
+        <Text style={styles.label}>Search for Projects</Text>
 
         <View style={styles.filterLocationContainer}>
           <TextInput
             style={styles.filterInput}
-            placeholder="Name"
+            placeholder="Search by Name"
             value={name}
             onChangeText={(text) => {
               setName(text);
@@ -54,7 +57,7 @@ export default function ProjectScreen({route}) {
           />
           <TextInput
             style={styles.locationInput}
-            placeholder="Location"
+            placeholder="Search By Location"
             value={location}
             onChangeText={(text) => {
               setLocation(text);
