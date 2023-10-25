@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet, TextInput } from "react-native";
 import CustomHeader from "../components/CustomHeader";
 import VerticalSlider from "../components/VerticalSlider";
 import { useSelector } from "react-redux";
@@ -18,30 +10,36 @@ export default function ProjectScreen({ route }) {
   const [locationQuery, setLocationQuery] = useState("");
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
-  const [suggestedNames, setSuggestedNames] = useState([]); // To store suggested names
 
   const projectReducer = useSelector(function (state) {
+    // console.log(state, '<<<<<<< ini di project screen')
     return state.projectReducer.projects;
   });
 
-  // ... Existing code ...
-
-  const handleNameChange = (text) => {
-    // Update the name input
-    setName(text);
-
-    // Filter and set suggested names
-    const suggestions = projectReducer
-      .filter((project) =>
-        project.name.toLowerCase().includes(text.toLowerCase())
-      )
-      .map((project) => project.name);
-
-    setSuggestedNames(suggestions);
+  const filterDataByCategory = (category) => {
+    const filteredData = projectReducer.filter(
+      (item) => item.Category.groupBy === category
+    );
+    return filteredData;
   };
 
-  // ... Existing code ...
+  const filteredProjects = filterDataByCategory(category);
 
+  const filteredNames = projectReducer
+    .filter((project) =>
+      project.name.toLowerCase().includes(name.toLowerCase())
+    )
+    .map((project) => project.name);
+
+  const filteredLocations = projectReducer
+    .filter((project) =>
+      project.location?.toLowerCase().includes(location.toLowerCase())
+    )
+    .map((project) => project.location);
+
+  const handleSumbit = () => {
+    
+  };
   return (
     <>
       <CustomHeader title='Project' />
@@ -53,7 +51,9 @@ export default function ProjectScreen({ route }) {
             style={styles.filterInput}
             placeholder='Name'
             value={name}
-            onChangeText={handleNameChange}
+            onChangeText={(text) => {
+              setName(text);
+            }}
           />
           <TextInput
             style={styles.locationInput}
@@ -64,26 +64,6 @@ export default function ProjectScreen({ route }) {
             }}
           />
         </View>
-
-        {/* Render the suggestion list if there are suggestions */}
-        {suggestedNames.length > 0 && (
-          <FlatList
-            data={suggestedNames}
-            keyExtractor={(item) => item}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  // Set the selected suggestion in the input field
-                  setName(item);
-                  // Clear the suggestion list
-                  setSuggestedNames([]);
-                }}>
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        )}
-
         <VerticalSlider name={name} location={location} />
       </ScrollView>
     </>
