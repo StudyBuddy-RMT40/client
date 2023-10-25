@@ -11,8 +11,7 @@ import {
 } from "./actionTypes";
 
 import axios from "axios";
-const baseUrl =
-  "https://d539-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
+const baseUrl = "https://46ca-182-0-144-39.ngrok-free.app/";
 
 let access_token;
 
@@ -139,6 +138,7 @@ export const fetchCategories = () => {
         type: FETCH_CATEGORIES_SUCCESS,
         payload: data,
       });
+      console.log("categories:", data);
       return data;
     } catch (err) {
       console.log(err);
@@ -260,6 +260,8 @@ export const loginUser = (loginForm) => {
 
       dispatch(Login(data.access_token, role));
 
+      await dispatch(fetchCategories());
+
       if (role === "buddy") {
         console.log("yooo buddy");
         await dispatch(fetchDashboardForTeacher());
@@ -267,8 +269,6 @@ export const loginUser = (loginForm) => {
         console.log("yooo student");
         await dispatch(fetchDashboardForStudent());
       }
-
-      await dispatch(fetchCategories());
 
       return { success: true };
     } catch (error) {

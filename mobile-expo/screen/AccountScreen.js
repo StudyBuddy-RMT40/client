@@ -20,8 +20,7 @@ import { fetchUserProfile, logoutUser } from "../store/actions/actionCreators";
 import axios from "axios";
 import ErrorModal from "../components/modal/ErrorModal";
 
-const baseUrl =
-  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
+const baseUrl = "https://3fd8-114-122-22-55.ngrok-free.app/";
 
 export default function AccountScreen() {
   const dispatch = useDispatch();
@@ -41,7 +40,7 @@ export default function AccountScreen() {
     return state.auth;
   });
 
-  const { profileUser } = useSelector((state) => state.user)
+  const { profileUser } = useSelector((state) => state.user);
 
   const editProfile = async () => {
     try {
@@ -50,24 +49,24 @@ export default function AccountScreen() {
         url: baseUrl + "users",
         data: userProfile,
         headers: {
-          access_token
-        }
-      })
-      console.log(data)
+          access_token,
+        },
+      });
+      console.log(data);
     } catch (err) {
-      console.log(err.response.data)
-      throw err
+      console.log(err.response.data);
+      throw err;
     }
-  }
+  };
 
   useEffect(() => {
-    setUserProfile(profileUser)
-    console.log(access_token, "blablablabla")
-  }, [profileUser])
+    setUserProfile(profileUser);
+    console.log(access_token, "blablablabla");
+  }, [profileUser]);
 
   useEffect(() => {
-    dispatch(fetchUserProfile(access_token, role))
-  }, [])
+    dispatch(fetchUserProfile(access_token, role));
+  }, []);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -87,21 +86,21 @@ export default function AccountScreen() {
   const handleSaveProfile = () => {
     editProfile()
       .then(() => {
-        setIsEditing(false)
+        setIsEditing(false);
       })
       .catch((err) => {
-        setIsEditing(true)
+        setIsEditing(true);
         setModalMessage(err.response.data.message);
         setShowModal(true);
-      })
-
-  }
+      });
+  };
 
   return (
     <SafeAreaView style={styles.containerSafeArea}>
       <ScrollView
         style={styles.contentContainerStyle}
-        contentContainerStyle={{ paddingBottom: 50 }}>
+        contentContainerStyle={{ paddingBottom: 50 }}
+      >
         <View style={styles.imageContainer}>
           <Image source={profileImage} style={styles.profileImage} />
           <Text style={styles.username}>{userProfile.name}</Text>
@@ -186,18 +185,16 @@ export default function AccountScreen() {
             style={styles.saveButton}
           />
         )}
-        {
-          !isEditing && (
-            <Button
-              text="Logout"
-              onPress={handleLogout}
-              style={styles.logoutButton}
-            />
-          )
-        }
+        {!isEditing && (
+          <Button
+            text="Logout"
+            onPress={handleLogout}
+            style={styles.logoutButton}
+          />
+        )}
         <ErrorModal
           visible={showModal}
-          title='Error'
+          title="Error"
           message={modalMessage}
           onClose={() => setShowModal(false)}
         />
