@@ -18,7 +18,6 @@ import university from "../assets/university.png";
 import browseLocation from "../assets/location.png";
 import topProject from "../assets/top-projects.png";
 import topBuddy from "../assets/top-teacher.png";
-import heroDummy from "../assets/dummy/hero-dummy.jpg";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile, getProjects } from "../store/actions/actionCreators";
@@ -61,7 +60,7 @@ export default function LandingPageScreen() {
       },
     },
     {
-      icon: highschool,
+      icon: university,
       label: "University Projects",
       size: 60,
       onPress: (category) => {
@@ -187,10 +186,10 @@ export default function LandingPageScreen() {
               title={getCategoryTitle(category)}
               dataFilter={filteredData}
               searchQuery={searchQuery}
+              groupBy={category}
             />
           );
         })}
-        {/* <VerticalSlider /> */}
       </ScrollView>
     </SafeAreaView>
   );
