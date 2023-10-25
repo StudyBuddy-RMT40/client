@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,251 +9,159 @@ import {
   ScrollView,
 } from "react-native";
 import Button from "../components/Button";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import CustomHeader from "../components/CustomHeader";
+import { SelectList } from "react-native-dropdown-select-list";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorModal from "../components/modal/ErrorModal";
-import BuddySlider from "../components/BuddySlider";
-import CheckBox from "react-native-check-box";
-import { ActivityIndicator } from "react-native";
+import {
+  Logout,
+  addProject,
+  logoutUser,
+  searchBuddy,
+} from "../store/actions/actionCreators";
 
 export default function ProjectForm() {
+  const DataCategory = useSelector((state) => state.category.categories);
+  const locations = useSelector((state) => state.location.locations);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [categoryId, setCategoryId] = useState("");
+  const dispatch = useDispatch();
+
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [buddy, setBuddy] = useState("");
   const [goals, setGoals] = useState("");
   const [todos, setTodos] = useState("");
   const [location, setLocation] = useState("");
   const [displaySlider, setDisplaySlider] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [todoList, setTodoList] = useState([]);
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
+  //handle error
+  const [projectNameError, setProjectNameError] = useState(null);
+  const [projectDescriptionError, setProjectDescriptionError] = useState(null);
+  const [categoryError, setCategoryError] = useState(null);
+  const [startDateError, setStartDateError] = useState(null);
+  const [endDateError, setEndDateError] = useState(null);
+  const [goalsError, setGoalsError] = useState(null);
+  const [locationError, setLocationError] = useState(null);
+  const [dataBuddy, setDataBuddy] = useState([]);
 
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-    let errorMessage = "";
-
-    if (!projectName) errorMessage += "Project Name must be filled. ";
-    if (!projectDescription)
-      errorMessage += "Project Description must be filled. ";
-    if (!category) errorMessage += "Category must be filled. ";
-    if (!startDate) errorMessage += "Start Date must be filled. ";
-    if (!endDate) errorMessage += "End Date must be filled. ";
-    if (!goals) errorMessage += "Goals must be filled. ";
-    if (!location) errorMessage += "Location must be filled. ";
-
-    if (errorMessage) {
-      setModalMessage(errorMessage);
-      setShowModal(true);
-      return;
-    }
-
-    navigation.push("Payment");
+    // TODO:
+    // console.log(projectName, buddy, projectDescription, categoryId, goals);
+    dispatch(
+      addProject(projectName, buddy, projectDescription, categoryId, goals)
+    )
+      .then((result) => {
+        console.log("loading");
+        setTimeout(() => {
+          navigation.navigate("Dashboard");
+        }, 500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // navigation.push("Dashboard");
   };
 
   const handleSearchBuddy = () => {
     if (category && location) {
-      setDisplaySlider(true);
+      console.log(category, location);
+      dispatch(searchBuddy(category, location))
+        .then((result) => {
+          console.log(result.Teacher, "dataa");
+          if (result.Teacher === undefined) {
+            dispatch(logoutUser());
+            navigation.navigate("Home");
+          } else {
+            setDisplaySlider(true);
+            setDataBuddy(result.Teacher);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       alert("Please fill in both category and location!");
     }
   };
 
-  const [filterQuery, setFilterQuery] = useState("");
-  const categories = [
-    "Matematika",
-    "Fisika",
-    "Kimia",
-    "Biologi",
-    "Bahasa Inggris",
-    "Bahasa Indonesia",
-    "Sejarah",
-    "Ekonomi",
-    "Bahasa Asing",
-    "Ilmu Komputer",
-    "Teknik",
-    "Ilmu Sosial",
-    "Penulisan Tesis",
-    "Riset dan Analisis Data",
-    "Pengembangan Perangkat Lunak",
-    "Studi Kasus Bisnis",
-    "Analisis Keuangan",
-    "Desain Arsitektur",
-    "Proyek Teknik",
-    "Perencanaan Bisnis",
-    "Pemasaran dan Strategi Penjualan",
-    "Analisis Pasar",
-    "Manajemen Proyek",
-    "Pengembangan Produk",
-    "Manajemen Keuangan",
-    "Konsultasi Startup",
-    "Kewirausahaan Sosial",
-    "Pengembangan Bisnis UMKM",
-    "Strategi Pemasaran UMKM",
-    "Manajemen Keuangan UMKM",
-    "Peningkatan Efisiensi Operasional UMKM",
-    "Pelatihan Keterampilan Kerja",
-    "Pendampingan Pemilik UMKM",
-    "Fotografi",
-    "Seni dan Kreativitas",
-    "Penulisan Kreatif",
-    "Proyek Kesehatan Masyarakat",
-    "Proyek Lingkungan",
-    "Proyek Sosial dan Kemanusiaan",
-    "Pengembangan Aplikasi Web",
-    "Keamanan Cyber",
-    "Pengembangan Aplikasi Mobile",
-    "Pengembangan Game",
-    "Pembuatan Situs Web",
-    "Desain UI/UX",
-    "Desain Grafis",
-    "Seni Lukis",
-    "Seni Rupa",
-    "Desain Mode",
-    "Seni Pertunjukan",
-    "Seni Musik",
-    "Gizi dan Diet",
-    "Kebugaran dan Olahraga",
-    "Kesehatan Mental",
-    "Konseling",
-    "Pengelolaan Stres",
-    "Pengembangan Keterampilan Kepribadian",
-  ];
-  const locations = ["Jakarta", "Bandung", "Yogyakarta", "Surabaya", "Medan"];
+  useFocusEffect(
+    React.useCallback(() => {
+      if (DataCategory.length > 0) {
+        const temp = DataCategory.map((e) => e.name);
+        setCategories(temp);
+      }
+    }, [DataCategory])
+  );
 
-  const [filteredCategories, setFilteredCategories] = useState(categories);
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
-
-  const [locationQuery, setLocationQuery] = useState("");
-
-  const [filteredLocations, setFilteredLocations] = useState(locations);
-  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-
-  useEffect(() => {
-    if (filterQuery) {
-      const filtered = categories.filter((cat) =>
-        cat.toLowerCase().includes(filterQuery.toLowerCase())
-      );
-      setFilteredCategories(filtered);
-    } else {
-      setFilteredCategories(categories);
-    }
-  }, [filterQuery]);
-
-  useEffect(() => {
-    if (locationQuery) {
-      const filtered = locations.filter((loc) =>
-        loc.toLowerCase().includes(locationQuery.toLowerCase())
-      );
-      setFilteredLocations(filtered);
-    } else {
-      setFilteredLocations(locations);
-    }
-  }, [locationQuery]);
+  const handleItemClick = (id, categoryId) => {
+    setBuddy(id);
+    setCategoryId(categoryId);
+  };
 
   return (
     <>
-      <CustomHeader title="Add New Project" />
+      <CustomHeader title='Add New Project' />
 
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Choose Your Mentor</Text>
 
         <View style={styles.filterLocationContainer}>
-          <TextInput
-            style={styles.filterInput}
-            placeholder="Select Category"
-            value={filterQuery}
-            onChangeText={(text) => {
-              setFilterQuery(text);
-              if (text) {
-                setShowCategoryDropdown(true);
-                setShowLocationDropdown(false);
-              } else {
-                setShowCategoryDropdown(false);
-              }
+          <SelectList
+            setSelected={(val) => {
+              setCategory(val);
             }}
-            onBlur={() => setTimeout(() => setShowCategoryDropdown(false), 150)}
+            data={categories}
+            save='name'
+            search={false}
+            placeholder='Category'
+            boxStyles={{ width: 330, marginTop: 5, backgroundColor: "white" }}
           />
+        </View>
 
-          {showCategoryDropdown && filteredCategories.length > 0 && (
-            <View style={styles.dropdownContainer}>
-              <View style={{ flex: 1 }}>
-                <ScrollView nestedScrollEnabled style={{ maxHeight: 200 }}>
-                  {filteredCategories.map((category) => (
-                    <TouchableOpacity
-                      style={styles.dropdownItem}
-                      key={category}
-                      onPress={() => {
-                        setCategory(category);
-                        setFilterQuery(category);
-                        setShowCategoryDropdown(false);
-                      }}
-                    >
-                      <Text>{category}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            </View>
-          )}
-
-          <TextInput
-            style={styles.locationInput}
-            placeholder="Select Location"
-            value={locationQuery}
-            onChangeText={(text) => {
-              setLocationQuery(text);
-              if (text) {
-                setShowLocationDropdown(true);
-                setShowCategoryDropdown(false);
-              } else {
-                setShowLocationDropdown(false);
-              }
-            }}
-            onBlur={() => setTimeout(() => setShowLocationDropdown(false), 150)}
+        <View>
+          <SelectList
+            setSelected={(val) => setLocation(val)}
+            data={locations}
+            save='name'
+            search={false}
+            placeholder='Location'
+            boxStyles={{ width: 330, marginTop: 5, backgroundColor: "white" }}
           />
-
-          {showLocationDropdown && filteredLocations.length > 0 && (
-            <View style={[styles.dropdownContainer, { left: "52%" }]}>
-              <View style={{ flex: 1 }}>
-                <ScrollView nestedScrollEnabled style={{ maxHeight: 200 }}>
-                  {filteredLocations.map((loc) => (
-                    <TouchableOpacity
-                      style={styles.dropdownItem}
-                      key={loc}
-                      onPress={() => {
-                        setLocation(loc);
-                        setLocationQuery(loc);
-                        setShowLocationDropdown(false);
-                      }}
-                    >
-                      <Text>{loc}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            </View>
-          )}
         </View>
 
         <Button
-          text="Search Buddy"
+          text='Search Buddy'
           onPress={handleSearchBuddy}
           style={styles.searchButton}
         />
 
-        {displaySlider && <BuddySlider />}
+        {/* {displaySlider && <HorizontalSlider />} */}
+        {displaySlider &&
+          dataBuddy &&
+          dataBuddy.map((e) => (
+            <View
+              key={e.id}
+              style={{
+                backgroundColor: buddy === e.id ? "lightblue" : "white",
+              }}>
+              <Text onPress={() => handleItemClick(e.id, e.categoryId)}>
+                {e.username}
+              </Text>
+            </View>
+          ))}
 
         <Text style={styles.label}>Project Name</Text>
         <View style={styles.container}>
           <TextInput
             value={projectName}
             onChangeText={setProjectName}
-            placeholder="Enter project name"
+            placeholder='Enter project name'
           />
         </View>
 
@@ -262,10 +170,10 @@ export default function ProjectForm() {
           <TextInput
             value={projectDescription}
             onChangeText={setProjectDescription}
-            placeholder="Enter project description"
+            placeholder='Enter project description'
             multiline
             numberOfLines={4}
-            textAlignVertical="top"
+            textAlignVertical='top'
           />
         </View>
 
@@ -274,35 +182,23 @@ export default function ProjectForm() {
           <TextInput
             value={goals}
             onChangeText={setGoals}
-            placeholder="Enter goals for the project"
+            placeholder='Enter goals for the project'
             multiline
             numberOfLines={4}
-            textAlignVertical="top"
+            textAlignVertical='top'
           />
         </View>
-
-        <Text style={styles.label}>Generate To Do List</Text>
-        <View style={styles.containerBig}>
-          <TextInput
-            value={todos}
-            onChangeText={setTodos}
-            placeholder="Enter your command so AI can generate your project. Use this format:
-            'Buat daftar tugas untuk pembuatan${userMessage} dalam format JSON seperti contoh ini:[{'tugas':''},{'tugas':''}]'"
-            multiline
-            numberOfLines={4}
-            textAlignVertical="top"
-          />
-        </View>
+        <Text style={styles.errorText}>{goalsError}</Text>
 
         <View>
-          <Button text="Submit" onPress={handleSubmit} />
+          <Button text='Submit' onPress={handleSubmit} />
         </View>
         <View style={{ marginBottom: 30 }}></View>
       </ScrollView>
 
       <ErrorModal
         visible={showModal}
-        title="Error"
+        title='Error'
         message={modalMessage}
         onClose={() => setShowModal(false)}
       />
@@ -422,5 +318,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomColor: "#f0f0f0",
     borderBottomWidth: 1,
+  },
+  errorText: {
+    backgroundColor: "#FFCACA",
+    color: "red",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 10,
+    marginTop: 10,
   },
 });
