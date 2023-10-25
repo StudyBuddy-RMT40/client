@@ -14,9 +14,9 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   const [selectedRole, setSelectedRole] = useState(null);
   const [specialization, setSpecialization] = useState([]);
   const dispatch = useDispatch();
-  let { categories } = useSelector((state) => {
-    return state.categories;
-  });
+  // let { categories } = useSelector((state) => {
+  //   return state.categories;
+  // });
   // ini butuh styling ya mba, tinggal uncomment
   // let dummySpecializations;
   // dummySpecializations = categories.map((e) => ({
