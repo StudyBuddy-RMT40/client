@@ -29,9 +29,9 @@ export default function LandingPageScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
-  const [isLogin, setIsLogin] = useState(false)
-  const { profileUser } = useSelector((state) => state.user)
-  const { access_token, role } = useSelector((state) => state.auth)
+  const [isLogin, setIsLogin] = useState(false);
+  const { profileUser } = useSelector((state) => state.user);
+  const { access_token, role } = useSelector((state) => state.auth);
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
     {
@@ -39,12 +39,12 @@ export default function LandingPageScreen() {
       label: "All Projects",
       size: 60,
       onPress: (category) => {
-        const filteredProjects = category === "All Projects"
-          ? projectReducer
-          : filterDataByCategory(category);
+        const filteredProjects =
+          category === "All Projects"
+            ? projectReducer
+            : filterDataByCategory(category);
 
-
-        navigation.navigate('Project', { filteredProjects });
+        navigation.navigate("Project", { filteredProjects });
       },
     },
     {
@@ -52,12 +52,12 @@ export default function LandingPageScreen() {
       label: "School Projects",
       size: 60,
       onPress: (category) => {
-        const filteredProjects = category === "School Projects"
-          ? projectReducer
-          : filterDataByCategory(category);
+        const filteredProjects =
+          category === "School Projects"
+            ? projectReducer
+            : filterDataByCategory(category);
 
-
-        navigation.navigate('Project', { filteredProjects });
+        navigation.navigate("Project", { filteredProjects });
       },
     },
     {
@@ -65,11 +65,12 @@ export default function LandingPageScreen() {
       label: "University Projects",
       size: 60,
       onPress: (category) => {
-        const filteredProjects = category === "University Projects"
-          ? projectReducer
-          : filterDataByCategory(category);
+        const filteredProjects =
+          category === "University Projects"
+            ? projectReducer
+            : filterDataByCategory(category);
 
-        navigation.navigate('Project', { filteredProjects });
+        navigation.navigate("Project", { filteredProjects });
       },
     },
     {
@@ -93,44 +94,62 @@ export default function LandingPageScreen() {
   ];
 
   const filterDataByCategory = (category) => {
-    const filteredData = projectReducer.filter(
-      (item) => item.Category.groupBy === category
-    );
-    return filteredData;
+    switch (category) {
+      case "All Projects":
+        return projectReducer;
+      case "highschool":
+        return projectReducer.filter(
+          (item) => item.Category.groupBy === "HighSchool Projects"
+        );
+      case "university":
+        return projectReducer.filter(
+          (item) => item.Category.groupBy === "University Projects"
+        );
+      case "public":
+        return projectReducer.filter(
+          (item) => item.Category.groupBy === "Public Projects"
+        );
+      default:
+        return [];
+    }
   };
 
   useEffect(() => {
     if (access_token) {
-      setIsLogin(true)
+      setIsLogin(true);
     } else {
-      setIsLogin(false)
+      setIsLogin(false);
     }
-  }, [access_token])
+  }, [access_token]);
 
   // useEffect(() => {
   //   dispatch(fetchUserProfile(access_token, role))
   // }, [])
 
-
   const projectReducer = useSelector((state) => state.projectReducer.projects);
-  // console.log(state, '<<<<<<< ini di landing page')
-
-  const topProjects = filterDataByCategory("Top Projects");
-  const topTeachers = filterDataByCategory("Top Teachers");
-  const topStudents = filterDataByCategory("Top Students");
+  // console.log(state, "<<<<<<< ini di landing page");
+  const getCategoryTitle = (category) => {
+    switch (category) {
+      case "highschool":
+        return "HighSchool Projects";
+      case "university":
+        return "University Projects";
+      case "public":
+        return "Public Projects";
+      default:
+        return category;
+    }
+  };
+  const orderedCategories = ["highschool", "university", "public"];
 
   const handleCategorySelect = (category) => {
     setSearchQuery("");
     setSelectedCategory(category);
   };
 
-
   useEffect(() => {
     dispatch(getProjects());
-    if (selectedCategory) {
-      const filteredProjects = filterDataByCategory(selectedCategory);
-      // Handle filtered projects
-    }
+    console.log(">>>", projectReducer);
   }, [dispatch, selectedCategory]);
 
   return (
@@ -157,22 +176,21 @@ export default function LandingPageScreen() {
         <View style={styles.carouselContainer}>
           <HeroCarousel />
         </View>
-        <ButtonGrid items={buttonItems} onSelectCategory={handleCategorySelect} />
-        <HorizontalSlider
-          title="Top Projects"
-          dataFilter={topProjects}
-          searchQuery={searchQuery}
+        <ButtonGrid
+          items={buttonItems}
+          onSelectCategory={handleCategorySelect}
         />
-        <HorizontalSlider
-          title="Top Teachers"
-          dataFilter={topTeachers}
-          searchQuery={searchQuery}
-        />
-        <HorizontalSlider
-          title="Top Students"
-          dataFilter={topStudents}
-          searchQuery={searchQuery}
-        />
+        {orderedCategories.map((category) => {
+          const filteredData = filterDataByCategory(category);
+          return (
+            <HorizontalSlider
+              key={category}
+              title={getCategoryTitle(category)}
+              dataFilter={filteredData}
+              searchQuery={searchQuery}
+            />
+          );
+        })}
         {/* <VerticalSlider /> */}
       </ScrollView>
     </SafeAreaView>
