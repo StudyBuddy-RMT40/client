@@ -1,29 +1,18 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Image,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet, Image } from "react-native";
 import CustomHeader from "../components/CustomHeader";
 
 export default function FinishScreen({ route }) {
   const projectData = route.params.project;
   const image = require("../assets/dummy/hero-dummy.jpg");
-  console.log(projectData)
-  
+  console.log(projectData);
 
   return (
     <>
       <CustomHeader title="Project Finish" />
 
-
       <ScrollView style={styles.contentContainerStyle}>
-      <Image
-        source={image}
-        style={styles.projectImage}
-      />
+        <Image source={image} style={styles.projectImage} />
         <Text style={styles.label}>Project Name</Text>
         <View style={styles.container}>
           <Text>{projectData?.name}</Text>
@@ -52,7 +41,7 @@ const styles = StyleSheet.create({
   projectImage: {
     width: "100%",
     height: 200,
-    borderRadius: 8, 
+    borderRadius: 8,
   },
   contentContainerStyle: {
     padding: 13,

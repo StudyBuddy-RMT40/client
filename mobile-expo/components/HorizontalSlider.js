@@ -48,10 +48,12 @@ const LocationSVG = () => (
 );
 
 export default function HorizontalSlider(props) {
-  const { data, title, searchQuery } = props;
+  const { dataFilter, title, searchQuery, groupBy } = props;
+  // console.log("dataFilter:", dataFilter);
+  // console.log("groupBy:", groupBy);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const image = require("../assets/dummy/hero-dummy.jpg");
+  const image = require("../assets/images/HiRes-17.jpg");
 
   const handleFinish = (projectData) => {
     navigation.push("Finish", { project: projectData });
@@ -61,17 +63,23 @@ export default function HorizontalSlider(props) {
   });
 
   const filteredData = projectReducer.filter((project) => {
-    if (project && project.Category && project.Category.name && project.name) {
-      const categoryName = project.Category.name;
+    if (
+      project &&
+      project.Category &&
+      project.Category.groupBy &&
+      project.name
+    ) {
+      const categoryName = project.Category.groupBy;
       const projectName = project.name.toLowerCase();
       return (
-        categoryName.includes(searchQuery.toLowerCase()) &&
+        categoryName === groupBy &&
         projectName.includes(searchQuery.toLowerCase())
-        // Add other filters like project.status and project.published if needed
       );
     }
-    return false; // Filter out invalid projects
+    return false;
   });
+
+  // console.log("filteredData:", filteredData);
 
   useEffect(() => {
     dispatch(getProjects());

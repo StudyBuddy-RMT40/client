@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import { FlatList, Image, Dimensions, View, StyleSheet } from "react-native";
 
-import heroDummy from "../assets/dummy/hero-dummy.jpg";
-import dummy1 from "../assets/dummy/dummy1.png";
-import dummy2 from "../assets/dummy/dummy2.png";
-import dummy3 from "../assets/dummy/dummy3.png";
+import heroDummy from "../assets/images/HiRes-17.jpg";
+import dummy1 from "../assets/images/HiRes-17.jpg";
+import dummy2 from "../assets/images/HiRes-17.jpg";
+import dummy3 from "../assets/images/HiRes-17.jpg";
 
 const screenWidth = Dimensions.get("window").width;
 
