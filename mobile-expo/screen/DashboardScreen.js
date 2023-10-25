@@ -84,7 +84,7 @@ export default function DashboardScreen() {
         "Access a complete set of learning materials, including recorded lectures, project templates, and additional resources, to help you excel in your capstone project.",
     },
   ]);
-  let temp = [];
+  let temp = []
 
   const buttonItems = [
     {
@@ -106,7 +106,7 @@ export default function DashboardScreen() {
     if (!role) {
       setModalMessage("What role do you prefer?");
       setShowModal(true);
-    }
+    } 
   }, []);
 
   useEffect(() => {
@@ -116,6 +116,7 @@ export default function DashboardScreen() {
       setReting(dataTeacher.Ratings);
       dataTeacher.Projects.forEach((e) => {
         console.log(e.status);
+        console.log(e.Category);
         temp.push({
           id: e._id,
           title: e.name,
@@ -128,44 +129,46 @@ export default function DashboardScreen() {
           learningMaterials: e.todos,
         });
       });
-      setProjectData(temp);
+      setProjectData(temp)
     } else if (role === "student" && dataStudent) {
       // setProjectData(dataStudent.Projects);
       setLike(dataStudent.Likes);
       setReting(dataStudent.Ratings);
       dataStudent.Projects.forEach((e) => {
+        console.log(e.status);
+        console.log(e.Categor.name);
         temp.push({
           id: e._id,
           title: e.name,
           progress: e.totalFinished,
           status: e.status,
           description: e.description,
-          category: "Design",
+          category: e.Categor.name,
           goals: e.goals,
           feedback: e.feedback,
           learningMaterials: e.todos,
         });
       });
-      setProjectData(temp);
+      setProjectData(temp)
     }
   }, [dataTeacher, dataStudent]);
   return (
     <>
-      <CustomHeader title="Dashboard" />
+      <CustomHeader title='Dashboard' />
 
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data={isLikes} isLike={true} title="Overview" />
+            <DashboardWidget data={isLikes} isLike={true} title='Overview' />
             <DashboardWidget data={isRatings} isReview={true} />
           </View>
           <ButtonGrid items={buttonItems} />
-          <DashboardProject projects={projectData.Projects} />
+          <DashboardProject projectData={projectData} />
         </ScrollView>
       </View>
       <ErrorModal
         visible={showModal}
-        title="Role Validation"
+        title='Role Validation'
         message={modalMessage}
         onClose={() => {
           setShowModal(false), setShowRoleModal(true);

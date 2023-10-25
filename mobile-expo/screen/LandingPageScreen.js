@@ -31,43 +31,42 @@ export default function LandingPageScreen() {
   const insets = useSafeAreaInsets();
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
-    {
-      icon: allProject,
-      label: "All Projects",
-      size: 60,
-      onPress: (category) => {
-        const filteredProjects =
-          category === "All Projects"
+      {
+        icon: allProject,
+        label: "All Projects",
+        size: 60,
+        onPress: (category) => {
+          const filteredProjects = category === "All Projects"
             ? projectReducer
             : filterDataByCategory(category);
-
-        navigation.navigate("Project", { filteredProjects });
+    
+         
+          navigation.navigate('Project', { filteredProjects });
+        },
       },
-    },
-    {
-      icon: highschool,
-      label: "School Projects",
-      size: 60,
-      onPress: (category) => {
-        const filteredProjects =
-          category === "School Projects"
+      {
+        icon: highschool,
+        label: "School Projects",
+        size: 60,
+        onPress: (category) => {
+          const filteredProjects = category === "School Projects"
             ? projectReducer
             : filterDataByCategory(category);
-
-        navigation.navigate("Project", { filteredProjects });
+    
+         
+          navigation.navigate('Project', { filteredProjects });
+        },
       },
-    },
     {
       icon: highschool,
       label: "University Projects",
       size: 60,
       onPress: (category) => {
-        const filteredProjects =
-          category === "University Projects"
-            ? projectReducer
-            : filterDataByCategory(category);
-
-        navigation.navigate("Project", { filteredProjects });
+        const filteredProjects = category === "University Projects"
+          ? projectReducer
+          : filterDataByCategory(category);
+  
+          navigation.navigate('Project', { filteredProjects });
       },
     },
     {
@@ -96,18 +95,22 @@ export default function LandingPageScreen() {
     );
     return filteredData;
   };
+  
 
+
+  
   const projectReducer = useSelector((state) => state.projectReducer.projects);
   // console.log(state, '<<<<<<< ini di landing page')
 
   const topProjects = filterDataByCategory("Top Projects");
   const topTeachers = filterDataByCategory("Top Teachers");
   const topStudents = filterDataByCategory("Top Students");
-
+ 
   const handleCategorySelect = (category) => {
-    setSearchQuery("");
+    setSearchQuery(""); 
     setSelectedCategory(category);
   };
+  
 
   useEffect(() => {
     dispatch(getProjects());
@@ -120,8 +123,8 @@ export default function LandingPageScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Welcome to StudyBuddy 👋</Text>
-        <Text style={styles.headerSubText}>Start your project here!</Text>
+        <Text style={styles.headerText}>Hi, Riska 👋</Text>
+        <Text style={styles.headerSubText}>Welcome to StudyBuddy!</Text>
         <TextInput
           style={styles.searchBar}
           placeholder="Looking for your next project?"
@@ -136,10 +139,7 @@ export default function LandingPageScreen() {
         <View style={styles.carouselContainer}>
           <HeroCarousel />
         </View>
-        <ButtonGrid
-          items={buttonItems}
-          onSelectCategory={handleCategorySelect}
-        />
+        <ButtonGrid items={buttonItems} onSelectCategory={handleCategorySelect} />
         <HorizontalSlider
           title="Top Projects"
           dataFilter={topProjects}
@@ -182,14 +182,14 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 24,
     color: "#0e365c",
     fontWeight: "bold",
     marginTop: 50,
     fontFamily: "Lato-Bold",
   },
   headerSubText: {
-    fontSize: 15,
+    fontSize: 17,
     color: "#4781a5",
     fontFamily: "Lato-Regular",
   },
