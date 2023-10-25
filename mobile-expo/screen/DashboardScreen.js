@@ -116,6 +116,7 @@ export default function DashboardScreen() {
       setReting(dataTeacher.Ratings);
       dataTeacher.Projects.forEach((e) => {
         console.log(e.status);
+        console.log(e.Category);
         temp.push({
           id: e._id,
           title: e.name,
@@ -134,13 +135,15 @@ export default function DashboardScreen() {
       setLike(dataStudent.Likes);
       setReting(dataStudent.Ratings);
       dataStudent.Projects.forEach((e) => {
+        console.log(e.status);
+        console.log(e.Categor.name);
         temp.push({
           id: e._id,
           title: e.name,
           progress: e.totalFinished,
           status: e.status,
           description: e.description,
-          category: "Design",
+          category: e.Categor.name,
           goals: e.goals,
           feedback: e.feedback,
           learningMaterials: e.todos,
