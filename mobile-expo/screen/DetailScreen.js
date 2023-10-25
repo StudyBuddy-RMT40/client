@@ -30,14 +30,24 @@ export default function DetailScreen({ route }) {
   const handlePayProject = () => {
     navigation.push("Payment");
   };
-
   const handleFinishProject = () => {
     setProject({ ...project, status: "Finished" });
   };
 
   const handleChat = () => {
     console.log("chat dipijit");
-    navigation.push("Chat");
+
+    // Define the data you want to send
+    const profile = {
+      // Define your data here, for example:
+      me: {},
+      other: {},
+    };
+
+    // Use the navigation.push method to send data as a parameter
+    navigation.push("Chat", {
+      data: chatData, // "data" is the parameter name, and "chatData" is the data object
+    });
   };
 
   const handleUpdateTodo = (text, index) => {
@@ -64,7 +74,7 @@ export default function DetailScreen({ route }) {
 
   return (
     <>
-      <CustomHeader title="Project Detail" />
+      <CustomHeader title='Project Detail' />
 
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Project Name</Text>
@@ -92,14 +102,13 @@ export default function DetailScreen({ route }) {
             <Text style={styles.label}>Proposal Price</Text>
             <TextInput
               style={styles.editableContainer}
-              placeholder="Enter Price"
+              placeholder='Enter Price'
               value={price}
               onChangeText={setPrice}
             />
             <TouchableOpacity
               style={styles.acceptButton}
-              onPress={handleAcceptProposal}
-            >
+              onPress={handleAcceptProposal}>
               <Text style={styles.buttonText}>Accept Project Proposal</Text>
             </TouchableOpacity>
           </>
@@ -143,9 +152,9 @@ export default function DetailScreen({ route }) {
 
             <View style={styles.containerButton}>
               {userRole === "buddy" ? (
-                <Button text="Chat with Student" onPress={handleChat} />
+                <Button text='Chat with Student' onPress={handleChat} />
               ) : (
-                <Button text="Chat with Buddy" onPress={handleChat} />
+                <Button text='Chat with Buddy' onPress={handleChat} />
               )}
             </View>
           </>
@@ -172,7 +181,7 @@ export default function DetailScreen({ route }) {
                 <Text style={styles.label}>buddy Feedback</Text>
                 <TextInput
                   style={styles.editableContainer}
-                  placeholder="Enter feedback"
+                  placeholder='Enter feedback'
                   value={buddyFeedback}
                   onChangeText={setBuddyFeedback}
                 />
@@ -186,15 +195,13 @@ export default function DetailScreen({ route }) {
                   onPress={() => {
                     // Handle Multer
                   }}
-                  style={styles.uploadDocumentationButton}
-                >
+                  style={styles.uploadDocumentationButton}>
                   <Text style={styles.buttonText}>Upload Documentation</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={handleFinishProject}
-                  style={styles.finishProjectButton}
-                >
+                  style={styles.finishProjectButton}>
                   <Text style={styles.buttonText}>Finish Project</Text>
                 </TouchableOpacity>
               </>
@@ -210,6 +217,7 @@ export default function DetailScreen({ route }) {
             style={styles.projectImage}
           />
         )}
+        <View style={{ marginBottom: 80 }}></View>
       </ScrollView>
     </>
   );

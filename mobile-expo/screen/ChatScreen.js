@@ -4,7 +4,11 @@ import { View, StyleSheet } from "react-native";
 import * as TalkRn from "@talkjs/expo";
 import CustomHeader from "../components/CustomHeader";
 
-export default function ChatScreen(props) {
+export default function ChatScreen({ route }) {
+  const { data } = route.params;
+  console.log(data);
+
+  
   const me = {
     id: "123456789",
     name: "Alice",
