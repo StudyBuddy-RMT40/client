@@ -1,28 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Linking,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import CustomHeader from "../components/CustomHeader";
+import getPaymentGatewayUrl from "../config/midtrans";
 
 export default function PaymentScreen() {
+  const [redirectUrl, setRedirectUrl] = useState(null);
   const navigation = useNavigation();
 
   const handleCancel = () => {
     navigation.goBack();
   };
 
-  const handleContinuePayment = () => {
-    const paymentGatewayURL = "https://www.midtrans.com/";
+  const handleContinuePayment = async () => {
+    try {
+      const parameter = {
+        transaction_details: {
+          order_id:
+            "TRANSACTION_" +
+            Math.floor(10000000 + Math.random() * 9000000) +
+            "_" +
+            1,
+          gross_amount: totalAmount,
+        },
+        credit_card: {
+          secure: true,
+        },
+        customer_details: {
+          email: "tester@mail.com",
+          name: "tester",
+        },
+      };
 
-    Linking.openURL(paymentGatewayURL).catch((err) =>
-      console.error("An error occurred: ", err)
-    );
+      const redirectUrl = await getPaymentGatewayUrl(parameter, orderDetails);
+
+      setRedirectUrl(redirectUrl);
+    } catch (error) {
+      console.error("Error creating Snap Token:", error);
+    }
   };
+
+  useEffect(() => {
+    if (redirectUrl) {
+      navigation.push("Midtrans", { paymentGatewayURL: redirectUrl.redirect_url });
+    }
+  }, [redirectUrl, navigation]);
 
   const orderDetails = [
     { label: "Lesson - Ternak Padi", price: 1000000 },

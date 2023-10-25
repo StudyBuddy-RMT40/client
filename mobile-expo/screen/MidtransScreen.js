@@ -1,23 +1,25 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
 export default function MidtransScreen({ route }) {
+  const navigation = useNavigation()
   const { paymentGatewayURL } = route.params;
 
   const handlePaymentFinished = (data) => {
-    console.log('Received data:', data); 
+    console.log('Received data:', data);
 
     if (data && data.message === 'paymentFinished') {
       console.log('Payment Success:', data);
-      
+      navigation.navigate("Home")
     } else {
       console.log('Unknown message or failed payment:', data);
-   
+
     }
   };
 
-  console.log('Payment Gateway URL:', paymentGatewayURL); 
+  console.log('Payment Gateway URL:', paymentGatewayURL);
 
   return (
     <View style={{ flex: 1 }}>
@@ -26,9 +28,16 @@ export default function MidtransScreen({ route }) {
         onMessage={event => {
           const data = JSON.parse(event.nativeEvent.data);
 
-          console.log('Received message:', data); 
+          console.log('Received message:', data);
 
           handlePaymentFinished(data);
+        }}
+        onNavigationStateChange={(navState) => {
+          const status = navState.url.split("/").includes("success")
+          console.log(status, '-> ini status');
+          if (status == true) {
+            navigation.navigate("Home")
+          }
         }}
       />
     </View>

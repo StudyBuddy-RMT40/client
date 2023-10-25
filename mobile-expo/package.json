@@ -25,6 +25,7 @@
     "@talkjs/expo": "^0.6.0",
     "@talkjs/react-native": "^0.6.0",
     "axios": "^1.5.1",
+    "base-64": "^1.0.0",
     "expo": "^49.0.0",
     "expo-font": "~11.4.0",
     "expo-linear-gradient": "~12.3.0",

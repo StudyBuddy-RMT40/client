@@ -99,7 +99,7 @@ export default function DetailScreen({ route }) {
           </>
         )}
 
-        {project.status === "accepted" && userRole === "student" && (
+        {project.status === "Accepted" && userRole === "student" && (
           <TouchableOpacity onPress={handlePayProject} style={styles.payButton}>
             <Text style={styles.buttonText}>Proceed Payment</Text>
           </TouchableOpacity>
