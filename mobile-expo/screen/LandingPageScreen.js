@@ -32,9 +32,6 @@ export default function LandingPageScreen() {
   const [isLogin, setIsLogin] = useState(false);
   const { profileUser } = useSelector((state) => state.user);
   const { access_token, role } = useSelector((state) => state.auth);
-  const [isLogin, setIsLogin] = useState(false);
-  const { profileUser } = useSelector((state) => state.user);
-  const { access_token, role } = useSelector((state) => state.auth);
   const paddingTop = Platform.OS === "ios" ? insets.top + 120 : 220;
   const buttonItems = [
     {
