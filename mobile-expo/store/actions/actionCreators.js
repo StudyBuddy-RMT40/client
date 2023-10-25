@@ -11,7 +11,7 @@ import {
 } from "./actionTypes";
 
 import axios from "axios";
-const baseUrl = "https://314e-114-124-238-247.ngrok-free.app/";
+const baseUrl = "https://bbe7-114-124-238-247.ngrok-free.app/";
 let access_token;
 
 export const fetchDashboardStudent = (data) => {
