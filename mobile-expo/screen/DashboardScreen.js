@@ -23,6 +23,7 @@ export default function DashboardScreen() {
   const { dataStudent, dataTeacher } = useSelector((state) => state.dashboard);
   const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
   const [projectData, setProjectData] = useState([]);
+  // console.log(projectData)
   let temp = [];
 
   const buttonItems = [
@@ -59,7 +60,7 @@ export default function DashboardScreen() {
       setLike(dataTeacher.Likes);
       setReting(dataTeacher.Ratings);
       dataTeacher.Projects.forEach((e) => {
-        console.log(e.status);
+        // console.log(e._id);
         // console.log(e.Category.name);
         temp.push({
           id: e._id,
@@ -67,7 +68,7 @@ export default function DashboardScreen() {
           progress: e.totalFinished,
           status: e.status,
           description: e.description,
-          category: "e.Category.name",
+          category: e.Category.name,
           goals: e.goals,
           feedback: e.feedback,
           learningMaterials: e.todos,
@@ -79,8 +80,8 @@ export default function DashboardScreen() {
       setLike(dataStudent.Likes);
       setReting(dataStudent.Ratings);
       dataStudent.Projects.forEach((e) => {
-        console.log(e.status);
-        console.log(e);
+        // console.log(e._id, e.name);
+        // console.log(e);
         // console.log(e.Category.name);
         temp.push({
           id: e._id,
@@ -88,7 +89,7 @@ export default function DashboardScreen() {
           progress: e.totalFinished,
           status: e.status,
           description: e.description,
-          category: "e.Category.name",
+          category: e.Category.name,
           goals: e.goals,
           feedback: e.feedback,
           learningMaterials: e.todos,

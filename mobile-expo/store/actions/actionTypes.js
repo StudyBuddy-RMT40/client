@@ -12,3 +12,5 @@ export const FETCH_CATEGORIES_SUCCESS = "categories/fetchSuccess";
 export const FETCH_DASHBOARD_STUDENT = "student/fetchSuccess";
 export const FETCH_DASHBOARD_TEACHER = "teacher/fetchSuccess";
 export const FETCH_USER_PROFILE = "userProfile/fetchSuccess"
+
+export const FETCH_REDIRECT_URL = "redirectUrl/fetchSuccess"

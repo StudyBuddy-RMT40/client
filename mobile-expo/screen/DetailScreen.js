@@ -22,12 +22,14 @@ export default function DetailScreen({ route }) {
   const [rating, setRating] = useState(0);
   const userRole = "student";
 
+  console.log(project)
+
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
   };
 
   const handlePayProject = () => {
-    navigation.push("Payment");
+    navigation.push("Payment", project.learningMaterials[0].projectId);
   };
 
   const handleFinishProject = () => {
@@ -63,7 +65,7 @@ export default function DetailScreen({ route }) {
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Project Name</Text>
         <View style={styles.container}>
-          <Text>{project.name}</Text>
+          <Text>{project.learningMaterials[0].name}</Text>
         </View>
 
         <Text style={styles.label}>Project Description</Text>

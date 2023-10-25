@@ -19,24 +19,30 @@ export default function MidtransScreen({ route }) {
     }
   };
 
+  // const callback = () => {
+  //   console.log("a")
+  //   navigation.navigate("Dashboard")
+  // }
+
   console.log('Payment Gateway URL:', paymentGatewayURL);
 
   return (
     <View style={{ flex: 1 }}>
       <WebView
         source={{ uri: paymentGatewayURL }}
-        onMessage={event => {
-          const data = JSON.parse(event.nativeEvent.data);
+        // onMessage={event => {
+        //   const data = JSON.parse(event.nativeEvent.data);
 
-          console.log('Received message:', data);
+        //   console.log('Received message:', data);
 
-          handlePaymentFinished(data);
-        }}
+        //   handlePaymentFinished(data);
+        // }}
         onNavigationStateChange={(navState) => {
           const status = navState.url.split("/").includes("success")
           console.log(status, '-> ini status');
+          console.log(navState)
           if (status == true) {
-            navigation.navigate("Home")
+            // callback()
           }
         }}
       />

@@ -5,6 +5,7 @@ import projectReducer from "./projectReducer";
 import locationReducer from "./locationReducer";
 import dashboardReducer from "./dashboardReducer";
 import userReducer from "./userReducer";
+import midtransReducer from "./midtransReducer";
 
 const rootReducer = combineReducers({
     auth: authReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     location: locationReducer,
     projectReducer: projectReducer,
     dashboard: dashboardReducer,
-    user: userReducer
+    user: userReducer,
+    midtrans: midtransReducer
 });
 
 export default rootReducer;

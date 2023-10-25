@@ -1,4 +1,4 @@
-import { FETCH_USER_PROFILE } from "./actionTypes";
+import { FETCH_REDIRECT_URL, FETCH_USER_PROFILE } from "./actionTypes";
 import {
   FETCH_CATEGORIES_SUCCESS,
   FETCH_LOCATIONS_SUCCESS,
@@ -11,7 +11,7 @@ import {
 } from "./actionTypes";
 
 import axios from "axios";
-const baseUrl = "https://e933-2001-448a-11b0-13d6-b8a6-ba1d-3553-50e8.ngrok-free.app/";
+const baseUrl = "https://bbe7-114-124-238-247.ngrok-free.app/";
 
 let access_token;
 
@@ -240,8 +240,6 @@ export const fetchUserProfile = (token, role) => {
       });
     } catch (err) {
       console.log(err.response.data);
-      setModalMessage(err.response.data.message);
-      setShowModal(true);
     }
   };
 };
@@ -264,6 +262,29 @@ export const editProfile = (access_token, form) => {
     }
   };
 };
+
+export const payment = (projectId) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: 'post',
+        url: baseUrl + 'generate-midtrans-token/' + projectId,
+        data: {
+          price: 5000000
+        },
+        headers: {
+          access_token: access_token
+        }
+      })
+      dispatch({
+        type: FETCH_REDIRECT_URL,
+        payload: data
+      })
+    } catch (err) {
+      console.log(err.response.data)
+    }
+  }
+}
 
 export const loginUser = (loginForm) => {
   return async (dispatch) => {
