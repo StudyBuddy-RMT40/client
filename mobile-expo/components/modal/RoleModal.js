@@ -69,7 +69,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
               .then((response) => {
                 if (response.success) {
                   onSave(selectedRole, specialization);
-                  onClose();
+                  // onClose();
                 } else {
                   setModalMessage(
                     "An error occurred during specialization addition: " +
@@ -78,6 +78,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
                   setShowModal(true);
                 }
               })
+
               .catch((error) => {
                 console.log(error);
               });
@@ -133,7 +134,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
                     styles.button,
                     specialization.includes(spec.name) && styles.selectedButton,
                   ]}
-                  onPress={() => toggleSpecialist(spec.name)}
+                  onPress={() => toggleSpecialist(spec.id)}
                 >
                   <Text>{spec.name}</Text>
                 </TouchableOpacity>

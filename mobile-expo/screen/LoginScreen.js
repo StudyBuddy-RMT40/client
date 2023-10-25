@@ -20,20 +20,13 @@ export default function LoginScreen() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
-  const { access_token, role } = useSelector((state) => {
-    return state.auth;
-  });
-
-  useEffect(() => {
-    console.log(access_token);
-  }, []);
-
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const handleLogin = () => {
     dispatch(loginUser({ username, password }))
       .then((response) => {
+        console.log(response);
         if (response.success) {
           navigation.navigate("Dashboard");
         } else {
@@ -44,7 +37,7 @@ export default function LoginScreen() {
         }
       })
       .catch((error) => {
-        console.log(error,"apaaaanih");
+        console.log(error, "apaaaanih");
       });
   };
 
