@@ -1,66 +1,89 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, StyleSheet, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import CustomHeader from "../components/CustomHeader";
 import VerticalSlider from "../components/VerticalSlider";
 import { useSelector } from "react-redux";
 
-export default function ProjectScreen({route}) {
+export default function ProjectScreen({ route }) {
   const { category } = route.params;
   const [nameQuery, setNameQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
+  const [suggestedNames, setSuggestedNames] = useState([]); // To store suggested names
 
   const projectReducer = useSelector(function (state) {
-    // console.log(state, '<<<<<<< ini di project screen')
     return state.projectReducer.projects;
   });
 
-  const filterDataByCategory = (category) => {
-    const filteredData = projectReducer.filter(
-      (item) => item.Category.groupBy === category
-    );
-    return filteredData;
+  // ... Existing code ...
+
+  const handleNameChange = (text) => {
+    // Update the name input
+    setName(text);
+
+    // Filter and set suggested names
+    const suggestions = projectReducer
+      .filter((project) =>
+        project.name.toLowerCase().includes(text.toLowerCase())
+      )
+      .map((project) => project.name);
+
+    setSuggestedNames(suggestions);
   };
 
-  const filteredProjects = filterDataByCategory(category);
-
-  const filteredNames = projectReducer
-    .filter((project) =>
-      project.name.toLowerCase().includes(name.toLowerCase())
-    )
-    .map((project) => project.name);
-
-  const filteredLocations = projectReducer
-    .filter((project) =>
-      project.location?.toLowerCase().includes(location.toLowerCase())
-    )
-    .map((project) => project.location);
+  // ... Existing code ...
 
   return (
     <>
-      <CustomHeader title="Project" />
+      <CustomHeader title='Project' />
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Search by Result</Text>
 
         <View style={styles.filterLocationContainer}>
           <TextInput
             style={styles.filterInput}
-            placeholder="Name"
+            placeholder='Name'
             value={name}
-            onChangeText={(text) => {
-              setName(text);
-            }}
+            onChangeText={handleNameChange}
           />
           <TextInput
             style={styles.locationInput}
-            placeholder="Location"
+            placeholder='Location'
             value={location}
             onChangeText={(text) => {
               setLocation(text);
             }}
           />
         </View>
+
+        {/* Render the suggestion list if there are suggestions */}
+        {suggestedNames.length > 0 && (
+          <FlatList
+            data={suggestedNames}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  // Set the selected suggestion in the input field
+                  setName(item);
+                  // Clear the suggestion list
+                  setSuggestedNames([]);
+                }}>
+                <Text>{item}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        )}
+
         <VerticalSlider name={name} location={location} />
       </ScrollView>
     </>

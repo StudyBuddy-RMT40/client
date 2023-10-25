@@ -21,7 +21,7 @@ import axios from "axios";
 import ErrorModal from "../components/modal/ErrorModal";
 
 const baseUrl =
-  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
+  "https://d539-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
 
 export default function AccountScreen() {
   const dispatch = useDispatch();
@@ -62,7 +62,7 @@ export default function AccountScreen() {
 
   useEffect(() => {
     setUserProfile(profileUser)
-    console.log(access_token, "blablablabla")
+    // console.log(access_token, "blablablabla")
   }, [profileUser])
 
   useEffect(() => {
@@ -90,6 +90,7 @@ export default function AccountScreen() {
         setIsEditing(false)
       })
       .catch((err) => {
+        console.log(err.response.data.message,"di profile");
         setIsEditing(true)
         setModalMessage(err.response.data.message);
         setShowModal(true);
