@@ -27,7 +27,6 @@ export default function LandingPageScreen() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
-  const [username, setUsername] = useState("")
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const [isLogin, setIsLogin] = useState(false)
