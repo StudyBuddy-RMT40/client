@@ -11,8 +11,7 @@ import {
 } from "./actionTypes";
 
 import axios from "axios";
-const baseUrl =
-  "https://3fd8-114-122-22-55.ngrok-free.app/";
+const baseUrl = "https://de78-114-124-213-71.ngrok-free.app/";
 
 let access_token;
 
@@ -139,6 +138,7 @@ export const fetchCategories = () => {
         type: FETCH_CATEGORIES_SUCCESS,
         payload: data,
       });
+      console.log("categories:", data);
       return data;
     } catch (err) {
       console.log(err);
@@ -231,20 +231,20 @@ export const fetchUserProfile = (token, role) => {
         method: "get",
         url: baseUrl + role + "_profile",
         headers: {
-          access_token: token
-        }
+          access_token: token,
+        },
       });
       dispatch({
         type: FETCH_USER_PROFILE,
-        payload: data
-      })
+        payload: data,
+      });
     } catch (err) {
-      console.log(err.response.data)
+      console.log(err.response.data);
       setModalMessage(err.response.data.message);
       setShowModal(true);
     }
-  }
-}
+  };
+};
 
 export const editProfile = (access_token, form) => {
   return async () => {
@@ -254,16 +254,16 @@ export const editProfile = (access_token, form) => {
         url: baseUrl + "users",
         data: form,
         headers: {
-          access_token
-        }
-      })
-      console.log(data)
+          access_token,
+        },
+      });
+      console.log(data);
     } catch (err) {
-      console.log(err.response.data)
-      throw err
+      console.log(err.response.data);
+      throw err;
     }
-  }
-}
+  };
+};
 
 export const loginUser = (loginForm) => {
   return async (dispatch) => {
@@ -279,6 +279,8 @@ export const loginUser = (loginForm) => {
 
       dispatch(Login(data.access_token, role));
 
+      await dispatch(fetchCategories());
+
       if (role === "buddy") {
         console.log("yooo buddy");
         await dispatch(fetchDashboardForTeacher());
@@ -286,8 +288,6 @@ export const loginUser = (loginForm) => {
         console.log("yooo student");
         await dispatch(fetchDashboardForStudent());
       }
-
-      await dispatch(fetchCategories());
 
       return { success: true };
     } catch (error) {

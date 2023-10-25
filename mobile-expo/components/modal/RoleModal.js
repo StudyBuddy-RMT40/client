@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Modal, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Modal,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addSpecialization,
@@ -14,24 +21,19 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   const [selectedRole, setSelectedRole] = useState(null);
   const [specialization, setSpecialization] = useState([]);
   const dispatch = useDispatch();
-  // let { categories } = useSelector((state) => {
-  //   return state.categories;
-  // });
-  // ini butuh styling ya mba, tinggal uncomment
-  // let dummySpecializations;
-  // dummySpecializations = categories.map((e) => ({
-  //   id: e._id,
-  //   name: e.name,
-  // }));
-  const dummySpecializations = [
-    { id: "653823f95c2c03c354f7685a", name: "Math" },
-    { id: "653823f95c2c03c354f7685b", name: "Ipa" },
-  ]; // nanti ini dicomment aja
+  let { categories } = useSelector((state) => {
+    return state.category;
+  });
+  console.log(categories);
+  let dummySpecializations;
+  dummySpecializations = categories.map((e) => ({
+    id: e._id,
+    name: e.name,
+  }));
 
   const handleSelectRole = (role) => {
     setSelectedRole(role);
     if (role === "student") {
-      // update student
       dispatch(updateStatusRole("student"))
         .then((response) => {
           if (response.success) {
@@ -50,11 +52,11 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
     }
   };
 
-  const toggleSpecialist = (spec) => {
-    if (specialization.includes(spec)) {
-      setSpecialization((prev) => prev.filter((item) => item !== spec));
+  const toggleSpecialist = (specName) => {
+    if (specialization.includes(specName)) {
+      setSpecialization((prev) => prev.filter((item) => item !== specName));
     } else {
-      setSpecialization((prev) => [...prev, spec]);
+      setSpecialization((prev) => [...prev, specName]);
     }
   };
 
@@ -67,7 +69,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
               .then((response) => {
                 if (response.success) {
                   onSave(selectedRole, specialization);
-                  onClose();
+                  // onClose();
                 } else {
                   setModalMessage(
                     "An error occurred during specialization addition: " +
@@ -76,6 +78,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
                   setShowModal(true);
                 }
               })
+
               .catch((error) => {
                 console.log(error);
               });
@@ -93,49 +96,61 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   };
 
   return (
-    <Modal animationType='slide' transparent={true} visible={isVisible}>
+    <Modal animationType="slide" transparent={true} visible={isVisible}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.title}>Select your role</Text>
+          <Text style={styles.title}>
+            {selectedRole === "buddy"
+              ? "Select Specialization"
+              : "Select your role"}
+          </Text>
 
-          {selectedRole === null && (
-            <>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleSelectRole("student")}>
-                <Text>Student</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleSelectRole("buddy")}>
-                <Text>Buddy</Text>
-              </TouchableOpacity>
-            </>
-          )}
+          <ScrollView
+            showsVerticalScrollIndicator={true}
+            indicatorStyle="default"
+          >
+            {selectedRole === null && (
+              <>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => handleSelectRole("student")}
+                >
+                  <Text>Student</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => handleSelectRole("buddy")}
+                >
+                  <Text>Buddy</Text>
+                </TouchableOpacity>
+              </>
+            )}
 
-          {selectedRole === "buddy" &&
-            dummySpecializations.map((spec) => (
-              <TouchableOpacity
-                key={spec.id}
-                style={[
-                  styles.button,
-                  specialization.includes(spec.name) && styles.selectedButton,
-                ]}
-                onPress={() => toggleSpecialist(spec.id)}>
-                <Text>{spec.name}</Text>
-              </TouchableOpacity>
-            ))}
+            {selectedRole === "buddy" &&
+              dummySpecializations.map((spec) => (
+                <TouchableOpacity
+                  key={spec.id}
+                  style={[
+                    styles.button,
+                    specialization.includes(spec.name) && styles.selectedButton,
+                  ]}
+                  onPress={() => toggleSpecialist(spec.id)}
+                >
+                  <Text>{spec.name}</Text>
+                </TouchableOpacity>
+              ))}
 
-          {selectedRole === "buddy" && specialization.length > 0 && (
-            <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
-              <Text>Done</Text>
-            </TouchableOpacity>
-          )}
+            {selectedRole === "buddy" && specialization.length > 0 && (
+              <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
+                <Text style={{ color: "white" }}>Done</Text>
+              </TouchableOpacity>
+            )}
+          </ScrollView>
         </View>
       </View>
       <ErrorModal
         visible={showModal}
-        title='Role Validation'
+        title="Role Validation"
         message={modalMessage}
         onClose={() => {
           setShowModal(false);
@@ -150,45 +165,50 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalView: {
-    width: "80%",
+    maxHeight: "80%",
+    width: "85%",
     padding: 20,
-    backgroundColor: "white",
-    borderRadius: 15,
+    backgroundColor: "#F5F5F5",
+    borderRadius: 10,
     alignItems: "center",
+    elevation: 5,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    shadowRadius: 3.84,
   },
   title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 22,
+    fontWeight: "500",
+    marginBottom: 25,
+    color: "#396987",
   },
   button: {
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    backgroundColor: "#E0E0E0",
+    paddingVertical: 12,
+    paddingHorizontal: 15,
     borderRadius: 8,
     width: "100%",
     alignItems: "center",
-    marginVertical: 5,
+    marginVertical: 6,
   },
   selectedButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#bddded",
   },
   doneButton: {
-    backgroundColor: "#2196F3",
-    padding: 10,
+    backgroundColor: "#0e365c",
+    paddingVertical: 12,
+    paddingHorizontal: 15,
     borderRadius: 8,
     width: "100%",
     alignItems: "center",
-    marginVertical: 5,
+    marginVertical: 6,
   },
 });
 

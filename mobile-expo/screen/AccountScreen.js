@@ -12,7 +12,11 @@ import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
 import profileImage from "../assets/dummy/hero-dummy.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProfile, logoutUser, editProfile } from "../store/actions/actionCreators";
+import {
+  fetchUserProfile,
+  logoutUser,
+  editProfile,
+} from "../store/actions/actionCreators";
 import axios from "axios";
 import ErrorModal from "../components/modal/ErrorModal";
 
@@ -37,7 +41,7 @@ export default function AccountScreen() {
     return state.auth;
   });
 
-  const { profileUser } = useSelector((state) => state.user)
+  const { profileUser } = useSelector((state) => state.user);
 
   // const editProfile = async () => {
   //   try {
@@ -57,14 +61,14 @@ export default function AccountScreen() {
   // }
 
   useEffect(() => {
-    console.log(access_token)
-    setUserProfile(profileUser)
+    console.log(access_token);
+    setUserProfile(profileUser);
     // console.log(access_token, "blablablabla")
-  }, [profileUser])
+  }, [profileUser]);
 
   useEffect(() => {
-    dispatch(fetchUserProfile(access_token, role))
-  }, [])
+    dispatch(fetchUserProfile(access_token, role));
+  }, []);
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -84,22 +88,22 @@ export default function AccountScreen() {
   const handleSaveProfile = () => {
     dispatch(editProfile(access_token, userProfile))
       .then(() => {
-        setIsEditing(false)
+        setIsEditing(false);
       })
       .catch((err) => {
-        console.log(err.response.data.message,"di profile");
-        setIsEditing(true)
+        console.log(err.response.data.message, "di profile");
+        setIsEditing(true);
         setModalMessage(err.response.data.message);
         setShowModal(true);
-      })
-
-  }
+      });
+  };
 
   return (
     <SafeAreaView style={styles.containerSafeArea}>
       <ScrollView
         style={styles.contentContainerStyle}
-        contentContainerStyle={{ paddingBottom: 50 }}>
+        contentContainerStyle={{ paddingBottom: 50 }}
+      >
         <View style={styles.imageContainer}>
           <Image source={profileImage} style={styles.profileImage} />
           <Text style={styles.username}>{userProfile.name}</Text>
@@ -178,18 +182,16 @@ export default function AccountScreen() {
             style={styles.saveButton}
           />
         )}
-        {
-          !isEditing && (
-            <Button
-              text="Logout"
-              onPress={handleLogout}
-              style={styles.logoutButton}
-            />
-          )
-        }
+        {!isEditing && (
+          <Button
+            text="Logout"
+            onPress={handleLogout}
+            style={styles.logoutButton}
+          />
+        )}
         <ErrorModal
           visible={showModal}
-          title='Error'
+          title="Error"
           message={modalMessage}
           onClose={() => setShowModal(false)}
         />

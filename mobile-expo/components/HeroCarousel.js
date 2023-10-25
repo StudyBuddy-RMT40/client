@@ -1,5 +1,5 @@
-import { Image, Dimensions } from "react-native";
-import Carousel from "react-native-snap-carousel";
+import React, { useRef, useEffect, useState } from "react";
+import { FlatList, Image, Dimensions, View, StyleSheet } from "react-native";
 
 import heroDummy from "../assets/dummy/hero-dummy.jpg";
 import dummy1 from "../assets/dummy/dummy1.png";
@@ -8,7 +8,7 @@ import dummy3 from "../assets/dummy/dummy3.png";
 
 const screenWidth = Dimensions.get("window").width;
 
-export default function HeroCarousel() {
+export default function HeroCarouselFlatList() {
   const carouselItems = [
     { text: "Ini Nama Project 1", image: heroDummy },
     { text: "Ini Nama Project 2", image: dummy1 },
@@ -16,29 +16,60 @@ export default function HeroCarousel() {
     { text: "Ini Nama Project 4", image: dummy3 },
   ];
 
+  const flatListRef = useRef(null);
+  const [currentItemIndex, setCurrentItemIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentItemIndex((prev) => (prev + 1) % carouselItems.length);
+      flatListRef.current.scrollToIndex({
+        animated: true,
+        index: currentItemIndex,
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentItemIndex]);
+
   return (
-    <Carousel
-      data={carouselItems}
-      renderItem={({ item, index }) => (
-        <Image
-          key={index}
-          style={{
-            width: screenWidth - 60,
-            height: 200,
-            resizeMode: "cover",
-            borderRadius: 15,
-          }}
-          source={item.image}
-        />
-      )}
-      sliderWidth={screenWidth}
-      itemWidth={screenWidth - 50}
-      inactiveSlideScale={1}
-      inactiveSlideOpacity={0.7}
-      activeSlideAlignment={"center"}
-      loop={true}
-      autoplay={true}
-      autoplayInterval={5000}
-    />
+    <View style={styles.container}>
+      <FlatList
+        ref={flatListRef}
+        data={carouselItems}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        decelerationRate={"fast"}
+        pagingEnabled
+        onScrollEndDrag={(ev) => {
+          const newIndex = Math.round(
+            ev.nativeEvent.contentOffset.x / (screenWidth - 50)
+          );
+          setCurrentItemIndex(newIndex);
+        }}
+        renderItem={({ item, index }) => (
+          <View style={styles.itemContainer}>
+            <Image key={index} style={styles.image} source={item.image} />
+          </View>
+        )}
+        keyExtractor={(item, index) => String(index)}
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  itemContainer: {
+    width: screenWidth,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: screenWidth - 60,
+    height: 200,
+    resizeMode: "cover",
+    borderRadius: 15,
+  },
+});
