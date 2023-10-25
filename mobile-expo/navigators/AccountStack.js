@@ -15,15 +15,15 @@ export default function AccountStack() {
       {access_token ? (
         <>
           <Stack.Screen
-            name='Profile'
+            name="Profile"
             component={AccountScreen}
             options={{ headerShown: true }}
           />
         </>
-      ):<></>}
-      {/* <Stack.Screen name='PDFScreen' component={PDFScreen} /> */}
-      <Stack.Screen name='Login' component={LoginScreen} />
-      <Stack.Screen name='Register' component={RegisterScreen} />
+      ) : (
+        <Stack.Screen name="Login" component={LoginScreen} />
+      )}
+      <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
   );
 }

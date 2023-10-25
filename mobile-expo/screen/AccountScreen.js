@@ -21,7 +21,7 @@ import axios from "axios";
 import ErrorModal from "../components/modal/ErrorModal";
 
 const baseUrl =
-  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
+  "https://d539-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
 
 export default function AccountScreen() {
   const dispatch = useDispatch();
