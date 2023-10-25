@@ -21,6 +21,7 @@ export default function DetailScreen({ route }) {
   const [buddyFeedback, setBuddyFeedback] = useState("");
   const [rating, setRating] = useState(0);
   const userRole = "student";
+  console.log(">>>", project);
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
@@ -32,6 +33,11 @@ export default function DetailScreen({ route }) {
 
   const handleFinishProject = () => {
     setProject({ ...project, status: "Finished" });
+  };
+
+  const handleChat = () => {
+    console.log("chat dipijit");
+    navigation.push("Chat");
   };
 
   const handleUpdateTodo = (text, index) => {
@@ -63,7 +69,7 @@ export default function DetailScreen({ route }) {
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Project Name</Text>
         <View style={styles.container}>
-          <Text>{project.name}</Text>
+          <Text>{project.title}</Text>
         </View>
 
         <Text style={styles.label}>Project Description</Text>
@@ -99,7 +105,7 @@ export default function DetailScreen({ route }) {
           </>
         )}
 
-        {project.status === "accepted" && userRole === "student" && (
+        {project.status === "Accepted" && userRole === "student" && (
           <TouchableOpacity onPress={handlePayProject} style={styles.payButton}>
             <Text style={styles.buttonText}>Proceed Payment</Text>
           </TouchableOpacity>
@@ -134,6 +140,14 @@ export default function DetailScreen({ route }) {
                   )}
               </View>
             ))}
+
+            <View style={styles.containerButton}>
+              {userRole === "buddy" ? (
+                <Button text="Chat with Student" onPress={handleChat} />
+              ) : (
+                <Button text="Chat with Buddy" onPress={handleChat} />
+              )}
+            </View>
           </>
         )}
 
