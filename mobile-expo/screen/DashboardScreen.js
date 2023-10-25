@@ -88,6 +88,9 @@ export default function DashboardScreen() {
     },
   ]);
   let temp = [];
+  // const finishedProjects = projectDataFromRedux
+  // ? projectDataFromRedux.filter((project) => project.status === "Finished")
+  // : [];
 
   const buttonItems = [
     {
