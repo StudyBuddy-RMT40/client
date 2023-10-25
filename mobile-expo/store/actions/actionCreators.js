@@ -1,3 +1,4 @@
+import { FETCH_USER_PROFILE } from "./actionTypes";
 import {
   FETCH_CATEGORIES_SUCCESS,
   FETCH_LOCATIONS_SUCCESS,
@@ -222,6 +223,28 @@ export const fetchDashboardForTeacher = () => {
     }
   };
 };
+
+export const fetchUserProfile = (token, role) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + role + "_profile",
+        headers: {
+          access_token: token
+        }
+      });
+      dispatch({
+        type: FETCH_USER_PROFILE,
+        payload: data
+      })
+    } catch (err) {
+      console.log(err.response.data)
+      setModalMessage(err.response.data.message);
+      setShowModal(true);
+    }
+  }
+}
 
 export const loginUser = (loginForm) => {
   return async (dispatch) => {

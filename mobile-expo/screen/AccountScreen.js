@@ -16,7 +16,7 @@ import profileImage from "../assets/dummy/hero-dummy.jpg";
 import pdfIcon from "../assets/icons/pdf.png";
 import imageIcon from "../assets/icons/images.png";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser } from "../store/actions/actionCreators";
+import { fetchUserProfile, logoutUser } from "../store/actions/actionCreators";
 import axios from "axios";
 import ErrorModal from "../components/modal/ErrorModal";
 
@@ -41,22 +41,7 @@ export default function AccountScreen() {
     return state.auth;
   });
 
-  const fetchProfile = async () => {
-    try {
-      const { data } = await axios({
-        method: "get",
-        url: baseUrl + role + "_profile",
-        headers: {
-          access_token
-        }
-      });
-      setUserProfile(data)
-    } catch (err) {
-      console.log(err.response.data)
-      setModalMessage(err.response.data.message);
-      setShowModal(true);
-    }
-  }
+  const { profileUser } = useSelector((state) => state.user)
 
   const editProfile = async () => {
     try {
@@ -76,7 +61,12 @@ export default function AccountScreen() {
   }
 
   useEffect(() => {
-    fetchProfile()
+    setUserProfile(profileUser)
+    console.log(access_token, "blablablabla")
+  }, [profileUser])
+
+  useEffect(() => {
+    dispatch(fetchUserProfile(access_token, role))
   }, [])
 
   const handleLogout = () => {
