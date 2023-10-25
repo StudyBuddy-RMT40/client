@@ -6,6 +6,9 @@ import ProjectForm from "../screen/ProjectForm";
 import PaymentScreen from "../screen/PaymentScreen";
 import ReviewScreen from "../screen/ReviewScreen";
 import DetailScreen from "../screen/DetailScreen";
+import MidtransScreen from "../screen/MidtransScreen";
+import ArchiveScreen from "../screen/ArchiveScreen";
+import WalletScreen from "../screen/WalletScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +31,11 @@ export default function DashboardStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="Archive"
+        component={ArchiveScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Chat"
         component={ChatScreen}
         options={{ headerShown: false }}
@@ -43,8 +51,18 @@ export default function DashboardStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="Midtrans"
+        component={MidtransScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Review"
         component={ReviewScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Wallet"
+        component={WalletScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

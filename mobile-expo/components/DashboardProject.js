@@ -39,7 +39,11 @@ const ProjectCard = ({
   if (status === "Submitted") displayText = "Waiting For Buddy Approval";
   else if (status === "Accepted") displayText = "Waiting For Payment";
   else if (status === "Paid") displayText = "0% Complete";
-  else if (status === "On Progress" || status === "Finished")
+  else if (
+    status === "On Progress" ||
+    status === "Finished" ||
+    status === "To Review"
+  )
     displayText = `${progress}% Complete`;
 
   let cardContent = (
@@ -98,7 +102,7 @@ const DashboardProject = ({ projectData }) => {
     );
   } else if (activeFilter === "Finished") {
     filteredData = projectData.filter(
-      (project) => project.status === "Finished"
+      (project) => project.status === "To Review"
     );
   }
 

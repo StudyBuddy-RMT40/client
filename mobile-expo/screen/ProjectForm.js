@@ -10,8 +10,11 @@ import {
 } from "react-native";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
-import HorizontalSlider from "../components/HorizontalSlider";
 import CustomHeader from "../components/CustomHeader";
+import ErrorModal from "../components/modal/ErrorModal";
+import BuddySlider from "../components/BuddySlider";
+import CheckBox from "react-native-check-box";
+import { ActivityIndicator } from "react-native";
 
 export default function ProjectForm() {
   const [projectName, setProjectName] = useState("");
@@ -20,72 +23,36 @@ export default function ProjectForm() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [goals, setGoals] = useState("");
+  const [todos, setTodos] = useState("");
   const [location, setLocation] = useState("");
   const [displaySlider, setDisplaySlider] = useState(false);
-  //handle error
-  const [projectNameError, setProjectNameError] = useState(null);
-  const [projectDescriptionError, setProjectDescriptionError] = useState(null);
-  const [categoryError, setCategoryError] = useState(null);
-  const [startDateError, setStartDateError] = useState(null);
-  const [endDateError, setEndDateError] = useState(null);
-  const [goalsError, setGoalsError] = useState(null);
-  const [locationError, setLocationError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [todoList, setTodoList] = useState([]);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   const navigation = useNavigation();
 
   const handleSubmit = () => {
-  setProjectNameError(null);
-  setProjectDescriptionError(null);
-  setCategoryError(null);
-  setStartDateError(null);
-  setEndDateError(null);
-  setGoalsError(null);
-  setLocationError(null);
+    let errorMessage = "";
 
-  let hasError = false;
+    if (!projectName) errorMessage += "Project Name must be filled. ";
+    if (!projectDescription)
+      errorMessage += "Project Description must be filled. ";
+    if (!category) errorMessage += "Category must be filled. ";
+    if (!startDate) errorMessage += "Start Date must be filled. ";
+    if (!endDate) errorMessage += "End Date must be filled. ";
+    if (!goals) errorMessage += "Goals must be filled. ";
+    if (!location) errorMessage += "Location must be filled. ";
 
-  if (!projectName) {
-    setProjectNameError("Project Name must be filled");
-    hasError = true;
-  }
+    if (errorMessage) {
+      setModalMessage(errorMessage);
+      setShowModal(true);
+      return;
+    }
 
-  if (!projectDescription) {
-    setProjectDescriptionError("Project Description must be filled");
-    hasError = true;
-  }
-
-  if (!category) {
-    setCategoryError("Category must be filled");
-    hasError = true;
-  }
-
-  if (!startDate) {
-    setStartDateError("Start Date must be filled");
-    hasError = true;
-  }
-
-  if (!endDate) {
-    setEndDateError("End Date must be filled");
-    hasError = true;
-  }
-
-  if (!goals) {
-    setGoalsError("Goals must be filled");
-    hasError = true;
-  }
-
-  if (!location) {
-    setLocationError("Location must be filled");
-    hasError = true;
-  }
-
-  if (hasError) {
-    return;
-  }
-
-  // TODO:
-  
-  navigation.push("Payment");
+    navigation.push("Payment");
   };
 
   const handleSearchBuddy = () => {
@@ -211,7 +178,6 @@ export default function ProjectForm() {
             }}
             onBlur={() => setTimeout(() => setShowCategoryDropdown(false), 150)}
           />
-          
 
           {showCategoryDropdown && filteredCategories.length > 0 && (
             <View style={styles.dropdownContainer}>
@@ -250,7 +216,6 @@ export default function ProjectForm() {
             }}
             onBlur={() => setTimeout(() => setShowLocationDropdown(false), 150)}
           />
-          
 
           {showLocationDropdown && filteredLocations.length > 0 && (
             <View style={[styles.dropdownContainer, { left: "52%" }]}>
@@ -274,8 +239,6 @@ export default function ProjectForm() {
             </View>
           )}
         </View>
-        <Text style={styles.errorText}>{categoryError}</Text>
-        <Text style={styles.errorText}>{locationError}</Text>
 
         <Button
           text="Search Buddy"
@@ -283,7 +246,7 @@ export default function ProjectForm() {
           style={styles.searchButton}
         />
 
-        {displaySlider && <HorizontalSlider />}
+        {displaySlider && <BuddySlider />}
 
         <Text style={styles.label}>Project Name</Text>
         <View style={styles.container}>
@@ -293,7 +256,6 @@ export default function ProjectForm() {
             placeholder="Enter project name"
           />
         </View>
-        <Text style={styles.errorText}>{projectNameError}</Text>
 
         <Text style={styles.label}>Project Description</Text>
         <View style={styles.containerBig}>
@@ -306,7 +268,6 @@ export default function ProjectForm() {
             textAlignVertical="top"
           />
         </View>
-        <Text style={styles.errorText}>{projectDescriptionError}</Text>
 
         <Text style={styles.label}>Goals</Text>
         <View style={styles.containerBig}>
@@ -319,13 +280,32 @@ export default function ProjectForm() {
             textAlignVertical="top"
           />
         </View>
-        <Text style={styles.errorText}>{goalsError}</Text>
+
+        <Text style={styles.label}>Generate To Do List</Text>
+        <View style={styles.containerBig}>
+          <TextInput
+            value={todos}
+            onChangeText={setTodos}
+            placeholder="Enter your command so AI can generate your project. Use this format:
+            'Buat daftar tugas untuk pembuatan${userMessage} dalam format JSON seperti contoh ini:[{'tugas':''},{'tugas':''}]'"
+            multiline
+            numberOfLines={4}
+            textAlignVertical="top"
+          />
+        </View>
 
         <View>
           <Button text="Submit" onPress={handleSubmit} />
         </View>
         <View style={{ marginBottom: 30 }}></View>
       </ScrollView>
+
+      <ErrorModal
+        visible={showModal}
+        title="Error"
+        message={modalMessage}
+        onClose={() => setShowModal(false)}
+      />
     </>
   );
 }
@@ -442,13 +422,5 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomColor: "#f0f0f0",
     borderBottomWidth: 1,
-  },
-  errorText: {
-    backgroundColor: '#FFCACA',
-    color: "red",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-    marginTop: 10
   },
 });
