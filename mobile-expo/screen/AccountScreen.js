@@ -5,18 +5,14 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  Linking,
   TextInput,
   SafeAreaView,
-  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../components/Button";
 import profileImage from "../assets/dummy/hero-dummy.jpg";
-import pdfIcon from "../assets/icons/pdf.png";
-import imageIcon from "../assets/icons/images.png";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProfile, logoutUser } from "../store/actions/actionCreators";
+import { fetchUserProfile, logoutUser, editProfile } from "../store/actions/actionCreators";
 import axios from "axios";
 import ErrorModal from "../components/modal/ErrorModal";
 
@@ -43,24 +39,25 @@ export default function AccountScreen() {
 
   const { profileUser } = useSelector((state) => state.user)
 
-  const editProfile = async () => {
-    try {
-      const { data } = await axios({
-        method: "put",
-        url: baseUrl + "users",
-        data: userProfile,
-        headers: {
-          access_token
-        }
-      })
-      console.log(data)
-    } catch (err) {
-      console.log(err.response.data)
-      throw err
-    }
-  }
+  // const editProfile = async () => {
+  //   try {
+  //     const { data } = await axios({
+  //       method: "put",
+  //       url: baseUrl + "users",
+  //       data: userProfile,
+  //       headers: {
+  //         access_token
+  //       }
+  //     })
+  //     console.log(data)
+  //   } catch (err) {
+  //     console.log(err.response.data)
+  //     throw err
+  //   }
+  // }
 
   useEffect(() => {
+    console.log(access_token)
     setUserProfile(profileUser)
     // console.log(access_token, "blablablabla")
   }, [profileUser])
@@ -85,7 +82,7 @@ export default function AccountScreen() {
   };
 
   const handleSaveProfile = () => {
-    editProfile()
+    dispatch(editProfile(access_token, userProfile))
       .then(() => {
         setIsEditing(false)
       })
@@ -168,12 +165,6 @@ export default function AccountScreen() {
             <Text>{userProfile.address}</Text>
           </View>
         )}
-
-        {/* <Button
-          text={isEditing ? "Save" : "Edit Profile"}
-          onPress={handleEditSaveProfile}
-          style={isEditing ? styles.saveButton : styles.editButton}
-        /> */}
         {!isEditing ? (
           <Button
             text={"Edit Profile"}

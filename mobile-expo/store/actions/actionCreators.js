@@ -12,7 +12,7 @@ import {
 
 import axios from "axios";
 const baseUrl =
-  "https://de78-114-124-213-71.ngrok-free.app/";
+  "https://3fd8-114-122-22-55.ngrok-free.app/";
 
 let access_token;
 
@@ -242,6 +242,25 @@ export const fetchUserProfile = (token, role) => {
       console.log(err.response.data)
       setModalMessage(err.response.data.message);
       setShowModal(true);
+    }
+  }
+}
+
+export const editProfile = (access_token, form) => {
+  return async () => {
+    try {
+      const { data } = await axios({
+        method: "put",
+        url: baseUrl + "users",
+        data: form,
+        headers: {
+          access_token
+        }
+      })
+      console.log(data)
+    } catch (err) {
+      console.log(err.response.data)
+      throw err
     }
   }
 }
