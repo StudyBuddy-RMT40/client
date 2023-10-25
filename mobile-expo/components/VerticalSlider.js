@@ -49,7 +49,7 @@ export default function VerticalSlider({ name, location }) {
 
   useEffect(() => {
     dispatch(getProjects());
-  }, [dispatch]); 
+  }, [dispatch]);
 
   const filteredProjects = projectReducer.filter(data => {
     const projectName = data.name.toLowerCase();
@@ -62,7 +62,7 @@ export default function VerticalSlider({ name, location }) {
     <View style={styles.verticalCardContainer}>
       <ScrollView vertical showsVerticalScrollIndicator={false}>
         {filteredProjects.map(data => (
-           <TouchableOpacity key={data._id}>
+          <TouchableOpacity key={data._id}>
             <View style={styles.verticalCard}>
               <Image style={styles.verticalCardImage} source={image} />
               <Text style={styles.verticalCardText}>{data.name}</Text>
