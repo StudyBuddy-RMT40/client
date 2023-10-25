@@ -44,7 +44,7 @@ export default function LoginScreen() {
         }
       })
       .catch((error) => {
-        console.log(error,"apaaaanih");
+        console.log(error, "apaaaanih");
       });
   };
 

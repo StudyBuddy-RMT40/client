@@ -57,6 +57,7 @@ export default function AccountScreen() {
   // }
 
   useEffect(() => {
+    console.log(access_token)
     setUserProfile(profileUser)
     console.log(access_token, "blablablabla")
   }, [profileUser])
