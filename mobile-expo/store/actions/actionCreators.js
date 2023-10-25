@@ -11,6 +11,7 @@ import {
 } from "./actionTypes";
 
 import axios from "axios";
+
 const baseUrl = "https://e933-2001-448a-11b0-13d6-b8a6-ba1d-3553-50e8.ngrok-free.app/";
 
 let access_token;
@@ -265,6 +266,57 @@ export const editProfile = (access_token, form) => {
   };
 };
 
+export const searchBuddy = (category, region) => {
+  return async () => {
+    try {
+      const { data } = await axios({
+        method: "GET",
+        url: baseUrl + `categories/${category}?address=${region}`,
+        headers: {
+          access_token,
+        },
+      });
+
+      const transformedData = {
+        Teacher: data.specialists.map((specialist) => ({
+          id: specialist.Teacher._id,
+          username: specialist.Teacher.username,
+          categoryId: specialist.categoryId,
+        })),
+      };
+      return transformedData;
+    } catch (error) {
+      return { success: false, error: error.response.data };
+    }
+  };
+};
+
+export const addProject = (name, teacherId, description, categoryId, goals) => {
+  return async () => {
+    try {
+      const { data } = await axios({
+        method: "POST",
+        url: baseUrl + `projects`,
+        headers: {
+          access_token,
+        },
+        data: {
+          name,
+          teacherId,
+          description,
+          categoryId,
+          goals,
+        },
+      });
+
+      console.log(data.parsedData);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.response.data };
+    }
+  };
+};
+
 export const loginUser = (loginForm) => {
   return async (dispatch) => {
     const { username, password } = loginForm;
@@ -280,6 +332,7 @@ export const loginUser = (loginForm) => {
       dispatch(Login(data.access_token, role));
 
       await dispatch(fetchCategories());
+      await dispatch(fetchLocations());
 
       if (role === "buddy") {
         console.log("yooo buddy");
