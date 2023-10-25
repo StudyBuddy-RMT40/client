@@ -93,7 +93,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   };
 
   return (
-    <Modal animationType='slide' transparent={true} visible={isVisible}>
+    <Modal animationType="slide" transparent={true} visible={isVisible}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.title}>Select your role</Text>
@@ -102,12 +102,14 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
             <>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSelectRole("student")}>
+                onPress={() => handleSelectRole("student")}
+              >
                 <Text>Student</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => handleSelectRole("buddy")}>
+                onPress={() => handleSelectRole("buddy")}
+              >
                 <Text>Buddy</Text>
               </TouchableOpacity>
             </>
@@ -121,7 +123,8 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
                   styles.button,
                   specialization.includes(spec.name) && styles.selectedButton,
                 ]}
-                onPress={() => toggleSpecialist(spec.id)}>
+                onPress={() => toggleSpecialist(spec.id)}
+              >
                 <Text>{spec.name}</Text>
               </TouchableOpacity>
             ))}
@@ -135,7 +138,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
       </View>
       <ErrorModal
         visible={showModal}
-        title='Role Validation'
+        title="Role Validation"
         message={modalMessage}
         onClose={() => {
           setShowModal(false);
@@ -172,7 +175,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#DDDDDD",
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 8,
     width: "100%",

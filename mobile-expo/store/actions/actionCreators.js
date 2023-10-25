@@ -1,3 +1,4 @@
+import { FETCH_USER_PROFILE } from "./actionTypes";
 import {
   FETCH_CATEGORIES_SUCCESS,
   FETCH_LOCATIONS_SUCCESS,
@@ -11,7 +12,7 @@ import {
 
 import axios from "axios";
 const baseUrl =
-  "https://1230-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
+  "https://d539-2001-448a-11b0-13d6-61fe-51f7-6192-2016.ngrok-free.app/";
 
 let access_token;
 
@@ -219,6 +220,28 @@ export const fetchDashboardForTeacher = () => {
       return data;
     } catch (error) {
       console.log(error.response.data);
+    }
+  };
+};
+
+export const fetchUserProfile = (token, role) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "get",
+        url: baseUrl + role + "_profile",
+        headers: {
+          access_token: token,
+        },
+      });
+      dispatch({
+        type: FETCH_USER_PROFILE,
+        payload: data,
+      });
+    } catch (err) {
+      console.log(err.response.data);
+      setModalMessage(err.response.data.message);
+      setShowModal(true);
     }
   };
 };
