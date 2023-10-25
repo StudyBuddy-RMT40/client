@@ -32,11 +32,11 @@ export default function WalletScreen() {
           <Text style={styles.headerSubText}>Rp. 7.000.000</Text>
         </View>
         <ButtonGrid items={buttonItems} />
-         {/* Transaction Records */}
-         <View style={styles.transactionContainer}>
+        {/* Transaction Records */}
+        <View style={styles.transactionContainer}>
           <Text style={styles.transactionHeader}>Transaction History</Text>
           {transactions.map((transaction, index) => {
-            let textColor = "#000"; 
+            let textColor = "#000";
             if (transaction.description === "Withdraw") {
               textColor = "red";
             } else if (transaction.description === "On Progress") {
@@ -47,9 +47,17 @@ export default function WalletScreen() {
 
             return (
               <View key={index} style={styles.transactionItem}>
-                <Text style={[styles.transactionDate, { color: textColor }]}>{transaction.date}</Text>
-                <Text style={[styles.transactionDescription, { color: textColor }]}>{transaction.description}</Text>
-                <Text style={[styles.transactionAmount, { color: textColor }]}>{transaction.amount}</Text>
+                <Text style={[styles.transactionDate, { color: textColor }]}>
+                  {transaction.date}
+                </Text>
+                <Text
+                  style={[styles.transactionDescription, { color: textColor }]}
+                >
+                  {transaction.description}
+                </Text>
+                <Text style={[styles.transactionAmount, { color: textColor }]}>
+                  {transaction.amount}
+                </Text>
               </View>
             );
           })}
@@ -58,7 +66,6 @@ export default function WalletScreen() {
     </>
   );
 }
-
 
 const styles = StyleSheet.create({
   contentContainerStyle: {
@@ -105,15 +112,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
-    borderBottomWidth: 2, 
-    borderBottomColor: '#ccc', 
-    borderWidth: 2,  
-    borderColor: '#ccc', 
+    borderBottomWidth: 2,
+    borderBottomColor: "#ccc",
+    borderWidth: 2,
+    borderColor: "#ccc",
     borderRadius: 10,
-    backgroundColor: "#f9f9f9", 
-    padding: 10, 
+    backgroundColor: "#f9f9f9",
+    padding: 10,
     justifyContent: "space-around",
-    alignItems: "center", 
+    alignItems: "center",
   },
   transactionDate: {
     flex: 1,

@@ -12,18 +12,30 @@ import Button from "../components/Button";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import CustomHeader from "../components/CustomHeader";
 import { SelectList } from "react-native-dropdown-select-list";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ErrorModal from "../components/modal/ErrorModal";
+import {
+  Logout,
+  addProject,
+  logoutUser,
+  searchBuddy,
+} from "../store/actions/actionCreators";
 
 export default function ProjectForm() {
-  let { categories: DataCategory } = useSelector((state) => state.category);
-  const { locations: DataLocation } = useSelector((state) => state.location);
+  const DataCategory = useSelector((state) => state.category.categories);
+  const locations = useSelector((state) => state.location.locations);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [categoryId, setCategoryId] = useState("");
+  const dispatch = useDispatch();
 
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [buddy, setBuddy] = useState("");
   const [goals, setGoals] = useState("");
+  const [todos, setTodos] = useState("");
   const [location, setLocation] = useState("");
   const [displaySlider, setDisplaySlider] = useState(false);
   //handle error
@@ -40,31 +52,58 @@ export default function ProjectForm() {
 
   const handleSubmit = () => {
     // TODO:
-    // navigation.push("Payment");
+    // console.log(projectName, buddy, projectDescription, categoryId, goals);
+    dispatch(
+      addProject(projectName, buddy, projectDescription, categoryId, goals)
+    )
+      .then((result) => {
+        console.log("loading");
+        setTimeout(() => {
+          navigation.navigate("Dashboard");
+        }, 500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // navigation.push("Dashboard");
   };
 
   const handleSearchBuddy = () => {
     if (category && location) {
       console.log(category, location);
-      setDisplaySlider(true);
+      dispatch(searchBuddy(category, location))
+        .then((result) => {
+          console.log(result.Teacher, "dataa");
+          if (result.Teacher === undefined) {
+            dispatch(logoutUser());
+            navigation.navigate("Home");
+          } else {
+            setDisplaySlider(true);
+            setDataBuddy(result.Teacher);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       alert("Please fill in both category and location!");
     }
   };
 
-  const categories = [];
-  const locations = [];
-
   useFocusEffect(
     React.useCallback(() => {
       if (DataCategory.length > 0) {
-        // console.log(DataCategory, "<<<<< categor`y");
+        const temp = DataCategory.map((e) => e.name);
+        setCategories(temp);
       }
-      if (DataLocation.length > 0) {
-        console.log(DataLocation, ">>>?? Location");
-      }
-    }, [DataCategory, DataLocation])
+    }, [DataCategory])
   );
+
+  const handleItemClick = (id, categoryId) => {
+    setBuddy(id);
+    setCategoryId(categoryId);
+  };
+
   return (
     <>
       <CustomHeader title='Add New Project' />
@@ -74,7 +113,9 @@ export default function ProjectForm() {
 
         <View style={styles.filterLocationContainer}>
           <SelectList
-            setSelected={(val) => setCategory(val)}
+            setSelected={(val) => {
+              setCategory(val);
+            }}
             data={categories}
             save='name'
             search={false}
@@ -82,6 +123,7 @@ export default function ProjectForm() {
             boxStyles={{ width: 330, marginTop: 5, backgroundColor: "white" }}
           />
         </View>
+
         <View>
           <SelectList
             setSelected={(val) => setLocation(val)}
@@ -101,10 +143,16 @@ export default function ProjectForm() {
 
         {/* {displaySlider && <HorizontalSlider />} */}
         {displaySlider &&
-          dataBuddy.map((item, index) => (
-            // Replace the following line with the JSX you want to render for each item.
-            <View>
-              <Text key={index}>{item} aaaaloo</Text>
+          dataBuddy &&
+          dataBuddy.map((e) => (
+            <View
+              key={e.id}
+              style={{
+                backgroundColor: buddy === e.id ? "lightblue" : "white",
+              }}>
+              <Text onPress={() => handleItemClick(e.id, e.categoryId)}>
+                {e.username}
+              </Text>
             </View>
           ))}
 
@@ -116,7 +164,6 @@ export default function ProjectForm() {
             placeholder='Enter project name'
           />
         </View>
-        <Text style={styles.errorText}>{projectNameError}</Text>
 
         <Text style={styles.label}>Project Description</Text>
         <View style={styles.containerBig}>
@@ -129,7 +176,6 @@ export default function ProjectForm() {
             textAlignVertical='top'
           />
         </View>
-        <Text style={styles.errorText}>{projectDescriptionError}</Text>
 
         <Text style={styles.label}>Goals</Text>
         <View style={styles.containerBig}>
@@ -149,6 +195,13 @@ export default function ProjectForm() {
         </View>
         <View style={{ marginBottom: 30 }}></View>
       </ScrollView>
+
+      <ErrorModal
+        visible={showModal}
+        title='Error'
+        message={modalMessage}
+        onClose={() => setShowModal(false)}
+      />
     </>
   );
 }

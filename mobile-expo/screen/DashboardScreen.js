@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import ButtonGrid from "../components/ButtonGrid";
 import allProject from "../assets/public.png";
+import addProject from "../assets/tap.png";
+import History from "../assets/certificate.png";
+import Wallet from "../assets/money.png";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";
 import DashboardProject from "../components/DashboardProject";
@@ -11,6 +14,12 @@ import ErrorModal from "../components/modal/ErrorModal";
 import RoleModal from "../components/modal/RoleModal";
 
 export default function DashboardScreen() {
+  const navigation = useNavigation();
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [isLikes, setLike] = useState(0);
+  const [isRatings, setReting] = useState(0);
   const { dataStudent, dataTeacher } = useSelector((state) => state.dashboard);
   const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
   const [projectData, setProjectData] = useState([]);
@@ -18,19 +27,24 @@ export default function DashboardScreen() {
 
   const buttonItems = [
     {
-      icon: allProject,
+      icon: addProject,
       label: "Add Projects",
       size: 60,
       onPress: () => navigation.navigate("AddProject"),
     },
+    {
+      icon: History,
+      label: "Project History",
+      size: 60,
+      onPress: () => navigation.navigate("Archive", { data: finishedProjects }),
+    },
+    {
+      icon: Wallet,
+      label: "Wallet",
+      size: 60,
+      onPress: () => navigation.navigate("Wallet"),
+    },
   ];
-
-  const navigation = useNavigation();
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [showRoleModal, setShowRoleModal] = useState(false);
-  const [isLikes, setLike] = useState(0);
-  const [isRatings, setReting] = useState(0);
 
   useEffect(() => {
     if (!role) {
@@ -40,7 +54,7 @@ export default function DashboardScreen() {
   }, []);
 
   useEffect(() => {
-    if (role === "buddy" && dataTeacher) {
+    if (role === "buddy" && dataTeacher._id) {
       // setProjectData(dataTeacher.Projects);
       setLike(dataTeacher.Likes);
       setReting(dataTeacher.Ratings);
@@ -60,7 +74,7 @@ export default function DashboardScreen() {
         });
       });
       setProjectData(temp);
-    } else if (role === "student" && dataStudent) {
+    } else if (role === "student" && dataStudent._id) {
       // setProjectData(dataStudent.Projects);
       setLike(dataStudent.Likes);
       setReting(dataStudent.Ratings);
@@ -85,12 +99,12 @@ export default function DashboardScreen() {
   }, [dataTeacher, dataStudent]);
   return (
     <>
-      <CustomHeader title='Dashboard' />
+      <CustomHeader title="Dashboard" />
 
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data={isLikes} isLike={true} title='Overview' />
+            <DashboardWidget data={isLikes} isLike={true} title="Overview" />
             <DashboardWidget data={isRatings} isReview={true} />
           </View>
           <ButtonGrid items={buttonItems} />
@@ -99,7 +113,7 @@ export default function DashboardScreen() {
       </View>
       <ErrorModal
         visible={showModal}
-        title='Role Validation'
+        title="Role Validation"
         message={modalMessage}
         onClose={() => {
           setShowModal(false), setShowRoleModal(true);
