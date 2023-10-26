@@ -102,8 +102,10 @@ export default function ProjectForm() {
   );
 
   const handleItemClick = (id, categoryId) => {
-    setBuddy(id);
-    setCategoryId(categoryId);
+    if (id) {
+      setBuddy(id);
+      setCategoryId(categoryId);
+    }
   };
 
   return (

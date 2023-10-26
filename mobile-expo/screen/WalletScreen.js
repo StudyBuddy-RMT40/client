@@ -13,7 +13,7 @@ export default function WalletScreen() {
       icon: Cash,
       label: "Withdraw",
       size: 60,
-      onPress: () => navigation.push(),
+      onPress: () => navigation.push(""),
     },
   ];
 

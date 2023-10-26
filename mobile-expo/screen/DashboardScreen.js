@@ -9,11 +9,13 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { DashboardWidget } from "../components/DashboardWidget";
 import DashboardProject from "../components/DashboardProject";
 import CustomHeader from "../components/CustomHeader";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ErrorModal from "../components/modal/ErrorModal";
 import RoleModal from "../components/modal/RoleModal";
+import { getProjects } from "../store/actions/actionCreators";
 
 export default function DashboardScreen() {
+  const dispatch = useDispatch()
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -23,6 +25,7 @@ export default function DashboardScreen() {
   const { dataStudent, dataTeacher } = useSelector((state) => state.dashboard);
   const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
   const [projectData, setProjectData] = useState([]);
+  // console.log(projectData)
   let temp = [];
   const buttonItems = [
     {
@@ -103,7 +106,11 @@ export default function DashboardScreen() {
       }
     }
   }, [dataTeacher, dataStudent]);
-  
+
+  useEffect(() => {
+    dispatch(getProjects)
+  }, [])
+
 
   return (
     <>

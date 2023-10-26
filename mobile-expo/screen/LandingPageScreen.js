@@ -148,7 +148,7 @@ export default function LandingPageScreen() {
 
   useEffect(() => {
     dispatch(getProjects());
-    (">>>", projectReducer);
+    // console.log(">>>", projectReducer);
   }, [dispatch, selectedCategory]);
 
   return (

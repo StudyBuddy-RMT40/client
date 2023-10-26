@@ -1,33 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Linking,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import CustomHeader from "../components/CustomHeader";
+import getPaymentGatewayUrl from "../config/midtrans";
+import { useSelector, useDispatch } from "react-redux";
+import { payment } from "../store/actions/actionCreators";
 
-export default function PaymentScreen() {
+export default function PaymentScreen({ route }) {
+  const [redirectUrl, setRedirectUrl] = useState(null);
   const navigation = useNavigation();
+  const dispatch = useDispatch()
+  console.log(route.params)
+
+  const { urlRedirect } = useSelector((state) => state.midtrans)
 
   const handleCancel = () => {
     navigation.goBack();
   };
 
-  const handleContinuePayment = () => {
-    const paymentGatewayURL = "https://www.midtrans.com/";
+  const handleContinuePayment = async () => {
+    // try {
+    //   const parameter = {
+    //     transaction_details: {
+    //       order_id:
+    //         "TRANSACTION_" +
+    //         Math.floor(Math.random() * 9000000) +
+    //         "_" +
+    //         Math.floor(Math.random() * 10),
+    //       gross_amount: totalAmount,
+    //     },
+    //     credit_card: {
+    //       secure: true,
+    //     },
+    //     customer_details: {
+    //       email: "tester@mail.com",
+    //       name: "tester",
+    //     },
+    //   };
 
-    Linking.openURL(paymentGatewayURL).catch((err) =>
-      console.error("An error occurred: ", err)
-    );
+    //   const redirectUrl = await getPaymentGatewayUrl(parameter, orderDetails);
+
+    //   setRedirectUrl(redirectUrl);
+    // } catch (error) {
+    //   console.error("Error creating Snap Token:", error);
+    // }
+    dispatch(payment(route.params))
+      .then(() => {
+        setRedirectUrl(urlRedirect)
+      })
   };
 
+  useEffect(() => {
+    if (redirectUrl) {
+      navigation.push("Midtrans", { paymentGatewayURL: redirectUrl, projectId: route.params });
+    }
+  }, [redirectUrl, navigation]);
+
   const orderDetails = [
-    { label: "Lesson - Ternak Padi", price: 1000000 },
-    { label: "Study - Bisnis Peternakan", price: 1500000 },
-    { label: "Intimidate - Publication Ternak", price: 2500000 },
+    { label: "Lesson - Ternak Padi", price: 100000 },
+    { label: "Study - Bisnis Peternakan", price: 150000 },
+    { label: "Intimidate - Publication Ternak", price: 250000 },
   ];
 
   const totalAmount = orderDetails.reduce(

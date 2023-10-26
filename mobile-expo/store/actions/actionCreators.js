@@ -1,4 +1,4 @@
-import { FETCH_USER_PROFILE } from "./actionTypes";
+import { FETCH_REDIRECT_URL, FETCH_USER_PROFILE } from "./actionTypes";
 import {
   FETCH_CATEGORIES_SUCCESS,
   FETCH_LOCATIONS_SUCCESS,
@@ -12,7 +12,7 @@ import {
 
 import axios from "axios";
 const baseUrl =
-  "https://e933-2001-448a-11b0-13d6-b8a6-ba1d-3553-50e8.ngrok-free.app/";
+  "https://dd9c-2001-448a-11b0-13d6-b8a6-ba1d-3553-50e8.ngrok-free.app/";
 let access_token;
 let role;
 export const fetchDashboardStudent = (data) => {
@@ -78,6 +78,7 @@ export const logoutUser = () => {
   return async (dispatch) => {
     try {
       dispatch(Logout());
+      access_token = ""
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
       // Return an error flag and error data
@@ -181,7 +182,7 @@ export const addSpecialization = (data) => {
         },
       });
       dispatch(fetchUserProfile(access_token, role));
-      return { success: true, data };
+      return { success: true };
     } catch (error) {
       console.log(error.response.data);
       return { success: false, error: error.response.data };
@@ -241,8 +242,6 @@ export const fetchUserProfile = (token, role) => {
       });
     } catch (err) {
       console.log(err.response.data);
-      setModalMessage(err.response.data.message);
-      setShowModal(true);
     }
   };
 };
@@ -350,6 +349,29 @@ export const updateStatusProject = (status, id) => {
     }
   };
 };
+
+export const payment = (projectId) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: 'post',
+        url: baseUrl + 'generate-midtrans-token/' + projectId,
+        data: {
+          price: 500000
+        },
+        headers: {
+          access_token: access_token
+        }
+      })
+      dispatch({
+        type: FETCH_REDIRECT_URL,
+        payload: data
+      })
+    } catch (err) {
+      console.log(err.response.data)
+    }
+  }
+}
 
 export const loginUser = (loginForm) => {
   return async (dispatch) => {
