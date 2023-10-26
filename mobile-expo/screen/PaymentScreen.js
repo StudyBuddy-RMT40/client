@@ -15,6 +15,7 @@ export default function PaymentScreen({ route }) {
   const [redirectUrl, setRedirectUrl] = useState(null);
   const navigation = useNavigation();
   const dispatch = useDispatch()
+  console.log(route.params)
 
   const { urlRedirect } = useSelector((state) => state.midtrans)
 

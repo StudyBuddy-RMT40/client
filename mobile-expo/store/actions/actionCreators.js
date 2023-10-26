@@ -12,7 +12,7 @@ import {
 
 import axios from "axios";
 const baseUrl =
-  "https://e933-2001-448a-11b0-13d6-b8a6-ba1d-3553-50e8.ngrok-free.app/";
+  "https://dd9c-2001-448a-11b0-13d6-b8a6-ba1d-3553-50e8.ngrok-free.app/";
 let access_token;
 let role;
 export const fetchDashboardStudent = (data) => {
@@ -182,7 +182,7 @@ export const addSpecialization = (data) => {
         },
       });
       dispatch(fetchUserProfile(access_token, role));
-      return { success: true, data };
+      return { success: true };
     } catch (error) {
       console.log(error.response.data);
       return { success: false, error: error.response.data };

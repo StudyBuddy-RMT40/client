@@ -27,15 +27,15 @@ export default function DetailScreen({ route }) {
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
-    dispatch(updateStatusProject("Accepted",project.id))
+    dispatch(updateStatusProject("Accepted", project.id))
   };
 
   const handlePayProject = () => {
-    navigation.push("Payment", project.learningMaterials[0].projectId);
+    navigation.push("Payment", project.id);
   };
   const handleFinishProject = () => {
     setProject({ ...project, status: "Finished" });
-    dispatch(updateStatusProject("Finished",project.id))
+    dispatch(updateStatusProject("Finished", project.id))
   };
 
   const handleChat = () => {
@@ -48,7 +48,7 @@ export default function DetailScreen({ route }) {
     if (role == "buddy") {
       chatData.me = project.teacher
       chatData.other = project.student
-    }else if (role == "student") {
+    } else if (role == "student") {
       chatData.other = project.teacher
       chatData.me = project.student
     }

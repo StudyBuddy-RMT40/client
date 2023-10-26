@@ -68,11 +68,11 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
               .then((response) => {
                 if (response.success) {
                   onSave(selectedRole, specialization);
-                  // onClose();
+                  onClose();
                 } else {
                   setModalMessage(
                     "An error occurred during specialization addition: " +
-                      response.error.message
+                    response.error.message
                   );
                   setShowModal(true);
                 }
