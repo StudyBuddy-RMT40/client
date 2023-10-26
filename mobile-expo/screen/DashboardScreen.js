@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { View, StyleSheet, Text, Image, ScrollView, RefreshControl } from "react-native";
 import ButtonGrid from "../components/ButtonGrid";
 import allProject from "../assets/public.png";
 import addProject from "../assets/tap.png";
@@ -25,7 +25,15 @@ export default function DashboardScreen() {
   const { dataStudent, dataTeacher } = useSelector((state) => state.dashboard);
   const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
   const [projectData, setProjectData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   // console.log(projectData)
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 500);
+  }, []);
   let temp = [];
   const buttonItems = [
     {
@@ -117,7 +125,7 @@ export default function DashboardScreen() {
       <CustomHeader title='Dashboard' />
 
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
             <DashboardWidget data={isLikes} isLike={true} title='Overview' />
             <DashboardWidget data={isRatings} isReview={true} />
