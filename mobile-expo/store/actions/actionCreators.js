@@ -69,7 +69,7 @@ export const registerUser = (registerForm) => {
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
       error.response.data;
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 };
@@ -82,7 +82,7 @@ export const logoutUser = () => {
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
       // Return an error flag and error data
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 };
@@ -94,7 +94,7 @@ export function getProjects() {
       // ("ACTION CREATOR>>>>>>>>>>", data);
       dispatch(fetchProjects(data));
     } catch (error) {
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 }
@@ -106,7 +106,7 @@ export function getProjectById(id) {
       // ("ACTION CREATOR PROJECT ID>>>>>", data);
       dispatch(fetchProjectById(data));
     } catch (error) {
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 }
@@ -158,10 +158,10 @@ export const updateStatusRole = (role) => {
         },
       });
       dispatch(fetchUserProfile(access_token, role));
-      return { success: true, data }; // Return a success flag and data
+      return { success: true }; // Return a success flag and data
     } catch (error) {
       console.log(error.response.data);
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 };
@@ -185,7 +185,7 @@ export const addSpecialization = (data) => {
       return { success: true };
     } catch (error) {
       console.log(error.response.data);
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 };
@@ -203,7 +203,7 @@ export const fetchDashboardForStudent = () => {
       dispatch(fetchDashboardStudent(data));
       return data;
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
     }
   };
 };
@@ -221,7 +221,7 @@ export const fetchDashboardForTeacher = () => {
       dispatch(fetchDashboardTeacher(data));
       return data;
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
     }
   };
 };
@@ -241,7 +241,7 @@ export const fetchUserProfile = (token, role) => {
         payload: data,
       });
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err);
     }
   };
 };
@@ -260,7 +260,7 @@ export const editProfile = (access_token, form) => {
 
       console.log(data);
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err);
       throw err;
     }
   };
@@ -286,7 +286,7 @@ export const searchBuddy = (category, region) => {
       };
       return transformedData;
     } catch (error) {
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 };
@@ -317,7 +317,7 @@ export const addProject = (name, teacherId, description, categoryId, goals) => {
 
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 };
@@ -345,7 +345,7 @@ export const updateStatusProject = (status, id) => {
       console.log(data);
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.response.data };
+      return { success: false };
     }
   };
 };
@@ -368,7 +368,7 @@ export const payment = (projectId) => {
         payload: data
       })
     } catch (err) {
-      console.log(err.response.data)
+      console.log(err)
     }
   }
 }
@@ -398,8 +398,8 @@ export const loginUser = (loginForm) => {
       dispatch(fetchUserProfile(data.access_token, data.role));
       return { success: true };
     } catch (error) {
-      console.log(error.response.data);
-      return { success: false, error: error.response.data };
+      console.log(error);
+      return { success: false };
     }
   };
 };
