@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 // import { useAuth } from "../navigators/Authcontext";
 
 const ProjectCard = ({
+  id,
   title,
   progress,
   status,
@@ -68,6 +69,7 @@ const ProjectCard = ({
       onPress={() =>
         navigation.push("Detail", {
           project: {
+            id,
             title,
             progress,
             status,

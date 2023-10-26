@@ -73,7 +73,6 @@ export default function AccountScreen() {
         setIsEditing(false);
       })
       .catch((err) => {
-        (err.response.data.message, "di profile");
         setIsEditing(true);
         setModalMessage(err.response.data.message);
         setShowModal(true);

@@ -12,7 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 import CheckBox from "react-native-check-box";
 import CustomHeader from "../components/CustomHeader";
 import { Rating } from "react-native-ratings";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateStatusProject, updateStatusRole } from "../store/actions/actionCreators";
 
 export default function DetailScreen({ route }) {
   const navigation = useNavigation();
@@ -22,9 +23,11 @@ export default function DetailScreen({ route }) {
   const [buddyFeedback, setBuddyFeedback] = useState("");
   const [rating, setRating] = useState(0);
   const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
+  const dispatch = useDispatch()
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
+    dispatch(updateStatusProject("Accepted",project.id))
   };
 
   const handlePayProject = () => {
@@ -32,6 +35,7 @@ export default function DetailScreen({ route }) {
   };
   const handleFinishProject = () => {
     setProject({ ...project, status: "Finished" });
+    dispatch(updateStatusProject("Finished",project.id))
   };
 
   const handleChat = () => {
