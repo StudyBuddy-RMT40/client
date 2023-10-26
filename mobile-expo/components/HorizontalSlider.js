@@ -49,8 +49,6 @@ const LocationSVG = () => (
 
 export default function HorizontalSlider(props) {
   const { dataFilter, title, searchQuery, groupBy } = props;
-  // console.log("dataFilter:", dataFilter);
-  // console.log("groupBy:", groupBy);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const image = require("../assets/images/HiRes-17.jpg");
@@ -78,8 +76,6 @@ export default function HorizontalSlider(props) {
     }
     return false;
   });
-
-  // console.log("filteredData:", filteredData);
 
   useEffect(() => {
     dispatch(getProjects());

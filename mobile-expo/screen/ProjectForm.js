@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import Button from "../components/Button";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -38,32 +39,33 @@ export default function ProjectForm() {
   const [todos, setTodos] = useState("");
   const [location, setLocation] = useState("");
   const [displaySlider, setDisplaySlider] = useState(false);
-  //handle error
-  const [projectNameError, setProjectNameError] = useState(null);
-  const [projectDescriptionError, setProjectDescriptionError] = useState(null);
-  const [categoryError, setCategoryError] = useState(null);
-  const [startDateError, setStartDateError] = useState(null);
-  const [endDateError, setEndDateError] = useState(null);
-  const [goalsError, setGoalsError] = useState(null);
-  const [locationError, setLocationError] = useState(null);
   const [dataBuddy, setDataBuddy] = useState([]);
 
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = () => {
     // TODO:
-    // console.log(projectName, buddy, projectDescription, categoryId, goals);
+    console.log(projectName, buddy, projectDescription, categoryId, goals);
+    setIsLoading(true);
+
     dispatch(
       addProject(projectName, buddy, projectDescription, categoryId, goals)
     )
       .then((result) => {
         console.log("loading");
         setTimeout(() => {
+          setIsLoading(false);
           navigation.navigate("Dashboard");
-        }, 500);
+        }, 15000);
       })
       .catch((err) => {
+        setIsLoading(false);
         console.log(err);
+        setShowModal(true);
+        setModalMessage(
+          "There was an error creating your project. Please try again."
+        );
       });
     // navigation.push("Dashboard");
   };
@@ -73,7 +75,6 @@ export default function ProjectForm() {
       console.log(category, location);
       dispatch(searchBuddy(category, location))
         .then((result) => {
-          console.log(result.Teacher, "dataa");
           if (result.Teacher === undefined) {
             dispatch(logoutUser());
             navigation.navigate("Home");
@@ -106,21 +107,21 @@ export default function ProjectForm() {
 
   return (
     <>
-      <CustomHeader title='Add New Project' />
+      <CustomHeader title="Add New Project" />
 
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Choose Your Mentor</Text>
 
-        <View style={styles.filterLocationContainer}>
+        <View style={{ marginBottom: 10 }}>
           <SelectList
             setSelected={(val) => {
               setCategory(val);
             }}
             data={categories}
-            save='name'
+            save="name"
             search={false}
-            placeholder='Category'
-            boxStyles={{ width: 330, marginTop: 5, backgroundColor: "white" }}
+            placeholder="Select Project Category"
+            style={styles.container}
           />
         </View>
 
@@ -128,40 +129,45 @@ export default function ProjectForm() {
           <SelectList
             setSelected={(val) => setLocation(val)}
             data={locations}
-            save='name'
+            save="name"
             search={false}
-            placeholder='Location'
-            boxStyles={{ width: 330, marginTop: 5, backgroundColor: "white" }}
+            placeholder="Select Location"
+            style={styles.container}
           />
         </View>
 
         <Button
-          text='Search Buddy'
+          text="Search For Buddy"
           onPress={handleSearchBuddy}
           style={styles.searchButton}
         />
 
         {/* {displaySlider && <HorizontalSlider />} */}
-        {displaySlider &&
-          dataBuddy &&
-          dataBuddy.map((e) => (
-            <View
-              key={e.id}
-              style={{
-                backgroundColor: buddy === e.id ? "lightblue" : "white",
-              }}>
-              <Text onPress={() => handleItemClick(e.id, e.categoryId)}>
-                {e.username}
-              </Text>
-            </View>
-          ))}
+        {displaySlider && (
+          <View style={{ marginBottom: 10 }}>
+            <SelectList
+              setSelected={(val) => {
+                const selectedBuddy = dataBuddy.find(
+                  (buddy) => buddy.username === val
+                );
+                handleItemClick(selectedBuddy.id, selectedBuddy.categoryId);
+              }}
+              data={dataBuddy.map((e) => e.username)}
+              save="name"
+              search={false}
+              placeholder="Select Buddy"
+              style={styles.container}
+            />
+          </View>
+        )}
 
         <Text style={styles.label}>Project Name</Text>
-        <View style={styles.container}>
+        <View style={styles.containerBig}>
           <TextInput
             value={projectName}
             onChangeText={setProjectName}
-            placeholder='Enter project name'
+            placeholder="Example: Cara Belajar Pemrograman Javascript Dengan Cepat"
+            multiline={true}
           />
         </View>
 
@@ -170,10 +176,10 @@ export default function ProjectForm() {
           <TextInput
             value={projectDescription}
             onChangeText={setProjectDescription}
-            placeholder='Enter project description'
-            multiline
+            placeholder="Example: Project ini dibuat untuk mempelajari dasar-dasar ilmu pemrograman Javascript dalam waktu singkat"
+            multiline={true}
             numberOfLines={4}
-            textAlignVertical='top'
+            textAlignVertical="top"
           />
         </View>
 
@@ -182,23 +188,42 @@ export default function ProjectForm() {
           <TextInput
             value={goals}
             onChangeText={setGoals}
-            placeholder='Enter goals for the project'
-            multiline
+            placeholder="Example: Saya ingin bisa membuat website pribadi sederhana"
+            multiline={true}
             numberOfLines={4}
-            textAlignVertical='top'
+            textAlignVertical="top"
           />
         </View>
-        <Text style={styles.errorText}>{goalsError}</Text>
 
         <View>
-          <Button text='Submit' onPress={handleSubmit} />
+          <Button text="Submit" onPress={handleSubmit} />
         </View>
         <View style={{ marginBottom: 30 }}></View>
       </ScrollView>
 
+      {isLoading && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+        >
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text style={{ marginTop: 15, color: "white", fontSize: 16 }}>
+            Generating your project...
+          </Text>
+        </View>
+      )}
+
       <ErrorModal
         visible={showModal}
-        title='Error'
+        title="Error"
         message={modalMessage}
         onClose={() => setShowModal(false)}
       />
@@ -229,8 +254,8 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: 40,
-    borderColor: "#e0e0e0",
-    borderWidth: 1,
+    borderColor: "black",
+    borderWidth: 0.5,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
@@ -248,8 +273,8 @@ const styles = StyleSheet.create({
   containerBig: {
     width: "100%",
     height: 100,
-    borderColor: "#e0e0e0",
-    borderWidth: 1,
+    borderColor: "black",
+    borderWidth: 0.5,
     borderRadius: 8,
     marginTop: 5,
     marginBottom: 15,
@@ -318,13 +343,5 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomColor: "#f0f0f0",
     borderBottomWidth: 1,
-  },
-  errorText: {
-    backgroundColor: "#FFCACA",
-    color: "red",
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 10,
-    marginTop: 10,
   },
 });

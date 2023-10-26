@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import CheckBox from "react-native-check-box";
 import CustomHeader from "../components/CustomHeader";
 import { Rating } from "react-native-ratings";
+import { useSelector } from "react-redux";
 
 export default function DetailScreen({ route }) {
   const navigation = useNavigation();
@@ -20,8 +21,7 @@ export default function DetailScreen({ route }) {
   const [studentFeedback, setStudentFeedback] = useState("");
   const [buddyFeedback, setBuddyFeedback] = useState("");
   const [rating, setRating] = useState(0);
-  const userRole = "student";
-  console.log(">>>", project);
+  const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
@@ -30,14 +30,29 @@ export default function DetailScreen({ route }) {
   const handlePayProject = () => {
     navigation.push("Payment", project.learningMaterials[0].projectId);
   };
-
   const handleFinishProject = () => {
     setProject({ ...project, status: "Finished" });
   };
 
   const handleChat = () => {
-    console.log("chat dipijit");
-    navigation.push("Chat");
+    // Define the data you want to send
+    const chatData = {
+      // Define your data here, for example:
+      me: {},
+      other: {},
+    };
+    if (role == "buddy") {
+      chatData.me = project.teacher
+      chatData.other = project.student
+    }else if (role == "student") {
+      chatData.other = project.teacher
+      chatData.me = project.student
+    }
+
+    // Use the navigation.push method to send data as a parameter
+    navigation.push("Chat", {
+      data: chatData, // "data" is the parameter name, and "chatData" is the data object
+    });
   };
 
   const handleUpdateTodo = (text, index) => {
@@ -64,7 +79,7 @@ export default function DetailScreen({ route }) {
 
   return (
     <>
-      <CustomHeader title="Project Detail" />
+      <CustomHeader title='Project Detail' />
 
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Project Name</Text>
@@ -87,25 +102,24 @@ export default function DetailScreen({ route }) {
           <Text>{project.goals}</Text>
         </View>
 
-        {userRole === "buddy" && project.status === "Submitted" && (
+        {role === "buddy" && project.status === "Submitted" && (
           <>
             <Text style={styles.label}>Proposal Price</Text>
             <TextInput
               style={styles.editableContainer}
-              placeholder="Enter Price"
+              placeholder='Enter Price'
               value={price}
               onChangeText={setPrice}
             />
             <TouchableOpacity
               style={styles.acceptButton}
-              onPress={handleAcceptProposal}
-            >
+              onPress={handleAcceptProposal}>
               <Text style={styles.buttonText}>Accept Project Proposal</Text>
             </TouchableOpacity>
           </>
         )}
 
-        {project.status === "Accepted" && userRole === "student" && (
+        {project.status === "Accepted" && role === "student" && (
           <TouchableOpacity onPress={handlePayProject} style={styles.payButton}>
             <Text style={styles.buttonText}>Proceed Payment</Text>
           </TouchableOpacity>
@@ -119,19 +133,19 @@ export default function DetailScreen({ route }) {
                 <CheckBox
                   isChecked={todo.isFinished}
                   onClick={() => handleToggleTodoChecked(index)}
-                  disabled={userRole === "buddy"}
+                  disabled={role === "buddy"}
                 />
                 <TextInput
                   style={styles.editableTodoText}
                   value={todo.name}
                   onChangeText={(text) => handleUpdateTodo(text, index)}
                   editable={
-                    userRole === "buddy" &&
+                    role === "buddy" &&
                     (project.status === "Paid" ||
                       project.status === "On Progress")
                   }
                 />
-                {userRole === "buddy" &&
+                {role === "buddy" &&
                   (project.status === "Paid" ||
                     project.status === "On Progress") && (
                     <TouchableOpacity onPress={() => handleRemoveTodo(index)}>
@@ -142,10 +156,10 @@ export default function DetailScreen({ route }) {
             ))}
 
             <View style={styles.containerButton}>
-              {userRole === "buddy" ? (
+              {role === "buddy" ? (
                 <Button text="Chat with Student" onPress={handleChat} />
               ) : (
-                <Button text="Chat with Buddy" onPress={handleChat} />
+                <Button text='Chat with Buddy' onPress={handleChat} />
               )}
             </View>
           </>
@@ -153,7 +167,7 @@ export default function DetailScreen({ route }) {
 
         {project.status === "To Review" && (
           <>
-            {userRole === "student" && (
+            {role === "student" && (
               <>
                 <Text style={styles.label}>Student Rating</Text>
                 <Rating
@@ -167,12 +181,12 @@ export default function DetailScreen({ route }) {
               </>
             )}
 
-            {userRole === "buddy" && (
+            {role === "buddy" && (
               <>
                 <Text style={styles.label}>buddy Feedback</Text>
                 <TextInput
                   style={styles.editableContainer}
-                  placeholder="Enter feedback"
+                  placeholder='Enter feedback'
                   value={buddyFeedback}
                   onChangeText={setBuddyFeedback}
                 />
@@ -186,15 +200,13 @@ export default function DetailScreen({ route }) {
                   onPress={() => {
                     // Handle Multer
                   }}
-                  style={styles.uploadDocumentationButton}
-                >
+                  style={styles.uploadDocumentationButton}>
                   <Text style={styles.buttonText}>Upload Documentation</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={handleFinishProject}
-                  style={styles.finishProjectButton}
-                >
+                  style={styles.finishProjectButton}>
                   <Text style={styles.buttonText}>Finish Project</Text>
                 </TouchableOpacity>
               </>
@@ -210,6 +222,7 @@ export default function DetailScreen({ route }) {
             style={styles.projectImage}
           />
         )}
+        <View style={{ marginBottom: 80 }}></View>
       </ScrollView>
     </>
   );

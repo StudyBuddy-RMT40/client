@@ -26,7 +26,7 @@ export default function LoginScreen() {
   const handleLogin = () => {
     dispatch(loginUser({ username, password }))
       .then((response) => {
-        console.log(response);
+        (response);
         if (response.success) {
           navigation.navigate("Dashboard");
         } else {

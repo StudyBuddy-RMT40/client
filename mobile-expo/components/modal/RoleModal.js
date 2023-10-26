@@ -24,7 +24,6 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
   let { categories } = useSelector((state) => {
     return state.category;
   });
-  console.log(categories);
   let dummySpecializations;
   dummySpecializations = categories.map((e) => ({
     id: e._id,

@@ -57,7 +57,7 @@ export const fetchProjectById = (data) => {
 
 // <><><><><><><><><>STUDDYBUDDDYYY><><><><><><><
 export const registerUser = (registerForm) => {
-  // console.log(registerForm);;
+  // (registerForm);;
   return async () => {
     try {
       const { data } = await axios({
@@ -67,7 +67,7 @@ export const registerUser = (registerForm) => {
       });
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
-      console.log(error.response.data);
+      (error.response.data);
       return { success: false, error: error.response.data };
     }
   };
@@ -89,7 +89,7 @@ export function getProjects() {
   return async (dispatch) => {
     try {
       const { data } = await axios(baseUrl + "pub/projects");
-      // console.log("ACTION CREATOR>>>>>>>>>>", data);
+      // ("ACTION CREATOR>>>>>>>>>>", data);
       dispatch(fetchProjects(data));
     } catch (error) {
       return { success: false, error: error.response.data };
@@ -101,7 +101,7 @@ export function getProjectById(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios(baseUrl + "pub/projects/" + id);
-      // console.log("ACTION CREATOR PROJECT ID>>>>>", data);
+      // ("ACTION CREATOR PROJECT ID>>>>>", data);
       dispatch(fetchProjectById(data));
     } catch (error) {
       return { success: false, error: error.response.data };
@@ -137,7 +137,6 @@ export const fetchCategories = () => {
         type: FETCH_CATEGORIES_SUCCESS,
         payload: data,
       });
-      console.log("categories:", data);
       return data;
     } catch (err) {
       console.log(err);
@@ -354,15 +353,14 @@ export const loginUser = (loginForm) => {
       await dispatch(fetchLocations());
 
       if (role === "buddy") {
-        console.log("yooo buddy");
         await dispatch(fetchDashboardForTeacher());
       } else if (role === "student") {
-        console.log("yooo student");
         await dispatch(fetchDashboardForStudent());
       }
 
       return { success: true };
     } catch (error) {
+      console.log(error.response.data);
       return { success: false, error: error.response.data };
     }
   };

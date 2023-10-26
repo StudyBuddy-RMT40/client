@@ -43,27 +43,9 @@ export default function AccountScreen() {
 
   const { profileUser } = useSelector((state) => state.user);
 
-  // const editProfile = async () => {
-  //   try {
-  //     const { data } = await axios({
-  //       method: "put",
-  //       url: baseUrl + "users",
-  //       data: userProfile,
-  //       headers: {
-  //         access_token
-  //       }
-  //     })
-  //     console.log(data)
-  //   } catch (err) {
-  //     console.log(err.response.data)
-  //     throw err
-  //   }
-  // }
-
   useEffect(() => {
-    console.log(access_token);
+    (access_token);
     setUserProfile(profileUser);
-    // console.log(access_token, "blablablabla")
   }, [profileUser]);
 
   useEffect(() => {
@@ -91,7 +73,7 @@ export default function AccountScreen() {
         setIsEditing(false);
       })
       .catch((err) => {
-        console.log(err.response.data.message, "di profile");
+        (err.response.data.message, "di profile");
         setIsEditing(true);
         setModalMessage(err.response.data.message);
         setShowModal(true);
