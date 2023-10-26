@@ -292,7 +292,7 @@ export const searchBuddy = (category, region) => {
 };
 
 export const addProject = (name, teacherId, description, categoryId, goals) => {
-  return async () => {
+  return async (dispatch) => {
     try {
       const { data } = await axios({
         method: "POST",
@@ -314,6 +314,8 @@ export const addProject = (name, teacherId, description, categoryId, goals) => {
       } else if (role === "student") {
         await dispatch(fetchDashboardForStudent());
       }
+
+      dispatch(fetchProjects())
 
       console.log("a")
       return { success: true };

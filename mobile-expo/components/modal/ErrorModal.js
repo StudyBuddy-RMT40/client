@@ -21,7 +21,7 @@ const ErrorModal = ({ visible, title, message, onClose }) => {
           <Text style={styles.modalTitle}>{title}</Text>
           <Text style={styles.modalMessage}>{message}</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>Close</Text>
+            <Text style={styles.closeButtonText}>Okay</Text>
           </TouchableOpacity>
         </View>
       </View>
