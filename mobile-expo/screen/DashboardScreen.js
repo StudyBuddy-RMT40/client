@@ -55,44 +55,40 @@ export default function DashboardScreen() {
 
   useEffect(() => {
     if (role === "buddy" && dataTeacher._id) {
-      // setProjectData(dataTeacher.Projects);
       setLike(dataTeacher.Likes);
       setReting(dataTeacher.Ratings);
       dataTeacher.Projects.forEach((e) => {
-        // (e.status);
-        (e.Category[0],"<<<<<<<<<<<<");
         temp.push({
           id: e._id,
           title: e.name,
           progress: e.totalFinished,
           status: e.status,
           description: e.description,
-          category: e.Category.name,
+          category: e.Category[0].name,
           goals: e.goals,
           feedback: e.feedback,
           learningMaterials: e.todos,
+          student:dataTeacher.Projects[0].Student[0],
+          teacher:dataTeacher.Projects[0].Teacher[0]
         });
       });
       setProjectData(temp);
-    } else if (role === "student" && dataStudent._id) {
-      // setProjectData(dataStudent);
-      (dataStudent.Teacher,"<<<<<<<<<<<<");
+    } else if (role === "student" && dataStudent._id) { 
       setLike(dataStudent.Likes);
       setReting(dataStudent.Ratings);
       dataStudent.Projects.forEach((e) => {
-        // (e.status);
-        // (e);
-        // (e.Category.name);
         temp.push({
           id: e._id,
           title: e.name,
           progress: e.totalFinished,
           status: e.status,
           description: e.description,
-          category: e.Category.name,
+          category:  e.Category[0].name,
           goals: e.goals,
           feedback: e.feedback,
           learningMaterials: e.todos,
+          student:dataStudent.Projects[0].Student[0],
+          teacher:dataStudent.Projects[0].Teacher[0]
         });
       });
       setProjectData(temp);

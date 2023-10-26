@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import CheckBox from "react-native-check-box";
 import CustomHeader from "../components/CustomHeader";
 import { Rating } from "react-native-ratings";
+import { useSelector } from "react-redux";
 
 export default function DetailScreen({ route }) {
   const navigation = useNavigation();
@@ -20,7 +21,7 @@ export default function DetailScreen({ route }) {
   const [studentFeedback, setStudentFeedback] = useState("");
   const [buddyFeedback, setBuddyFeedback] = useState("");
   const [rating, setRating] = useState(0);
-  const userRole = "student";
+  const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
@@ -34,14 +35,19 @@ export default function DetailScreen({ route }) {
   };
 
   const handleChat = () => {
-    ("chat dipijit");
-
     // Define the data you want to send
-    const profile = {
+    const chatData = {
       // Define your data here, for example:
       me: {},
       other: {},
     };
+    if (role == "buddy") {
+      chatData.me = project.teacher
+      chatData.other = project.student
+    }else if (role == "student") {
+      chatData.other = project.teacher
+      chatData.me = project.student
+    }
 
     // Use the navigation.push method to send data as a parameter
     navigation.push("Chat", {
@@ -96,7 +102,7 @@ export default function DetailScreen({ route }) {
           <Text>{project.goals}</Text>
         </View>
 
-        {userRole === "buddy" && project.status === "Submitted" && (
+        {role === "buddy" && project.status === "Submitted" && (
           <>
             <Text style={styles.label}>Proposal Price</Text>
             <TextInput
@@ -113,7 +119,7 @@ export default function DetailScreen({ route }) {
           </>
         )}
 
-        {project.status === "Accepted" && userRole === "student" && (
+        {project.status === "Accepted" && role === "student" && (
           <TouchableOpacity onPress={handlePayProject} style={styles.payButton}>
             <Text style={styles.buttonText}>Proceed Payment</Text>
           </TouchableOpacity>
@@ -127,19 +133,19 @@ export default function DetailScreen({ route }) {
                 <CheckBox
                   isChecked={todo.isFinished}
                   onClick={() => handleToggleTodoChecked(index)}
-                  disabled={userRole === "buddy"}
+                  disabled={role === "buddy"}
                 />
                 <TextInput
                   style={styles.editableTodoText}
                   value={todo.name}
                   onChangeText={(text) => handleUpdateTodo(text, index)}
                   editable={
-                    userRole === "buddy" &&
+                    role === "buddy" &&
                     (project.status === "Paid" ||
                       project.status === "On Progress")
                   }
                 />
-                {userRole === "buddy" &&
+                {role === "buddy" &&
                   (project.status === "Paid" ||
                     project.status === "On Progress") && (
                     <TouchableOpacity onPress={() => handleRemoveTodo(index)}>
@@ -150,8 +156,8 @@ export default function DetailScreen({ route }) {
             ))}
 
             <View style={styles.containerButton}>
-              {userRole === "buddy" ? (
-                <Button text='Chat with Student' onPress={handleChat} />
+              {role === "buddy" ? (
+                <Button text="Chat with Student" onPress={handleChat} />
               ) : (
                 <Button text='Chat with Buddy' onPress={handleChat} />
               )}
@@ -161,7 +167,7 @@ export default function DetailScreen({ route }) {
 
         {project.status === "To Review" && (
           <>
-            {userRole === "student" && (
+            {role === "student" && (
               <>
                 <Text style={styles.label}>Student Rating</Text>
                 <Rating
@@ -175,7 +181,7 @@ export default function DetailScreen({ route }) {
               </>
             )}
 
-            {userRole === "buddy" && (
+            {role === "buddy" && (
               <>
                 <Text style={styles.label}>buddy Feedback</Text>
                 <TextInput
