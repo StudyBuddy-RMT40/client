@@ -11,9 +11,10 @@ import {
 } from "./actionTypes";
 
 import axios from "axios";
-const baseUrl = "https://e933-2001-448a-11b0-13d6-b8a6-ba1d-3553-50e8.ngrok-free.app/";
+const baseUrl =
+  "https://e933-2001-448a-11b0-13d6-b8a6-ba1d-3553-50e8.ngrok-free.app/";
 let access_token;
-
+let role;
 export const fetchDashboardStudent = (data) => {
   return {
     type: FETCH_DASHBOARD_STUDENT,
@@ -67,7 +68,7 @@ export const registerUser = (registerForm) => {
       });
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
-      (error.response.data);
+      error.response.data;
       return { success: false, error: error.response.data };
     }
   };
@@ -156,6 +157,7 @@ export const updateStatusRole = (role) => {
           access_token: access_token,
         },
       });
+      dispatch(fetchUserProfile(access_token, role));
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
       console.log(error.response.data);
@@ -179,6 +181,7 @@ export const addSpecialization = (data) => {
           access_token: access_token,
         },
       });
+      dispatch(fetchUserProfile(access_token, role));
       return { success: true, data };
     } catch (error) {
       console.log(error.response.data);
@@ -254,6 +257,7 @@ export const editProfile = (access_token, form) => {
           access_token,
         },
       });
+
       console.log(data);
     } catch (err) {
       console.log(err.response.data);
@@ -305,7 +309,40 @@ export const addProject = (name, teacherId, description, categoryId, goals) => {
         },
       });
 
-      console.log(data.parsedData);
+      if (role === "buddy") {
+        await dispatch(fetchDashboardForTeacher());
+      } else if (role === "student") {
+        await dispatch(fetchDashboardForStudent());
+      }
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.response.data };
+    }
+  };
+};
+
+export const updateStatusProject = (status, id) => {
+  return async () => {
+    try {
+      const { data } = await axios({
+        method: "PATCH",
+        url: baseUrl + `projects/` + id,
+        headers: {
+          access_token,
+        },
+        data: {
+          status,
+        },
+      });
+
+      if (role === "buddy") {
+        await dispatch(fetchDashboardForTeacher());
+      } else if (role === "student") {
+        await dispatch(fetchDashboardForStudent());
+      }
+
+      console.log(data);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.response.data };
@@ -336,27 +373,6 @@ export const payment = (projectId) => {
   }
 }
 
-export const updateStatusProject = (id, status) => {
-  return async (dispatch) => {
-    try {
-      const { data } = await axios({
-        method: "patch",
-        url: baseUrl + 'projects/' + id,
-        headers: {
-          access_token: access_token
-        },
-        data: {
-          status
-        }
-      })
-      console.log(data)
-      dispatch(getProjects())
-    } catch (err) {
-      console.log(err.response.data)
-    }
-  }
-}
-
 export const loginUser = (loginForm) => {
   return async (dispatch) => {
     const { username, password } = loginForm;
@@ -366,10 +382,10 @@ export const loginUser = (loginForm) => {
         password: password,
       });
 
-      const role = data.role;
-      access_token = data.access_token;
+      role = await data.role;
+      access_token = await data.access_token;
 
-      dispatch(Login(data.access_token, role));
+      dispatch(Login(data.access_token, data.role));
 
       await dispatch(fetchCategories());
       await dispatch(fetchLocations());
@@ -379,7 +395,7 @@ export const loginUser = (loginForm) => {
       } else if (role === "student") {
         await dispatch(fetchDashboardForStudent());
       }
-
+      dispatch(fetchUserProfile(data.access_token, data.role));
       return { success: true };
     } catch (error) {
       console.log(error.response.data);

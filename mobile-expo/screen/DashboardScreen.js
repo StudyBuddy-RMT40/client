@@ -25,7 +25,6 @@ export default function DashboardScreen() {
   const [projectData, setProjectData] = useState([]);
   // console.log(projectData)
   let temp = [];
-
   const buttonItems = [
     {
       icon: addProject,
@@ -58,51 +57,63 @@ export default function DashboardScreen() {
     if (role === "buddy" && dataTeacher._id) {
       setLike(dataTeacher.Likes);
       setReting(dataTeacher.Ratings);
-      dataTeacher.Projects.forEach((e) => {
-        temp.push({
-          id: e._id,
-          title: e.name,
-          progress: e.totalFinished,
-          status: e.status,
-          description: e.description,
-          category: e.Category[0].name,
-          goals: e.goals,
-          feedback: e.feedback,
-          learningMaterials: e.todos,
-          student: dataTeacher.Projects[0].Student[0],
-          teacher: dataTeacher.Projects[0].Teacher[0]
+      if (dataTeacher.hasOwnProperty("Projects") && dataTeacher.Projects) {
+        let temp = [];
+        dataTeacher.Projects.forEach((e) => {
+          if (e.Category && e.Category[0] && e.Category[0].name) {
+            temp.push({
+              id: e._id,
+              title: e.name,
+              progress: e.totalFinished,
+              status: e.status,
+              description: e.description,
+              category: e.Category[0].name,
+              goals: e.goals,
+              feedback: e.feedback,
+              learningMaterials: e.todos,
+              student: e.Student[0], // Change to e.Student[0] to get the student associated with this project
+              teacher: e.Teacher[0], // Change to e.Teacher[0] to get the teacher associated with this project
+            });
+          }
         });
-      });
-      setProjectData(temp);
+        setProjectData(temp);
+      }
     } else if (role === "student" && dataStudent._id) {
       setLike(dataStudent.Likes);
       setReting(dataStudent.Ratings);
-      dataStudent.Projects.forEach((e) => {
-        temp.push({
-          id: e._id,
-          title: e.name,
-          progress: e.totalFinished,
-          status: e.status,
-          description: e.description,
-          category: e.Category[0].name,
-          goals: e.goals,
-          feedback: e.feedback,
-          learningMaterials: e.todos,
-          student: dataStudent.Projects[0].Student[0],
-          teacher: dataStudent.Projects[0].Teacher[0]
+      if (dataStudent.hasOwnProperty("Projects") && dataStudent.Projects) {
+        let temp = [];
+        dataStudent.Projects.forEach((e) => {
+          if (e.Category && e.Category[0] && e.Category[0].name) {
+            temp.push({
+              id: e._id,
+              title: e.name,
+              progress: e.totalFinished,
+              status: e.status,
+              description: e.description,
+              category: e.Category[0].name,
+              goals: e.goals,
+              feedback: e.feedback,
+              learningMaterials: e.todos,
+              student: e.Student[0], // Change to e.Student[0] to get the student associated with this project
+              teacher: e.Teacher[0], // Change to e.Teacher[0] to get the teacher associated with this project
+            });
+          }
         });
-      });
-      setProjectData(temp);
+        setProjectData(temp);
+      }
     }
   }, [dataTeacher, dataStudent]);
+
+
   return (
     <>
-      <CustomHeader title="Dashboard" />
+      <CustomHeader title='Dashboard' />
 
       <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <ScrollView style={styles.container}>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            <DashboardWidget data={isLikes} isLike={true} title="Overview" />
+            <DashboardWidget data={isLikes} isLike={true} title='Overview' />
             <DashboardWidget data={isRatings} isReview={true} />
           </View>
           <ButtonGrid items={buttonItems} />
@@ -111,7 +122,7 @@ export default function DashboardScreen() {
       </View>
       <ErrorModal
         visible={showModal}
-        title="Role Validation"
+        title='Role Validation'
         message={modalMessage}
         onClose={() => {
           setShowModal(false), setShowRoleModal(true);

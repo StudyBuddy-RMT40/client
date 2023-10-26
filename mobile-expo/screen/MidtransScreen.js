@@ -23,7 +23,7 @@ export default function MidtransScreen({ route }) {
   };
 
   const handleUpdateProjectStatus = () => {
-    dispatch(updateStatusProject(projectId, "Paid"))
+    dispatch(updateStatusProject("Paid", projectId))
       .then(() => {
         navigation.navigate("Dashboard")
       })
