@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile, getProjects } from "../store/actions/actionCreators";
 
 export default function LandingPageScreen() {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
@@ -179,6 +179,7 @@ export default function LandingPageScreen() {
           onSelectCategory={handleCategorySelect}
         />
         {orderedCategories.map((category) => {
+          console.log(category)
           const filteredData = filterDataByCategory(category);
           return (
             <HorizontalSlider

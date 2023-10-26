@@ -37,12 +37,12 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
         .then((response) => {
           if (response.success) {
             onSave(role, []);
-            onClose();
           }
         })
         .catch((error) => {
           console.log(error, "erorr ini bukan ?");
         });
+      onClose();
     }
   };
 
