@@ -126,7 +126,7 @@ export default function LandingPageScreen() {
   // }, [])
 
   const projectReducer = useSelector((state) => state.projectReducer.projects);
-  // console.log(state, "<<<<<<< ini di landing page");
+  // (state, "<<<<<<< ini di landing page");
   const getCategoryTitle = (category) => {
     switch (category) {
       case "highschool":
@@ -148,7 +148,7 @@ export default function LandingPageScreen() {
 
   useEffect(() => {
     dispatch(getProjects());
-    console.log(">>>", projectReducer);
+    (">>>", projectReducer);
   }, [dispatch, selectedCategory]);
 
   return (

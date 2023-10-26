@@ -21,7 +21,6 @@ export default function DetailScreen({ route }) {
   const [buddyFeedback, setBuddyFeedback] = useState("");
   const [rating, setRating] = useState(0);
   const userRole = "student";
-  console.log(">>>", project);
 
   const handleAcceptProposal = () => {
     setProject({ ...project, status: "Accepted" });
@@ -35,7 +34,7 @@ export default function DetailScreen({ route }) {
   };
 
   const handleChat = () => {
-    console.log("chat dipijit");
+    ("chat dipijit");
 
     // Define the data you want to send
     const profile = {

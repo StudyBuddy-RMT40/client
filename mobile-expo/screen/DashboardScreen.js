@@ -59,15 +59,15 @@ export default function DashboardScreen() {
       setLike(dataTeacher.Likes);
       setReting(dataTeacher.Ratings);
       dataTeacher.Projects.forEach((e) => {
-        // console.log(e.status);
-        // console.log(e.Category.name);
+        // (e.status);
+        (e.Category[0],"<<<<<<<<<<<<");
         temp.push({
           id: e._id,
           title: e.name,
           progress: e.totalFinished,
           status: e.status,
           description: e.description,
-          category: "e.Category.name",
+          category: e.Category.name,
           goals: e.goals,
           feedback: e.feedback,
           learningMaterials: e.todos,
@@ -76,13 +76,13 @@ export default function DashboardScreen() {
       setProjectData(temp);
     } else if (role === "student" && dataStudent._id) {
       // setProjectData(dataStudent);
-      console.log(dataStudent.Teacher,"<<<<<<<<<<<<");
+      (dataStudent.Teacher,"<<<<<<<<<<<<");
       setLike(dataStudent.Likes);
       setReting(dataStudent.Ratings);
       dataStudent.Projects.forEach((e) => {
-        // console.log(e.status);
-        // console.log(e);
-        // console.log(e.Category.name);
+        // (e.status);
+        // (e);
+        // (e.Category.name);
         temp.push({
           id: e._id,
           title: e.name,

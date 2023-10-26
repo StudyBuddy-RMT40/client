@@ -6,9 +6,7 @@ import CustomHeader from "../components/CustomHeader";
 
 export default function ChatScreen({ route }) {
   const { data } = route.params;
-  console.log(data);
 
-  
   const me = {
     id: "123456789",
     name: "Alice",
