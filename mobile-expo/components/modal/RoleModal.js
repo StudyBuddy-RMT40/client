@@ -38,11 +38,6 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
           if (response.success) {
             onSave(role, []);
             onClose();
-          } else {
-            setModalMessage(
-              "An error occurred during login: " + response.error.message
-            );
-            setShowModal(true);
           }
         })
         .catch((error) => {
