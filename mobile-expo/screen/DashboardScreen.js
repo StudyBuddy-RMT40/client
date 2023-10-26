@@ -12,7 +12,6 @@ import CustomHeader from "../components/CustomHeader";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorModal from "../components/modal/ErrorModal";
 import RoleModal from "../components/modal/RoleModal";
-import { getProjects } from "../store/actions/actionCreators";
 
 export default function DashboardScreen() {
   const dispatch = useDispatch()
@@ -24,6 +23,7 @@ export default function DashboardScreen() {
   const [isRatings, setReting] = useState(0);
   const { dataStudent, dataTeacher } = useSelector((state) => state.dashboard);
   const { role } = useSelector((state) => state.auth); // Retrieve 'role' from the 'auth' state
+  const { projects } = useSelector((state) => state.projectReducer)
   const [projectData, setProjectData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   // console.log(projectData)
@@ -113,11 +113,7 @@ export default function DashboardScreen() {
         setProjectData(temp);
       }
     }
-  }, [dataTeacher, dataStudent]);
-
-  useEffect(() => {
-    dispatch(getProjects)
-  }, [])
+  }, [dataTeacher, dataStudent, projects]);
 
 
   return (

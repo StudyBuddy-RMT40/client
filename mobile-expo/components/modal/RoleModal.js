@@ -144,7 +144,7 @@ const RoleModal = ({ isVisible, onClose, onSave }) => {
       </View>
       <ErrorModal
         visible={showModal}
-        title="Role Validation"
+        title="You need to pick a role."
         message={modalMessage}
         onClose={() => {
           setShowModal(false);
