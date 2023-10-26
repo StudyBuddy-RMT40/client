@@ -4,22 +4,23 @@ import { View, StyleSheet } from "react-native";
 import * as TalkRn from "@talkjs/expo";
 import CustomHeader from "../components/CustomHeader";
 
-export default function ChatScreen(props) {
+export default function ChatScreen({ route }) {
+  const { data } = route.params;
   const me = {
-    id: "123456789",
-    name: "Alice",
-    email: "alice@example.com",
-    photoUrl: "https://talkjs.com/images/avatar-1.jpg",
+    id: data.me._id,
+    name: data.me.username,
+    email: data.me.email,
+    photoUrl: "https://uhs-group.com/wp-content/uploads/2020/08/person-dummy-e1553259379744.jpg",
     welcomeMessage: "Hey there! How are you? :-)",
     role: "default",
   };
 
   const other = {
-    id: "987654321",
-    name: "Sebastian",
-    email: "Sebastian@example.com",
-    photoUrl: "https://talkjs.com/images/avatar-5.jpg",
-    welcomeMessage: "Hey, how can I help? https://google.com",
+    id: data.other._id,
+    name: data.other.username,
+    email: data.other.email,
+    photoUrl: "https://uhs-group.com/wp-content/uploads/2020/08/person-dummy-e1553259379744.jpg",
+    welcomeMessage: "Hey, how can I help?",
     role: "default",
   };
 
@@ -32,9 +33,9 @@ export default function ChatScreen(props) {
 
   return (
     <>
-      <CustomHeader title="Chat With Buddy" />
+      <CustomHeader title='Chat With Buddy' />
       <View style={styles.container}>
-        <TalkRn.Session appId="t8orPdLy" me={me}>
+        <TalkRn.Session appId='t8orPdLy' me={me}>
           <View style={styles.chatboxContainer}>
             <TalkRn.Chatbox conversationBuilder={conversationBuilder} />
           </View>

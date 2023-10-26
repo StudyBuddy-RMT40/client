@@ -75,7 +75,6 @@ export default function ProjectForm() {
       console.log(category, location);
       dispatch(searchBuddy(category, location))
         .then((result) => {
-          console.log(result.Teacher, "dataa");
           if (result.Teacher === undefined) {
             dispatch(logoutUser());
             navigation.navigate("Home");

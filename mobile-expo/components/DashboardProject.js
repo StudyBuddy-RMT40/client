@@ -19,6 +19,8 @@ const ProjectCard = ({
   goals,
   feedback,
   learningMaterials,
+  teacher,
+  student,
 }) => {
   const navigation = useNavigation();
   // const { accessToken } = useAuth();
@@ -55,8 +57,7 @@ const ProjectCard = ({
             ...styles.progressBarFill,
             width: `${progress}%`,
             backgroundColor: progressBarColor,
-          }}
-        ></View>
+          }}></View>
       </View>
       <Text style={styles.progressLabel}>{displayText}</Text>
     </View>
@@ -75,12 +76,13 @@ const ProjectCard = ({
             goals,
             feedback,
             learningMaterials,
+            teacher,
+            student,
           },
         })
       }
-      underlayColor="#f0f0f0"
-      style={styles.projectCard}
-    >
+      underlayColor='#f0f0f0'
+      style={styles.projectCard}>
       {cardContent}
     </TouchableHighlight>
   );
@@ -120,8 +122,7 @@ const DashboardProject = ({ projectData }) => {
           style={[
             styles.filterButton,
             activeFilter === "Proposed" && styles.activeFilter,
-          ]}
-        >
+          ]}>
           <Text style={styles.filterText}>Proposed</Text>
         </TouchableOpacity>
 
@@ -134,8 +135,7 @@ const DashboardProject = ({ projectData }) => {
           style={[
             styles.filterButton,
             activeFilter === "On Progress" && styles.activeFilter,
-          ]}
-        >
+          ]}>
           <Text style={styles.filterText}>On Progress</Text>
         </TouchableOpacity>
 
@@ -148,16 +148,15 @@ const DashboardProject = ({ projectData }) => {
           style={[
             styles.filterButton,
             activeFilter === "Finished" && styles.activeFilter,
-          ]}
-        >
+          ]}>
           <Text style={styles.filterText}>Finished</Text>
         </TouchableOpacity>
       </View>
 
       {loading ? (
         <ActivityIndicator
-          size="large"
-          color="#4781a5"
+          size='large'
+          color='#4781a5'
           style={{ marginTop: 20 }}
         />
       ) : filteredData.length ? (

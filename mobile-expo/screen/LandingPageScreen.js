@@ -126,7 +126,7 @@ export default function LandingPageScreen() {
   // }, [])
 
   const projectReducer = useSelector((state) => state.projectReducer.projects);
-  // console.log(state, "<<<<<<< ini di landing page");
+  // (state, "<<<<<<< ini di landing page");
   const getCategoryTitle = (category) => {
     switch (category) {
       case "highschool":
@@ -148,7 +148,7 @@ export default function LandingPageScreen() {
 
   useEffect(() => {
     dispatch(getProjects());
-    console.log(">>>", projectReducer);
+    (">>>", projectReducer);
   }, [dispatch, selectedCategory]);
 
   return (
@@ -163,15 +163,14 @@ export default function LandingPageScreen() {
         <Text style={styles.headerSubText}>Welcome to StudyBuddy!</Text>
         <TextInput
           style={styles.searchBar}
-          placeholder="Looking for your next project?"
+          placeholder='Looking for your next project?'
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
         />
       </View>
       <ScrollView
         style={[styles.scrollContainer, { paddingTop: paddingTop }]}
-        contentContainerStyle={{ paddingBottom: 200 }}
-      >
+        contentContainerStyle={{ paddingBottom: 200 }}>
         <View style={styles.carouselContainer}>
           <HeroCarousel />
         </View>
