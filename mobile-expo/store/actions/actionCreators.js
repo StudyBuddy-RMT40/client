@@ -319,7 +319,7 @@ export const payment = (projectId) => {
         method: 'post',
         url: baseUrl + 'generate-midtrans-token/' + projectId,
         data: {
-          price: 5000000
+          price: 500000
         },
         headers: {
           access_token: access_token
@@ -329,6 +329,27 @@ export const payment = (projectId) => {
         type: FETCH_REDIRECT_URL,
         payload: data
       })
+    } catch (err) {
+      console.log(err.response.data)
+    }
+  }
+}
+
+export const updateStatusProject = (id, status) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        method: "patch",
+        url: baseUrl + 'projects/' + id,
+        headers: {
+          access_token: access_token
+        },
+        data: {
+          status
+        }
+      })
+      console.log(data)
+      dispatch(getProjects())
     } catch (err) {
       console.log(err.response.data)
     }

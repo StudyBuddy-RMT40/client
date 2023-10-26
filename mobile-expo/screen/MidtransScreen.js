@@ -2,10 +2,13 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { useDispatch } from 'react-redux'
+import { updateStatusProject } from '../store/actions/actionCreators';
 
 export default function MidtransScreen({ route }) {
+  const dispatch = useDispatch()
   const navigation = useNavigation()
-  const { paymentGatewayURL } = route.params;
+  const { paymentGatewayURL, projectId } = route.params;
 
   const handlePaymentFinished = (data) => {
     console.log('Received data:', data);
@@ -18,6 +21,13 @@ export default function MidtransScreen({ route }) {
 
     }
   };
+
+  const handleUpdateProjectStatus = () => {
+    dispatch(updateStatusProject(projectId, "Paid"))
+      .then(() => {
+        navigation.navigate("Dashboard")
+      })
+  }
 
   // const callback = () => {
   //   console.log("a")
@@ -43,6 +53,7 @@ export default function MidtransScreen({ route }) {
           console.log(navState)
           if (status == true) {
             // callback()
+            handleUpdateProjectStatus()
           }
         }}
       />

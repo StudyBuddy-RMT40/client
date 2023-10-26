@@ -56,14 +56,14 @@ export default function PaymentScreen({ route }) {
 
   useEffect(() => {
     if (redirectUrl) {
-      navigation.push("Midtrans", { paymentGatewayURL: redirectUrl });
+      navigation.push("Midtrans", { paymentGatewayURL: redirectUrl, projectId: route.params });
     }
   }, [redirectUrl, navigation]);
 
   const orderDetails = [
-    { label: "Lesson - Ternak Padi", price: 1000000 },
-    { label: "Study - Bisnis Peternakan", price: 1500000 },
-    { label: "Intimidate - Publication Ternak", price: 2500000 },
+    { label: "Lesson - Ternak Padi", price: 100000 },
+    { label: "Study - Bisnis Peternakan", price: 150000 },
+    { label: "Intimidate - Publication Ternak", price: 250000 },
   ];
 
   const totalAmount = orderDetails.reduce(
