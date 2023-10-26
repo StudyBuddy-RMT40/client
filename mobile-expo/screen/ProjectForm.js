@@ -54,14 +54,15 @@ export default function ProjectForm() {
     )
       .then((result) => {
         console.log("loading");
-        setTimeout(() => {
-          setIsLoading(false);
-          navigation.navigate("Dashboard");
-        }, 15000);
+        if (result.success) {
+          setTimeout(() => {
+            setIsLoading(false);
+            navigation.navigate("Dashboard");
+          }, 15000);
+        }
       })
       .catch((err) => {
         setIsLoading(false);
-        console.log(err);
         setShowModal(true);
         setModalMessage(
           "There was an error creating your project. Please try again."
@@ -107,7 +108,7 @@ export default function ProjectForm() {
 
   return (
     <>
-      <CustomHeader title="Add New Project" />
+      <CustomHeader title='Add New Project' />
 
       <ScrollView style={styles.contentContainerStyle}>
         <Text style={styles.label}>Choose Your Mentor</Text>
@@ -118,9 +119,9 @@ export default function ProjectForm() {
               setCategory(val);
             }}
             data={categories}
-            save="name"
+            save='name'
             search={false}
-            placeholder="Select Project Category"
+            placeholder='Select Project Category'
             style={styles.container}
           />
         </View>
@@ -129,15 +130,15 @@ export default function ProjectForm() {
           <SelectList
             setSelected={(val) => setLocation(val)}
             data={locations}
-            save="name"
+            save='name'
             search={false}
-            placeholder="Select Location"
+            placeholder='Select Location'
             style={styles.container}
           />
         </View>
 
         <Button
-          text="Search For Buddy"
+          text='Search For Buddy'
           onPress={handleSearchBuddy}
           style={styles.searchButton}
         />
@@ -153,9 +154,9 @@ export default function ProjectForm() {
                 handleItemClick(selectedBuddy.id, selectedBuddy.categoryId);
               }}
               data={dataBuddy.map((e) => e.username)}
-              save="name"
+              save='name'
               search={false}
-              placeholder="Select Buddy"
+              placeholder='Select Buddy'
               style={styles.container}
             />
           </View>
@@ -166,7 +167,7 @@ export default function ProjectForm() {
           <TextInput
             value={projectName}
             onChangeText={setProjectName}
-            placeholder="Example: Cara Belajar Pemrograman Javascript Dengan Cepat"
+            placeholder='Example: Cara Belajar Pemrograman Javascript Dengan Cepat'
             multiline={true}
           />
         </View>
@@ -176,10 +177,10 @@ export default function ProjectForm() {
           <TextInput
             value={projectDescription}
             onChangeText={setProjectDescription}
-            placeholder="Example: Project ini dibuat untuk mempelajari dasar-dasar ilmu pemrograman Javascript dalam waktu singkat"
+            placeholder='Example: Project ini dibuat untuk mempelajari dasar-dasar ilmu pemrograman Javascript dalam waktu singkat'
             multiline={true}
             numberOfLines={4}
-            textAlignVertical="top"
+            textAlignVertical='top'
           />
         </View>
 
@@ -188,15 +189,15 @@ export default function ProjectForm() {
           <TextInput
             value={goals}
             onChangeText={setGoals}
-            placeholder="Example: Saya ingin bisa membuat website pribadi sederhana"
+            placeholder='Example: Saya ingin bisa membuat website pribadi sederhana'
             multiline={true}
             numberOfLines={4}
-            textAlignVertical="top"
+            textAlignVertical='top'
           />
         </View>
 
         <View>
-          <Button text="Submit" onPress={handleSubmit} />
+          <Button text='Submit' onPress={handleSubmit} />
         </View>
         <View style={{ marginBottom: 30 }}></View>
       </ScrollView>
@@ -212,9 +213,8 @@ export default function ProjectForm() {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: "rgba(0,0,0,0.5)",
-          }}
-        >
-          <ActivityIndicator size="large" color="#0000ff" />
+          }}>
+          <ActivityIndicator size='large' color='#0000ff' />
           <Text style={{ marginTop: 15, color: "white", fontSize: 16 }}>
             Generating your project...
           </Text>
@@ -223,7 +223,7 @@ export default function ProjectForm() {
 
       <ErrorModal
         visible={showModal}
-        title="Error"
+        title='Error'
         message={modalMessage}
         onClose={() => setShowModal(false)}
       />
