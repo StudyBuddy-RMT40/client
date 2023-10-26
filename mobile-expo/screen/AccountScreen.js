@@ -41,6 +41,8 @@ export default function AccountScreen() {
     return state.auth;
   });
 
+  console.log(access_token)
+
   const { profileUser } = useSelector((state) => state.user);
 
   useEffect(() => {

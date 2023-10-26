@@ -77,6 +77,7 @@ export const logoutUser = () => {
   return async (dispatch) => {
     try {
       dispatch(Logout());
+      access_token = ""
       return { success: true, data }; // Return a success flag and data
     } catch (error) {
       // Return an error flag and error data
