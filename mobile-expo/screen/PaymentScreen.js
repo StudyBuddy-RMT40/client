@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import CustomHeader from "../components/CustomHeader";
-import getPaymentGatewayUrl from "../config/midtrans";
 import { useSelector, useDispatch } from "react-redux";
 import { payment } from "../store/actions/actionCreators";
 
@@ -24,31 +23,6 @@ export default function PaymentScreen({ route }) {
   };
 
   const handleContinuePayment = async () => {
-    // try {
-    //   const parameter = {
-    //     transaction_details: {
-    //       order_id:
-    //         "TRANSACTION_" +
-    //         Math.floor(Math.random() * 9000000) +
-    //         "_" +
-    //         Math.floor(Math.random() * 10),
-    //       gross_amount: totalAmount,
-    //     },
-    //     credit_card: {
-    //       secure: true,
-    //     },
-    //     customer_details: {
-    //       email: "tester@mail.com",
-    //       name: "tester",
-    //     },
-    //   };
-
-    //   const redirectUrl = await getPaymentGatewayUrl(parameter, orderDetails);
-
-    //   setRedirectUrl(redirectUrl);
-    // } catch (error) {
-    //   console.error("Error creating Snap Token:", error);
-    // }
     dispatch(payment(route.params))
       .then(() => {
         setRedirectUrl(urlRedirect)

@@ -5,7 +5,7 @@ import VerticalSlider from "../components/VerticalSlider";
 import { useSelector } from "react-redux";
 
 export default function ProjectScreen({ route }) {
-  // const { category } = route.params;
+  const { category } = route.params;
   const [nameQuery, setNameQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
   const [name, setName] = useState("");
@@ -37,7 +37,7 @@ export default function ProjectScreen({ route }) {
     .map((project) => project.location);
 
   const handleSumbit = () => {
-    
+
   };
   return (
     <>

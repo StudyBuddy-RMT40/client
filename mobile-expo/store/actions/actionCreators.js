@@ -315,8 +315,10 @@ export const addProject = (name, teacherId, description, categoryId, goals) => {
         await dispatch(fetchDashboardForStudent());
       }
 
+      console.log("a")
       return { success: true };
     } catch (error) {
+      console.log(error)
       return { success: false };
     }
   };
