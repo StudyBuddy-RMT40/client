@@ -3,7 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useDispatch } from 'react-redux'
-import { fetchProjects, updateStatusProject } from '../store/actions/actionCreators';
+import { updateStatusProject } from '../store/actions/actionCreators';
 
 export default function MidtransScreen({ route }) {
   const dispatch = useDispatch()
@@ -52,7 +52,6 @@ export default function MidtransScreen({ route }) {
             // callback()
             handleUpdateProjectStatus()
             navigation.push("Dashboard")
-            dispatch(fetchProjects())
           }
         }}
       />
